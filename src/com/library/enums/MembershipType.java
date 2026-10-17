@@ -1,5 +1,5 @@
 package com.library.enums;
 
-public enum MembershipTypeEnums{
+public enum MembershipType {
     STUDENT, STAFF, GENERAL
 }
