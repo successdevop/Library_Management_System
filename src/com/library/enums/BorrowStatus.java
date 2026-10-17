@@ -1,5 +1,5 @@
 package com.library.enums;
 
-public enum BorrowStatusEnum{
+public enum BorrowStatus {
     BORROWED, RETURNED, OVERDUE
 }

@@ -1,5 +1,5 @@
 package com.library.enums;
 
-public enum BookEnums{
+public enum BookStatus {
     AVAILABLE, BORROWED, LOST, DAMAGED
 }

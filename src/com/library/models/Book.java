@@ -1,6 +1,6 @@
 package com.library.models;
 
-import com.library.enums.BookEnums;
+import com.library.enums.BookStatus;
 
 
 public class Book{
@@ -10,7 +10,7 @@ public class Book{
     private String author;
     private String category;
     private String isbn;
-    private BookEnums status;
+    private BookStatus status;
 
     public Book(String title, String author, String category, short publication_year){
         this.book_id = getBookId();
@@ -19,7 +19,7 @@ public class Book{
         this.category = category;
         this.isbn = getBookISBN();
         this.publication_year = publication_year;
-        this.status = BookEnums.AVAILABLE;
+        this.status = BookStatus.AVAILABLE;
     }
 
     public String getBookId(){
@@ -62,11 +62,11 @@ public class Book{
         return this.publication_year;
     }
 
-    public void setBookStatus(BookEnums status){
+    public void setBookStatus(BookStatus status){
         this.status = status;
     }
 
-    public BookEnums getBookStatus(){
+    public BookStatus getBookStatus(){
         return this.status;
     }
 
