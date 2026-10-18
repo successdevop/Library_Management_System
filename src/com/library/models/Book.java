@@ -5,7 +5,7 @@ import com.library.enums.BookStatus;
 
 public class Book{
     private short publication_year;
-    private String book_id;
+    private String id;
     private String title;
     private String author;
     private String category;
@@ -13,7 +13,7 @@ public class Book{
     private BookStatus status;
 
     public Book(String title, String author, String category, short publication_year){
-        this.book_id = getBookId();
+        this.id = getBookId();
         this.title = title;
         this.author = author;
         this.category = category;
@@ -23,7 +23,7 @@ public class Book{
     }
 
     public String getBookId(){
-        return this.book_id;
+        return this.id;
     }
 
     public String getBookISBN(){
@@ -72,7 +72,7 @@ public class Book{
 
     @Override
     public String toString(){
-        return "Book<(book_id :"+this.book_id+", book_title: "+this.title+", " +
+        return "Book<(book_id :"+this.id +", book_title: "+this.title+", " +
                 "book_author: "+this.author+", book_category: "+this.category+", book_status: "+this.status+")>";
     }
 }

@@ -14,10 +14,12 @@ public abstract class User{
     private MemberStatus status;
 
     protected User(String firstName, String lastName, String email, String phoneNo){
+        this.id = getId();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNo = phoneNo;
+        this.dateJoined = getDateJoined();
         this.status = MemberStatus.ACTIVE;
     }
 
