@@ -1,10 +1,11 @@
 package com.library.models;
 
 import com.library.enums.MemberStatus;
+import com.library.enums.MembershipType;
 
 import java.util.Date;
 
-public abstract class User{
+public class User{
     private String id;
     private String firstName;
     private String lastName;
@@ -12,8 +13,9 @@ public abstract class User{
     private String phoneNo;
     private Date dateJoined;
     private MemberStatus status;
+    private MembershipType membershipType;
 
-    protected User(String firstName, String lastName, String email, String phoneNo){
+    protected User(String firstName, String lastName, String email, String phoneNo, MembershipType memberType){
         this.id = getId();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -21,6 +23,7 @@ public abstract class User{
         this.phoneNo = phoneNo;
         this.dateJoined = getDateJoined();
         this.status = MemberStatus.ACTIVE;
+        this.membershipType = memberType;
     }
 
     public String getId(){
@@ -71,5 +74,17 @@ public abstract class User{
         return this.dateJoined;
     }
 
-    public abstract String displayInformation();
+    public MembershipType getMembershipType(){
+        return this.membershipType;
+    }
+
+    public void setMembershipType(MembershipType memberType){
+        this.membershipType = memberType;
+    }
+
+    public String displayInformation(){
+        return "User<(id: "+this.id+", firstName: "+this.firstName+", email: "+this.email+", " +
+                "userType: "+this.membershipType+", status: "+getStatus()+")>";
+    }
+
 }

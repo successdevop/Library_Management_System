@@ -5,8 +5,7 @@ import com.library.enums.BookStatus;
 import com.library.enums.MemberStatus;
 import com.library.enums.MembershipType;
 import com.library.models.Book;
-import com.library.models.Librarian;
-import com.library.models.LibraryMember;
+import com.library.models.Users;
 
 import java.io.*;
 import java.time.Instant;
@@ -16,37 +15,37 @@ import java.util.Date;
 import java.util.List;
 
 public class Database{
-    private final Book[] books;
-    private final Librarian[] librarian;
-    private final LibraryMember[] members;
+    private static Database instance = null;
+    private static Book[] books = null;
+    private static Users[] users = null;
 
-    public Database(String[] storage_files){
-        this.books = new Book[Config.MAX_BOOKS];
-        this.librarian = new Librarian[Config.MAX_STAFF];
-        this.members = new LibraryMember[Config.MAX_MEMBERS];
-        this.loadDatabase(storage_files);
+    private Database(){}
+
+    public static Book[] getBooksDatabase(){
+        return books;
     }
 
-    public Book[] getBooksDatabase(){
-        return this.books;
+    public static Users[] getUsersDatabase(){
+        return users;
     }
 
-    public Librarian[] getLibrariansDatabase(){
-        return this.librarian;
+    public static synchronized Database getInstance(String[] files){
+        if (instance == null){
+            instance = new Database();
+            books = new Book[Config.MAX_BOOKS];
+            users = new Users[Config.MAX_USERS];
+            loadDatabase(files);
+        }
+        return instance;
     }
 
-    public LibraryMember[] getLibraryMembersDatabase(){
-        return this.members;
+    private static void loadDatabase(String[] storage_files){
+        loadBooks(storage_files[0]);
+        loadUsers(storage_files[1]);
     }
 
-    private void loadDatabase(String[] storage_files){
-        this.loadBooks(storage_files[0]);
-        this.loadLibrarians(storage_files[1]);
-        this.loadLibraryMembers(storage_files[2]);
-    }
-
-    private Book[] loadBooks(String book_file_storage){
-        Arrays.fill(this.books, null);
+    private static Book[] loadBooks(String book_file_storage){
+        Arrays.fill(books, null);
         List<Book> bks = new ArrayList<>();
 
         try(BufferedReader br = new BufferedReader(new FileReader(book_file_storage))){
@@ -70,14 +69,14 @@ public class Database{
             System.err.println("Error loading books to array: "+ex.getMessage());
         }
 
-        return bks.toArray(this.books);
+        return bks.toArray(books);
     }
 
-    private Librarian[] loadLibrarians(String file_storage){
-        Arrays.fill(this.librarian, null);
-        List<Librarian> lib = new ArrayList<>();
+    private static Users[] loadUsers(String user_file_storage){
+        Arrays.fill(users, null);
+        List<Users> usr = new ArrayList<>();
 
-        try(BufferedReader br = new BufferedReader(new FileReader(file_storage))){
+        try(BufferedReader br = new BufferedReader(new FileReader(user_file_storage))){
             String line;
             while((line = br.readLine()) != null){
                 String[] values = line.split("\\|");
@@ -88,43 +87,15 @@ public class Database{
                 String phoneNo = values[4].trim();
                 Date dateJoined = Date.from(Instant.parse(values[5].trim()));
                 MemberStatus status = MemberStatus.valueOf(values[6].trim());
-                MembershipType membershipType = MembershipType.valueOf(values[7].trim());
+                MembershipType memberType = MembershipType.valueOf(values[7].trim());
 
-                lib.add(new Librarian(firstName, lastName, email, phoneNo));
+                usr.add(new Users(firstName, lastName, email, phoneNo, memberType));
             }
             System.out.println("Library staff loaded");
         } catch (IOException | NumberFormatException ex){
             System.err.println("Error loading Librarians to array: "+ex.getMessage());
         }
 
-        return lib.toArray(this.librarian);
-    }
-
-    private LibraryMember[] loadLibraryMembers(String file_storage){
-        Arrays.fill(this.librarian, null);
-
-        List<LibraryMember> mem = new ArrayList<>();
-
-        try(BufferedReader br = new BufferedReader(new FileReader(file_storage))){
-            String line;
-            while((line = br.readLine()) != null){
-                String[] values = line.split("\\|");
-                String id = values[0].trim();
-                String firstName = values[1].trim();
-                String lastName = values[2].trim();
-                String email = values[3].trim();
-                String phoneNo = values[4].trim();
-                Date dateJoined = Date.from(Instant.parse(values[5].trim()));
-                MemberStatus status = MemberStatus.valueOf(values[6].trim());
-                MembershipType membershipType = MembershipType.valueOf(values[7].trim());
-
-                mem.add(new LibraryMember(firstName, lastName, email, phoneNo, membershipType));
-            }
-            System.out.println("Library members loaded");
-        } catch (IOException | NumberFormatException ex){
-            System.err.println("Error loading Library members to array: "+ex.getMessage());
-        }
-
-        return mem.toArray(this.members);
+        return usr.toArray(users);
     }
 }
