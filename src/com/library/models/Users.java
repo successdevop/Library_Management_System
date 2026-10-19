@@ -5,7 +5,7 @@ import com.library.enums.MembershipType;
 
 import java.util.Date;
 
-public class User{
+public class Users{
     private String id;
     private String firstName;
     private String lastName;
@@ -15,7 +15,7 @@ public class User{
     private MemberStatus status;
     private MembershipType membershipType;
 
-    protected User(String firstName, String lastName, String email, String phoneNo, MembershipType memberType){
+    public Users(String firstName, String lastName, String email, String phoneNo, MembershipType memberType){
         this.id = getId();
         this.firstName = firstName;
         this.lastName = lastName;
