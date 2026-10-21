@@ -1,7 +1,7 @@
 package com.library.exceptions;
 
 public class InvalidNameLengthException extends RuntimeException{
-    private String msg;
+    private final String msg;
 
     public InvalidNameLengthException(String message){
         this.msg = message;
