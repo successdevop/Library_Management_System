@@ -8,6 +8,5 @@ public class UserService{
 
     public void registerMember(String firstName, String lastName, String email, String phoneNo, MembershipType membershipType){
 
-
     }
 }

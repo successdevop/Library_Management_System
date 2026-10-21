@@ -1,7 +1,15 @@
 package com.library;
 
+import com.library.api.Controller;
+
 public class Main{
     public static void main(String[] args){
-        System.out.println("Hello world");
+
+        try{
+            Controller.signUpAccount();
+            System.out.println("Hello world");
+        } catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 }
