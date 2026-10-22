@@ -3,7 +3,9 @@ package com.library.models;
 import com.library.enums.MemberStatus;
 import com.library.enums.MembershipType;
 
-import java.util.Date;
+import java.time.LocalDate;
+
+import static com.library.utils.LibraryUtils.generateUserId;
 
 public class Users{
     private String id;
@@ -11,17 +13,17 @@ public class Users{
     private String lastName;
     private String email;
     private String phoneNo;
-    private Date dateJoined;
+    private LocalDate dateJoined;
     private MemberStatus status;
     private MembershipType membershipType;
 
     public Users(String firstName, String lastName, String email, String phoneNo, MembershipType memberType){
-        this.id = getId();
+        this.id = generateUserId();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNo = phoneNo;
-        this.dateJoined = getDateJoined();
+        this.dateJoined = LocalDate.now();
         this.status = MemberStatus.ACTIVE;
         this.membershipType = memberType;
     }
@@ -70,7 +72,7 @@ public class Users{
         this.status = status;
     }
 
-    public Date getDateJoined(){
+    public LocalDate getDateJoined(){
         return this.dateJoined;
     }
 

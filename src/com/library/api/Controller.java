@@ -5,6 +5,7 @@ import com.library.exceptions.InvalidEmailException;
 import com.library.exceptions.InvalidMembershipTypeException;
 import com.library.exceptions.InvalidNameLengthException;
 import com.library.exceptions.InvalidPhoneNumberException;
+import com.library.models.Users;
 import com.library.services.UserService;
 import com.library.utils.LibraryUtils;
 
@@ -22,7 +23,7 @@ public class Controller{
         new Controller();
     }
 
-    public static void signUpAccount(){
+    public static String signUpAccount(){
         String firstName = "";
         String lastName = "";
         String email = "";
@@ -52,6 +53,8 @@ public class Controller{
                 membershipType = LibraryUtils.validateMembershipType(scanner.nextLine());
 
                 regFlag = true;
+
+                scanner.close();
             } catch(InvalidNameLengthException | InvalidEmailException | InvalidPhoneNumberException |
                    InvalidMembershipTypeException ex){
                 System.out.println("❌ Error: " + ex.getMessage());
@@ -62,9 +65,9 @@ public class Controller{
         // enforce lower case
         email = email.toLowerCase();
 
-        userService.registerMember(firstName, lastName, email, phoneNo,
+        Users user = userService.registerMember(firstName, lastName, email, phoneNo,
                 MembershipType.valueOf(membershipType.toUpperCase().trim()));
 
-        scanner.close();
+        return "Congratulations "+user.getFirstName()+", your registration is successful";
     }
 }

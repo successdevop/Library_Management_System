@@ -1,10 +1,12 @@
 package com.library.utils;
 
 import com.library.app_files.Config;
+import com.library.database.Database;
 import com.library.exceptions.InvalidEmailException;
 import com.library.exceptions.InvalidMembershipTypeException;
 import com.library.exceptions.InvalidNameLengthException;
 import com.library.exceptions.InvalidPhoneNumberException;
+import com.library.models.Users;
 
 import java.util.Set;
 
@@ -13,7 +15,25 @@ import static com.library.app_files.Config.PHONE_NUMBER_PATTERN;
 
 
 public class LibraryUtils{
-    public static String generateId(){
+    public static String generateUserId(){
+        String id = "";
+
+        Users[] users = Database.getUsersDatabase();
+        if (users[0] == null){
+            id = "U001";
+            return id;
+        }
+
+        for (int i = 0; i < users.length; i++){
+            if (users[i] == null){
+                id = users[i - 1].getId();
+                break;
+            }
+        }
+
+        String newId = id.substring(1);
+        int x = Integer.parseInt(newId) + 1;
+        System.out.println(x);
         return "";
     }
 

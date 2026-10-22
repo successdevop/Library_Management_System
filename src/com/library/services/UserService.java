@@ -11,7 +11,6 @@ public class UserService{
 
     public UserService(){
         this.userRepo = new UserRepo();
-        System.out.println("repo: "+userRepo);
     }
 
     public Users registerMember(String firstName, String lastName, String email, String phoneNo, MembershipType membershipType){

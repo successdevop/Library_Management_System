@@ -40,8 +40,8 @@ public class Database{
     }
 
     private static void loadDatabase(String[] storage_files){
-        loadBooks(storage_files[0]);
-        loadUsers(storage_files[1]);
+        loadUsers(storage_files[0]);
+        loadBooks(storage_files[1]);
     }
 
     private static Book[] loadBooks(String book_file_storage){
@@ -93,7 +93,7 @@ public class Database{
             }
             System.out.println("Library staff loaded");
         } catch (IOException | NumberFormatException ex){
-            System.err.println("Error loading Librarians to array: "+ex.getMessage());
+            System.err.println("Error loading Users to array: "+ex.getMessage());
         }
 
         return usr.toArray(users);

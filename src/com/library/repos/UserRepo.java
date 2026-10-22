@@ -25,9 +25,9 @@ public class UserRepo{
         Users[] users = Database.getUsersDatabase();
         Users user = null;
 
-        for (Users value : users) {
-            if (value.getEmail().equals(email)) {
-                user = value;
+        for (Users userObj : users) {
+            if (userObj != null && userObj.getEmail().equals(email)) {
+                user = userObj;
                 break;
             }
         }
@@ -39,7 +39,7 @@ public class UserRepo{
         String phoneNumber = null;
 
         for (Users user : Database.getUsersDatabase()){
-            if (user.getPhoneNo().equals(phoneNo)){
+            if (user != null && user.getPhoneNo().equals(phoneNo)){
                 phoneNumber = user.getPhoneNo();
                 break;
             }
