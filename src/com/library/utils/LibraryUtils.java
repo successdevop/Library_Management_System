@@ -16,25 +16,29 @@ import static com.library.app_files.Config.PHONE_NUMBER_PATTERN;
 
 public class LibraryUtils{
     public static String generateUserId(){
-        String id = "";
-
         Users[] users = Database.getUsersDatabase();
-        if (users[0] == null){
-            id = "U001";
-            return id;
-        }
 
-        for (int i = 0; i < users.length; i++){
-            if (users[i] == null){
-                id = users[i - 1].getId();
-                break;
+        if (users == null)
+            throw new IllegalStateException("User database not initialized");
+
+        int maxId = 0;
+
+        for(Users user : users){
+            if (user == null)
+                continue;
+
+            String userId = user.getId();
+            if(userId == null || !userId.matches("U\\d+")){
+                throw new IllegalStateException("Invalid user ID found: "+userId);
             }
+
+            int numericId = Integer.parseInt(userId.substring(1));
+            if(numericId > maxId)
+                maxId = numericId;
         }
 
-        String newId = id.substring(1);
-        int x = Integer.parseInt(newId) + 1;
-        System.out.println(x);
-        return "";
+        int id = maxId + 1;
+        return String.format("U%03d", id);
     }
 
     public static String validateStringLength(String name){
