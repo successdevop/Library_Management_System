@@ -8,10 +8,9 @@ import com.library.models.Book;
 import com.library.models.Users;
 
 import java.io.*;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class Database{
@@ -40,11 +39,11 @@ public class Database{
     }
 
     private static void loadDatabase(String[] storage_files){
-        loadUsers(storage_files[0]);
-        loadBooks(storage_files[1]);
+        loadUsersFromFile(storage_files[0]);
+        loadBooksFromFile(storage_files[1]);
     }
 
-    private static Book[] loadBooks(String book_file_storage){
+    private static Book[] loadBooksFromFile(String book_file_storage){
         Arrays.fill(books, null);
         List<Book> bks = new ArrayList<>();
 
@@ -72,7 +71,7 @@ public class Database{
         return bks.toArray(books);
     }
 
-    private static Users[] loadUsers(String user_file_storage){
+    private static Users[] loadUsersFromFile(String user_file_storage){
         Arrays.fill(users, null);
         List<Users> usr = new ArrayList<>();
 
@@ -85,17 +84,43 @@ public class Database{
                 String lastName = values[2].trim();
                 String email = values[3].trim();
                 String phoneNo = values[4].trim();
-                Date dateJoined = Date.from(Instant.parse(values[5].trim()));
+                LocalDate dateJoined = LocalDate.parse((values[5].trim()));
                 MemberStatus status = MemberStatus.valueOf(values[6].trim());
                 MembershipType memberType = MembershipType.valueOf(values[7].trim());
 
                 usr.add(new Users(firstName, lastName, email, phoneNo, memberType));
             }
-            System.out.println("Library staff loaded");
+            System.out.println("Users loaded");
         } catch (IOException | NumberFormatException ex){
             System.err.println("Error loading Users to array: "+ex.getMessage());
         }
 
         return usr.toArray(users);
+    }
+
+    public static Users appendUserToFile(String user_file_storage, Users user) {
+
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(user_file_storage, true))){
+            String id = user.getId();
+            String firstName = user.getFirstName();
+            String lastName = user.getLastName();
+            String email = user.getEmail();
+            String phoneNo = user.getPhoneNo();
+            String dateJoined = String.valueOf(user.getDateJoined());
+            String status = user.getStatus().toString();
+            String membershipType = user.getMembershipType().toString();
+
+            String line = String.format("%s|%s|%s|%s|%s|%s|%s|%s",
+                    id, firstName, lastName, email, phoneNo, dateJoined, status, membershipType);
+
+            bw.write(line);
+            bw.newLine();
+
+            return user;
+        }catch (IOException ex){
+            System.err.println("Error writing User to file: "+ex.getMessage());
+        }
+
+        return null;
     }
 }

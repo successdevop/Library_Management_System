@@ -16,8 +16,10 @@ public class Config{
     public static final int MAX_BOOKS = 500;
     public static final int MAX_USERS = 1000;
 
+    public static final String USERS_STORAGE_FILE = "users_file.txt";
+    public static final String BOOKS_STORAGE_FILE = "books_file.txt";
+
     public static final String[] DATABASE_FILE = {
-            "/Library_Management_system/src/com/library/app_storage_file/users_file.txt",
-            "/Library_Management_system/src/com/library/app_storage_file/books_file.txt"
+            USERS_STORAGE_FILE, BOOKS_STORAGE_FILE
     };
 }

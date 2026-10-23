@@ -29,6 +29,7 @@ public class Controller{
         String email = "";
         String phoneNo = "";
         String membershipType = "";
+
         boolean regFlag = false;
 
         System.out.println("=== User Registration ===");
@@ -57,7 +58,7 @@ public class Controller{
                 scanner.close();
             } catch(InvalidNameLengthException | InvalidEmailException | InvalidPhoneNumberException |
                    InvalidMembershipTypeException ex){
-                System.out.println("❌ Error: " + ex.getMessage());
+                System.err.println("❌ Error: " + ex.getMessage());
                 System.out.println("Please try again.\n\n");
             }
         }
@@ -68,6 +69,9 @@ public class Controller{
         Users user = userService.registerMember(firstName, lastName, email, phoneNo,
                 MembershipType.valueOf(membershipType.toUpperCase().trim()));
 
-        return "Congratulations "+user.getFirstName()+", your registration is successful";
+        if (user != null)
+            return "Congratulations "+user.getFirstName()+", your registration is successful";
+
+        return "User registration failed, please try again later";
     }
 }

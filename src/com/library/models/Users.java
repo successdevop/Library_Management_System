@@ -17,7 +17,7 @@ public class Users{
     private MemberStatus status;
     private MembershipType membershipType;
 
-    public Users(String firstName, String lastName, String email, String phoneNo, MembershipType memberType){
+    public Users(String firstName, String lastName, String email, String phoneNo, MembershipType membershipType){
         this.id = generateUserId();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -25,7 +25,7 @@ public class Users{
         this.phoneNo = phoneNo;
         this.dateJoined = LocalDate.now();
         this.status = MemberStatus.ACTIVE;
-        this.membershipType = memberType;
+        this.membershipType = membershipType;
     }
 
     public String getId(){

@@ -26,7 +26,6 @@ public class UserService{
 
         Users newUser = new Users(firstName, lastName, email, phoneNo, membershipType);
 
-        userRepo.addUser(newUser);
-        return newUser;
+        return userRepo.addUser(newUser);
     }
 }
