@@ -15,8 +15,9 @@ public class Users{
     private LocalDate dateJoined;
     private MemberStatus status;
     private MembershipType membershipType;
+    private String password;
 
-    public Users(String firstName, String lastName, String email, String phoneNo, MembershipType membershipType){
+    public Users(String firstName, String lastName, String email, String phoneNo, MembershipType membershipType, String password){
         this.id = getId();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -25,6 +26,7 @@ public class Users{
         this.dateJoined = getDateJoined();
         this.status = getStatus();
         this.membershipType = membershipType;
+        this.password = password;
     }
 
     public String getId(){
@@ -89,6 +91,14 @@ public class Users{
 
     public void setMembershipType(MembershipType memberType){
         this.membershipType = memberType;
+    }
+
+    public String getPassword(){
+        return this.password;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
     }
 
     @Override

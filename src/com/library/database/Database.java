@@ -88,8 +88,9 @@ public class Database{
                 LocalDate dateJoined = LocalDate.parse((values[5].trim()));
                 MemberStatus status = MemberStatus.valueOf(values[6].trim());
                 MembershipType memberType = MembershipType.valueOf(values[7].trim());
+                String password = values[8].trim();
 
-                Users user = new Users(firstName, lastName, email, phoneNo, memberType);
+                Users user = new Users(firstName, lastName, email, phoneNo, memberType, password);
                 user.setId(id);
                 user.setDateJoined(dateJoined);
                 user.setStatus(status);
@@ -114,9 +115,10 @@ public class Database{
             String dateJoined = String.valueOf(user.getDateJoined());
             String status = user.getStatus().toString();
             String membershipType = user.getMembershipType().toString();
+            String password = user.getPassword();
 
-            String line = String.format("%s|%s|%s|%s|%s|%s|%s|%s",
-                    id, firstName, lastName, email, phoneNo, dateJoined, status, membershipType);
+            String line = String.format("%s|%s|%s|%s|%s|%s|%s|%s|%s",
+                    id, firstName, lastName, email, phoneNo, dateJoined, status, membershipType, password);
 
             bw.write(line);
             bw.newLine();

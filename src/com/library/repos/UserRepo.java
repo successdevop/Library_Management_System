@@ -25,6 +25,20 @@ public class UserRepo{
         return userResult;
     }
 
+    public Users getUserById(String id){
+        Users[] users = Database.getUsersDatabase();
+        Users user = null;
+
+        for (Users userObj : users) {
+            if (userObj != null && userObj.getId().equals(id)) {
+                user = userObj;
+                break;
+            }
+        }
+
+        return user;
+    }
+
     public Users getUserByEmail(String email){
         Users[] users = Database.getUsersDatabase();
         Users user = null;

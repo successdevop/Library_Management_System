@@ -1,9 +1,11 @@
 package com.library.services;
 
+import com.library.database.Database;
 import com.library.enums.MemberStatus;
 import com.library.enums.MembershipType;
 import com.library.exceptions.PhoneNumberAlreadyExistsException;
 import com.library.exceptions.UserAlreadyExistException;
+import com.library.exceptions.UserNotFoundException;
 import com.library.models.Users;
 import com.library.repos.UserRepo;
 
@@ -18,22 +20,20 @@ public class UserService{
         this.userRepo = new UserRepo();
     }
 
-    public Users registerMember(String firstName, String lastName, String email, String phoneNo, MembershipType membershipType){
-        Users user = userRepo.getUserByEmail(email);
-        if (user != null){
-            throw new UserAlreadyExistException();
-        }
+    public String viewProfile(String userId){
+        Users user = userRepo.getUserById(userId);
 
-        String phoneNumber = userRepo.getUserByPhoneNumber(phoneNo);
-        if (phoneNumber != null){
-            throw new PhoneNumberAlreadyExistsException();
-        }
+        if (user == null)
+            throw new UserNotFoundException();
 
-        Users newUser = new Users(firstName, lastName, email, phoneNo, membershipType);
-        newUser.setId(generateUserId());
-        newUser.setDateJoined(LocalDate.now());
-        newUser.setStatus(MemberStatus.ACTIVE);
-
-        return userRepo.addUser(newUser);
+        return "User Profile\n" +
+                "Id: "+user.getId()+"\n" +
+                "FirstName: "+user.getFirstName()+"\n" +
+                "LastName: "+user.getLastName()+"\n" +
+                "Email: "+user.getEmail()+"\n" +
+                "PhoneNo: "+user.getPhoneNo()+"\n" +
+                "Registration Date: "+user.getDateJoined()+"\n" +
+                "Status: "+user.getStatus()+"\n" +
+                "Membership Type: "+user.getMembershipType();
     }
 }
