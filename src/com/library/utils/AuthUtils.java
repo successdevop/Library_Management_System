@@ -50,9 +50,20 @@ public class AuthUtils{
 
         // Decode the original salt from Base64 back into bytes
         byte[] salt = Base64.getDecoder().decode(parts[0]);
-        String originalHash = parts[1];
 
-        String newHash = hashPassword(password);
-        return newHash.equals(storedPassword);
+        // Decode the original stored hash back into a raw byte array
+        byte[] originalHash = Base64.getDecoder().decode(parts[1]);
+
+        try{
+            // Re-hash the login attempt password using the ORIGINAL salt
+            MessageDigest digest = MessageDigest.getInstance(ALGORITHM);
+            digest.update(salt);
+            byte[] newHashedBytes = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+
+            // Use MessageDigest.isEqual for a secure, constant-time byte comparison
+            return MessageDigest.isEqual(newHashedBytes, originalHash);
+        } catch (NoSuchAlgorithmException | IllegalArgumentException ex){
+            throw new RuntimeException(ex);
+        }
     }
 }
