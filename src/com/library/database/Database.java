@@ -18,7 +18,10 @@ public class Database{
     private static Book[] books = null;
     private static Users[] users = null;
 
-    private Database(){}
+    private Database(){
+        books = new Book[Config.MAX_BOOKS];
+        users = new Users[Config.MAX_USERS];
+    }
 
     public static Book[] getBooksDatabase(){
         return books;
@@ -31,8 +34,6 @@ public class Database{
     public static synchronized Database getInstance(String[] files){
         if (instance == null){
             instance = new Database();
-            books = new Book[Config.MAX_BOOKS];
-            users = new Users[Config.MAX_USERS];
             loadDatabase(files);
         }
         return instance;
@@ -88,7 +89,11 @@ public class Database{
                 MemberStatus status = MemberStatus.valueOf(values[6].trim());
                 MembershipType memberType = MembershipType.valueOf(values[7].trim());
 
-                usr.add(new Users(firstName, lastName, email, phoneNo, memberType));
+                Users user = new Users(firstName, lastName, email, phoneNo, memberType);
+                user.setId(id);
+                user.setDateJoined(dateJoined);
+                user.setStatus(status);
+                usr.add(user);
             }
             System.out.println("Users loaded");
         } catch (IOException | NumberFormatException ex){

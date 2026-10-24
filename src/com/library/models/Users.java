@@ -5,7 +5,6 @@ import com.library.enums.MembershipType;
 
 import java.time.LocalDate;
 
-import static com.library.utils.LibraryUtils.generateUserId;
 
 public class Users{
     private String id;
@@ -18,18 +17,22 @@ public class Users{
     private MembershipType membershipType;
 
     public Users(String firstName, String lastName, String email, String phoneNo, MembershipType membershipType){
-        this.id = generateUserId();
+        this.id = getId();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNo = phoneNo;
-        this.dateJoined = LocalDate.now();
-        this.status = MemberStatus.ACTIVE;
+        this.dateJoined = getDateJoined();
+        this.status = getStatus();
         this.membershipType = membershipType;
     }
 
     public String getId(){
         return this.id;
+    }
+
+    public void setId(String vals){
+        this.id = vals;
     }
 
     public String getFirstName(){
@@ -76,6 +79,10 @@ public class Users{
         return this.dateJoined;
     }
 
+    public void setDateJoined(LocalDate date){
+        this.dateJoined = date;
+    }
+
     public MembershipType getMembershipType(){
         return this.membershipType;
     }
@@ -84,9 +91,9 @@ public class Users{
         this.membershipType = memberType;
     }
 
-    public String displayInformation(){
+    @Override
+    public String toString(){
         return "User<(id: "+this.id+", firstName: "+this.firstName+", email: "+this.email+", " +
                 "userType: "+this.membershipType+", status: "+getStatus()+")>";
     }
-
 }

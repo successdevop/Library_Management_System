@@ -1,10 +1,15 @@
 package com.library.services;
 
+import com.library.enums.MemberStatus;
 import com.library.enums.MembershipType;
 import com.library.exceptions.PhoneNumberAlreadyExistsException;
 import com.library.exceptions.UserAlreadyExistException;
 import com.library.models.Users;
 import com.library.repos.UserRepo;
+
+import java.time.LocalDate;
+
+import static com.library.utils.LibraryUtils.generateUserId;
 
 public class UserService{
     private final UserRepo userRepo;
@@ -25,6 +30,9 @@ public class UserService{
         }
 
         Users newUser = new Users(firstName, lastName, email, phoneNo, membershipType);
+        newUser.setId(generateUserId());
+        newUser.setDateJoined(LocalDate.now());
+        newUser.setStatus(MemberStatus.ACTIVE);
 
         return userRepo.addUser(newUser);
     }
