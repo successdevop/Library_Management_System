@@ -3,7 +3,7 @@ package com.library.exceptions;
 import java.util.regex.Pattern;
 
 public class InvalidPhoneNumberException extends RuntimeException{
-    private String phoneNo;
+    private final String phoneNo;
 
     public InvalidPhoneNumberException(String phoneNo){
         this.phoneNo = phoneNo;
