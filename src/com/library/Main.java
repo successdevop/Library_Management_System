@@ -5,6 +5,7 @@ import com.library.api.auth.Auth;
 import com.library.app_files.Config;
 import com.library.database.Database;
 
+import static com.library.api.auth.Auth.signInAccount;
 import static com.library.api.auth.Auth.signUpAccount;
 
 
@@ -15,7 +16,8 @@ public class Main{
 
 
         try{
-            System.out.println(signUpAccount());
+//            System.out.println(signUpAccount());
+            signInAccount();
         } catch(Exception e){
             System.out.println(e.getMessage());
         }

@@ -1,5 +1,5 @@
 package com.library.enums;
 
 public enum MemberStatus {
-    ACTIVE, SUSPENDED, EXPIRED
+    ACTIVE, SUSPENDED, EXPIRED, INACTIVE
 }

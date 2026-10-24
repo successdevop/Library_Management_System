@@ -1,10 +1,7 @@
 package com.library.api.auth;
 
 import com.library.enums.MembershipType;
-import com.library.exceptions.InvalidEmailException;
-import com.library.exceptions.InvalidMembershipTypeException;
-import com.library.exceptions.InvalidNameLengthException;
-import com.library.exceptions.InvalidPhoneNumberException;
+import com.library.exceptions.*;
 import com.library.models.Users;
 import com.library.services.AuthService;
 import com.library.utils.LibraryUtils;
@@ -15,7 +12,7 @@ import java.util.Scanner;
 public class Auth{
     private static AuthService authService = null;
     private static final Scanner scanner = new Scanner(System.in);
-    private static final Users currentUser = null;
+    private static Users currentUser = null;
 
     private Auth(){
         authService = new AuthService();
@@ -68,7 +65,7 @@ public class Auth{
 
                 scanner.close();
             } catch(InvalidNameLengthException | InvalidEmailException | InvalidPhoneNumberException |
-                    InvalidMembershipTypeException ex){
+                    InvalidMembershipTypeException | InvalidPasswordException ex){
                 System.err.println("❌ Error: " + ex.getMessage());
                 System.out.println("Please try again.\n\n");
             }
@@ -86,18 +83,28 @@ public class Auth{
         return "User registration failed, please try again later";
     }
 
-    public static void signInAccount(){
+    public static Users signInAccount(){
         String email = "";
         String password = "";
 
-        int loginTryCount = 3;
+        System.out.print("Please enter your email: ");
+        email = LibraryUtils.validateEmail(scanner.nextLine());
 
-        for (int i = 0; i < 3; i++){
-            System.out.println("Please enter your email: ");
-            email = LibraryUtils.validateEmail(scanner.nextLine());
+        System.out.print("Please enter your password: ");
+        password = LibraryUtils.validatePassword(scanner.nextLine());
 
-            System.out.println("Please enter your password: ");
-        }
+        scanner.close();
 
+        // enforce lower case
+        email = email.toLowerCase();
+        Users user = authService.loginMember(email, password);
+
+        if (user == null)
+            System.out.println("Login failed");
+
+        currentUser = user;
+        System.out.println("Login successful");
+
+        return currentUser;
     }
 }
