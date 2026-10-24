@@ -2,16 +2,12 @@ package com.library.utils;
 
 import com.library.app_files.Config;
 import com.library.database.Database;
-import com.library.exceptions.InvalidEmailException;
-import com.library.exceptions.InvalidMembershipTypeException;
-import com.library.exceptions.InvalidNameLengthException;
-import com.library.exceptions.InvalidPhoneNumberException;
+import com.library.exceptions.*;
 import com.library.models.Users;
 
 import java.util.Set;
 
-import static com.library.app_files.Config.EMAIL_PATTERN;
-import static com.library.app_files.Config.PHONE_NUMBER_PATTERN;
+import static com.library.app_files.Config.*;
 
 
 public class LibraryUtils{
@@ -68,6 +64,15 @@ public class LibraryUtils{
         }
 
         return email;
+    }
+
+    public static String validatePassword(String password){
+
+        boolean isMatches = PASSWORD_PATTERN.matcher(password).matches();
+        if(!isMatches)
+            throw new InvalidPasswordException("Invalid password");
+
+        return password;
     }
 
     public static String validateMembershipType(String membershipType){
