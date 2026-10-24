@@ -10,11 +10,11 @@ import com.library.models.Users;
 import com.library.repos.UserRepo;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 import static com.library.utils.AuthUtils.hashPassword;
 import static com.library.utils.AuthUtils.verifyPassword;
 import static com.library.utils.LibraryUtils.generateUserId;
+
 
 public class AuthService{
     private final UserRepo userRepo;
