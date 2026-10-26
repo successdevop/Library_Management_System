@@ -12,14 +12,20 @@ import static com.library.api.auth.Auth.signUpAccount;
 public class Main{
     public static void main(String[] args){
         Database.getInstance(Config.DATABASE_FILE);
-        Auth.getInstance();
+//        Auth.getInstance();
 
+        while(true){
+            Controller.displayMainMenu();
+            try{
+                System.out.println(signUpAccount());
+                signInAccount();
+            } catch(Exception e){
+                System.out.println(e.getMessage());
+            }
 
-        try{
-//            System.out.println(signUpAccount());
-            signInAccount();
-        } catch(Exception e){
-            System.out.println(e.getMessage());
         }
+
+
+
     }
 }

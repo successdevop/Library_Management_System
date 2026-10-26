@@ -64,7 +64,6 @@ public class Database{
                     bks.add(new Book(title, author, category, publication_year));
                 }
             }
-            System.out.println("Books loaded");
         } catch (IOException | NumberFormatException ex){
             System.err.println("Error loading books to array: "+ex.getMessage());
         }
@@ -96,7 +95,6 @@ public class Database{
                 user.setStatus(status);
                 usr.add(user);
             }
-            System.out.println("Users loaded");
         } catch (IOException | NumberFormatException ex){
             System.err.println("Error loading Users to array: "+ex.getMessage());
         }
