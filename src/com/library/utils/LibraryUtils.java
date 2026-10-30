@@ -5,6 +5,7 @@ import com.library.database.Database;
 import com.library.exceptions.*;
 import com.library.models.Users;
 
+import java.time.LocalTime;
 import java.util.Set;
 
 import static com.library.app_files.Config.*;
@@ -80,5 +81,22 @@ public class LibraryUtils{
             throw new InvalidMembershipTypeException("Invalid membership type");
         }
         return membershipType;
+    }
+
+    public static String greet(){
+        LocalTime now = LocalTime.now();
+        int hour = now.getHour();
+
+        String greeting;
+
+        if (hour <= 12){
+            greeting = "Good morning";
+        } else if (hour <= 17){
+            greeting = "Good afternoon";
+        } else{
+            greeting = "Good evening";
+        }
+
+        return greeting;
     }
 }

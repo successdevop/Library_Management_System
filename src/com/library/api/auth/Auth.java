@@ -14,19 +14,16 @@ public class Auth{
     private static final Scanner scanner = new Scanner(System.in);
     private static Users currentUser = null;
 
-    private Auth(){
+    public Auth(){
         authService = new AuthService();
     }
 
-    public static void getInstance(){
-        new Auth();
-    }
-
-    public static Users getCurrentUser(){
+    public Users getCurrentUser(){
         return currentUser;
     }
 
-    public static String signUpAccount(){
+    // REGISTER MEMBER
+    public String signUpAccount(){
         String firstName = "";
         String lastName = "";
         String email = "";
@@ -67,7 +64,7 @@ public class Auth{
             } catch(InvalidNameLengthException | InvalidEmailException | InvalidPhoneNumberException |
                     InvalidMembershipTypeException | InvalidPasswordException ex){
                 System.err.println("❌ Error: " + ex.getMessage());
-                System.out.println("Please try again.\n\n");
+                System.out.println("Please try again.\n");
             }
         }
 
@@ -83,7 +80,8 @@ public class Auth{
         return "User registration failed, please try again later";
     }
 
-    public static Users signInAccount(){
+    // LOGIN MEMBER
+    public Users signInAccount(){
         String email = "";
         String password = "";
 
@@ -92,8 +90,6 @@ public class Auth{
 
         System.out.print("Please enter your password: ");
         password = LibraryUtils.validatePassword(scanner.nextLine());
-
-        scanner.close();
 
         // enforce lower case
         email = email.toLowerCase();
@@ -106,5 +102,13 @@ public class Auth{
         System.out.println("Login successful");
 
         return currentUser;
+    }
+
+    // REGISTER MEMBER
+    public void logout(){
+        if (currentUser != null){
+            System.out.println(currentUser.getFirstName()+" logged out successfully");
+            currentUser = null;
+        }
     }
 }

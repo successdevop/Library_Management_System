@@ -9,21 +9,12 @@ public class UserController{
     private static UserService userService = null;
     private static final Scanner scanner = new Scanner(System.in);
 
-    private UserController(){
+    public UserController(){
         userService = new UserService();
     }
 
-    public static void getInstance(){
-        new UserController();
+    // VIEW USER PROFILE
+    public String viewUserProfile(String id){
+         return userService.userProfile(id);
     }
-
-//    public static String viewUserProfile(){
-//        String id = "";
-//
-//        System.out.println("Please enter your Id: ");
-//        id = scanner.nextLine();
-//
-//         userService.viewProfile(id);
-//
-//    }
 }
