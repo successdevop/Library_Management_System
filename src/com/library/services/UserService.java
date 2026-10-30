@@ -16,7 +16,7 @@ public class UserService{
         Users user = userRepo.getUserById(userId);
 
         if (user == null)
-            throw new UserNotFoundException("User not found");
+            throw new UserNotFoundException("Member not found");
 
         System.out.println("\n========================");
         System.out.println("   USER PROFILE         ");

@@ -7,7 +7,6 @@ import java.util.Scanner;
 
 public class UserController{
     private static UserService userService = null;
-    private static final Scanner scanner = new Scanner(System.in);
 
     public UserController(){
         userService = new UserService();

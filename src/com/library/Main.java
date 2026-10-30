@@ -29,7 +29,7 @@ public class Main{
             try{
                 switch (choice){
                     case "1":
-                        controller.registerMember();
+                        System.out.println(controller.registerMember());
                         break;
 
                     case "2":

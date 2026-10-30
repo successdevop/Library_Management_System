@@ -84,7 +84,7 @@ public class Controller{
                     System.out.println(userController.viewUserProfile(id));
                     break;
                 case "10":
-                    System.out.print("Enter member Id:");
+                    System.out.print("Enter member Id: ");
                     choice = scanner.nextLine();
                     System.out.println(userController.viewUserProfile(choice));
                     break;
