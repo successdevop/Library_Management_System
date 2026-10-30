@@ -65,4 +65,8 @@ public class UserRepo{
 
         return phoneNumber;
     }
+
+    public Users[] getAllUsers(){
+        return Database.getUsersDatabase();
+    }
 }

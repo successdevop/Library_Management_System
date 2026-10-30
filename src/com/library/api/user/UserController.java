@@ -17,4 +17,9 @@ public class UserController{
     public String viewUserProfile(String id){
          return userService.userProfile(id);
     }
+
+    // VIEW ALL USERS
+    public void viewAllUsers(){
+        userService.getAllUsers();
+    }
 }

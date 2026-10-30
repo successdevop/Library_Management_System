@@ -16,7 +16,7 @@ public class UserService{
         Users user = userRepo.getUserById(userId);
 
         if (user == null)
-            throw new UserNotFoundException();
+            throw new UserNotFoundException("User not found");
 
         System.out.println("\n========================");
         System.out.println("   USER PROFILE         ");
@@ -33,5 +33,19 @@ public class UserService{
                         "Membership Type: "+user.getMembershipType()
                 );
 
+    }
+
+    public void getAllUsers(){
+        Users[] users = userRepo.getAllUsers();
+        if (users == null || users.length == 0)
+            throw new UserNotFoundException("Empty/Null array: Users not found");
+
+        for (int i = 0; i < users.length; i++){
+            if (users[i] == null)
+                break;
+
+            System.out.println((i+1)+". "+"User<(id: "+users[i].getId()+", firstName: "+users[i].getFirstName()+", email: "+
+                    users[i].getEmail()+", " + "userType: "+users[i].getMembershipType()+", status: "+users[i].getStatus()+")>");
+        }
     }
 }

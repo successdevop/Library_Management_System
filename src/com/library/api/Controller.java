@@ -84,16 +84,18 @@ public class Controller{
                     System.out.println(userController.viewUserProfile(id));
                     break;
                 case "10":
-                    System.out.println("View Member Details");
+                    System.out.print("Enter member Id:");
+                    choice = scanner.nextLine();
+                    System.out.println(userController.viewUserProfile(choice));
                     break;
                 case "11":
-                    System.out.println("View All Members");
+                    userController.viewAllUsers();
                     break;
                 case "12":
                     System.out.println("View Library Statistics");
                     break;
                 case "0":
-                    System.out.println("Logout");
+                    authController.logout();
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + choice);
@@ -122,10 +124,10 @@ public class Controller{
                     System.out.println("View Borrowing Records");
                     break;
                 case "7":
-                    userController.viewUserProfile(id);
+                    System.out.println(userController.viewUserProfile(id));
                     break;
                 case "0":
-                    System.out.println("Logout");
+                    authController.logout();
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + choice);
