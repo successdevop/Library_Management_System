@@ -19,15 +19,23 @@ public class Book{
         this.category = category;
         this.isbn = getBookISBN();
         this.publication_year = publication_year;
-        this.status = BookStatus.AVAILABLE;
+        this.status = getBookStatus();
     }
 
     public String getBookId(){
         return this.id;
     }
 
+    public void setBookId(String id){
+        this.id = id;
+    }
+
     public String getBookISBN(){
         return this.isbn;
+    }
+
+    public void setBookISBN(String isbn){
+        this.isbn = isbn;
     }
 
     public void setTitle(String title){
