@@ -3,9 +3,11 @@ package com.library.utils;
 import com.library.app_files.Config;
 import com.library.database.Database;
 import com.library.exceptions.*;
+import com.library.models.Book;
 import com.library.models.Users;
 
 import java.time.LocalTime;
+import java.util.Random;
 import java.util.Set;
 
 import static com.library.app_files.Config.*;
@@ -36,6 +38,55 @@ public class LibraryUtils{
 
         int id = maxId + 1;
         return String.format("U%03d", id);
+    }
+
+    public static String generateBookId(){
+        Book[] books = Database.getBooksDatabase();
+
+        if (books == null)
+            throw new IllegalStateException("Book database not initialised");
+
+        int bookMaxId = 0;
+
+        for (Book book : books){
+            if (book == null)
+                continue;
+
+            String bookId = book.getBookId();
+            if (bookId == null || bookId.matches("B\\d+"))
+                throw new IllegalStateException("Invalid book ID found: "+bookId);
+
+            int numericBookId = Integer.parseInt(bookId.substring(1));
+            if(numericBookId > bookMaxId)
+                bookMaxId = numericBookId;
+        }
+
+        int bookId = bookMaxId + 1;
+        return String.format("B%03d", bookId);
+    }
+
+    public static String generateTransactionId(){
+        return null;
+    }
+
+    public static String generateBookIsbnNumber(){
+        StringBuilder sb = new StringBuilder("978");
+
+        for (int i = 0; i < 12; i++){
+            sb.append(new Random().nextInt(10));
+        }
+
+        // Calculate the checkSum
+        int sum = 0;
+        for (int i = 0; i < 12; i++){
+            int digit = Character.getNumericValue(sb.charAt(i));
+            sum += (digit % 2 == 0) ? digit : digit * 3;
+        }
+
+        int checkSum = (10 - (sum % 10) % 10);
+        sb.append(checkSum);
+
+        return sb.toString();
     }
 
     public static String validateStringLength(String name){
