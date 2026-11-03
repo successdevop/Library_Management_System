@@ -7,7 +7,6 @@ import static com.library.app_files.Config.USERS_STORAGE_FILE;
 
 
 public class UserRepo{
-
     public Users addUser(Users user){
         Users userResult =  Database.appendUserToFile(USERS_STORAGE_FILE, user);
 
