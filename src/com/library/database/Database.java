@@ -61,9 +61,14 @@ public class Database{
                     short publication_year = Short.parseShort(values[5].trim());
                     BookStatus status = BookStatus.valueOf(values[6].trim());
 
-                    bks.add(new Book(title, author, category, publication_year));
+                    Book book = new Book(title, author, category, publication_year);
+                    book.setBookId(id);
+                    book.setBookISBN(isbn);
+                    book.setBookStatus(status);
+                    bks.add(book);
                 }
             }
+            System.out.println("Books loaded");
         } catch (IOException | NumberFormatException ex){
             System.err.println("Error loading books to array: "+ex.getMessage());
         }
@@ -95,6 +100,7 @@ public class Database{
                 user.setStatus(status);
                 usr.add(user);
             }
+            System.out.println("Users loaded");
         } catch (IOException | NumberFormatException ex){
             System.err.println("Error loading Users to array: "+ex.getMessage());
         }
@@ -126,6 +132,27 @@ public class Database{
             System.err.println("Error writing User to file: "+ex.getMessage());
         }
 
+        return null;
+    }
+
+    public static Book appendBookToFile(String book_file_storage, Book book){
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(book_file_storage))){
+            String id = book.getBookId();
+            String title = book.getTitle();
+            String author = book.getAuthor();
+            String category = book.getCategory();
+            String isbn = book.getBookISBN();
+            String status = book.getBookStatus().toString();
+
+            String line = String.format("%s|%s|%s|%s|%s|%s", id, title, author, category, isbn, status);
+
+            bw.write(line);
+            bw.newLine();
+
+            return book;
+        }catch (IOException ex){
+            System.err.println("Error adding book to file: "+ex.getMessage());
+        }
         return null;
     }
 }
