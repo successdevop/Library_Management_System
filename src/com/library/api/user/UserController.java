@@ -2,8 +2,6 @@ package com.library.api.user;
 
 import com.library.services.UserService;
 
-import java.util.Scanner;
-
 
 public class UserController{
     private static UserService userService = null;

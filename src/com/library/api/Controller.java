@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 
 public class Controller{
-    Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
     private final Auth authController = new Auth();
     private final UserController userController = new UserController();
 

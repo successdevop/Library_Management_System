@@ -18,10 +18,6 @@ public class Auth{
         authService = new AuthService();
     }
 
-    public Users getCurrentUser(){
-        return currentUser;
-    }
-
     // REGISTER MEMBER
     public String signUpAccount(){
         String firstName = "";
@@ -82,8 +78,8 @@ public class Auth{
 
     // LOGIN MEMBER
     public Users signInAccount(){
-        String email = "";
-        String password = "";
+        String email;
+        String password;
 
         System.out.print("Please enter your email: ");
         email = LibraryUtils.validateEmail(scanner.nextLine());
