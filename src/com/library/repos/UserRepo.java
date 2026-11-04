@@ -7,65 +7,58 @@ import static com.library.app_files.Config.USERS_STORAGE_FILE;
 
 
 public class UserRepo{
-    public Users addUser(Users user){
-        Users userResult =  Database.appendUserToFile(USERS_STORAGE_FILE, user);
+    private final Users[] users = Database.getUsersDatabase();
 
-        if (userResult == null)
+    public Users addUser(Users user){
+        Users userObj =  Database.appendUserToFile(USERS_STORAGE_FILE, user);
+
+        if (userObj == null)
             return null;
 
-        Users[] users = Database.getUsersDatabase();
         for (int i = 0; i < users.length; i++){
             if(users[i] == null){
-                users[i] = userResult;
+                users[i] = userObj;
                 break;
             }
         }
 
-        return userResult;
+        return userObj;
     }
 
     public Users getUserById(String id){
-        Users[] users = Database.getUsersDatabase();
-        Users user = null;
 
-        for (Users userObj : users) {
-            if (userObj != null && userObj.getId().equals(id)) {
-                user = userObj;
-                break;
+        for (Users user : users) {
+            if (user != null && user.getId().equals(id)) {
+                return user;
             }
         }
 
-        return user;
+        return null;
     }
 
     public Users getUserByEmail(String email){
-        Users[] users = Database.getUsersDatabase();
-        Users user = null;
 
-        for (Users userObj : users) {
-            if (userObj != null && userObj.getEmail().equals(email)) {
-                user = userObj;
-                break;
+        for (Users user : users) {
+            if (user != null && user.getEmail().equals(email)) {
+                return user;
             }
         }
 
-        return user;
+        return null;
     }
 
     public String getUserByPhoneNumber(String phoneNo){
-        String phoneNumber = null;
 
-        for (Users user : Database.getUsersDatabase()){
+        for (Users user : users){
             if (user != null && user.getPhoneNo().equals(phoneNo)){
-                phoneNumber = user.getPhoneNo();
-                break;
+                return user.getPhoneNo();
             }
         }
 
-        return phoneNumber;
+        return null;
     }
 
     public Users[] getAllUsers(){
-        return Database.getUsersDatabase();
+        return users;
     }
 }

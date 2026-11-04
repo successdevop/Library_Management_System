@@ -25,6 +25,7 @@ public class AuthService{
 
     public Users registerMember(String firstName, String lastName, String email, String phoneNo,
                                 MembershipType membershipType, String password){
+
         Users user = userRepo.getUserByEmail(email);
         if (user != null){
             throw new UserAlreadyExistException();
@@ -36,6 +37,7 @@ public class AuthService{
         }
 
         String hashedPassword = hashPassword(password);
+
         Users newUser = new Users(firstName, lastName, email, phoneNo, membershipType, hashedPassword);
         newUser.setId(generateUserId());
         newUser.setDateJoined(LocalDate.now());
@@ -54,15 +56,15 @@ public class AuthService{
             throw new InvalidCredentialException("Invalid email or password");
         }
 
-        if (user.getStatus().name().equalsIgnoreCase("inactive")){
+        if (user.getStatus().toString().equalsIgnoreCase("inactive")){
             throw new InactiveAccountException("Account is inactive, please contact customer support/agents");
         }
 
-        if (user.getStatus().name().equalsIgnoreCase("suspended")){
+        if (user.getStatus().toString().equalsIgnoreCase("suspended")){
             throw new InactiveAccountException("Account is suspended, please contact customer support/agents");
         }
 
-        if (user.getStatus().name().equalsIgnoreCase("expired"))
+        if (user.getStatus().toString().equalsIgnoreCase("expired"))
             throw new InactiveAccountException("Account is expired, please contact customer support/agents");
 
         return user;

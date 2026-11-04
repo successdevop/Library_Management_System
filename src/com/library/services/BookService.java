@@ -6,10 +6,9 @@ import com.library.exceptions.BookNotFoundException;
 import com.library.models.Book;
 import com.library.repos.BookRepo;
 
-import java.util.Arrays;
-
 import static com.library.utils.LibraryUtils.generateBookId;
 import static com.library.utils.LibraryUtils.generateBookIsbnNumber;
+
 
 public class BookService{
     private final BookRepo bookRepo;
@@ -20,8 +19,7 @@ public class BookService{
 
     public Book addBook(String book_title, String author, String category, short publication_year){
 
-        boolean isExists = bookRepo.checkBook(book_title, author);
-        if (isExists)
+        if (bookRepo.searchBook(book_title, author) != null)
             throw new BookAlreadyExistsException("Book already exists");
 
         Book newBook = new Book(book_title, author, category, publication_year);
@@ -45,7 +43,7 @@ public class BookService{
         }
     }
 
-    public String viewBook(String title, String author){
+    public String viewBookDetails(String title, String author){
         Book book = bookRepo.searchBook(title, author);
 
         if (book == null)

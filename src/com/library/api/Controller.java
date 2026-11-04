@@ -3,6 +3,7 @@ package com.library.api;
 import com.library.api.auth.Auth;
 import com.library.api.book.BookController;
 import com.library.api.user.UserController;
+import com.library.exceptions.*;
 import com.library.models.Book;
 import com.library.models.Users;
 import com.library.utils.LibraryUtils;
@@ -52,13 +53,11 @@ public class Controller{
     }
 
     public void featuresCall(String membershipType, String id){
-        String choice;
 
         if (membershipType.equalsIgnoreCase("staff")){
             System.out.print("\nSelect an option (0 - 12): ");
-            choice = scanner.nextLine();
 
-            switch(choice){
+            switch(scanner.nextLine()){
                 case "1":
                     String result;
 
@@ -78,7 +77,7 @@ public class Controller{
                     if (book != null) {
                         result = "Book added successfully";
                     }else{
-                        result = "Book addition failed";
+                        result = "Adding new book failed, please try again later!!!";
                     }
 
                     System.out.println(result);
@@ -93,12 +92,14 @@ public class Controller{
                     System.out.println("\n========================");
                     System.out.println("   BOOK DETAILS         ");
                     System.out.println("========================");
+
                     System.out.println(bookController.viewBookDetails(title, bookAuthor));
                     break;
                 case "3":
                     System.out.println("\n=================================");
                     System.out.println("       LIBRARY BOOKS          ");
                     System.out.println("=================================");
+
                     bookController.viewAllBooks();
                     break;
                 case "4":
@@ -120,21 +121,23 @@ public class Controller{
                     System.out.println("\n========================");
                     System.out.println("   USER PROFILE         ");
                     System.out.println("========================");
+
                     System.out.println(userController.viewUserProfile(id));
                     break;
                 case "10":
                     System.out.print("Enter member Id: ");
-                    choice = scanner.nextLine();
 
                     System.out.println("\n========================");
                     System.out.println("   USER PROFILE         ");
                     System.out.println("========================");
-                    System.out.println(userController.viewUserProfile(choice));
+
+                    System.out.println(userController.viewUserProfile(scanner.nextLine()));
                     break;
                 case "11":
                     System.out.println("\n=================================");
                     System.out.println("        LIBRARY MEMBERS          ");
                     System.out.println("=================================");
+
                     userController.viewAllUsers();
                     break;
                 case "12":
@@ -144,18 +147,31 @@ public class Controller{
                     authController.logout();
                     break;
                 default:
-                    throw new IllegalStateException("Unexpected value: " + choice);
+                    throw new IllegalStateException("Unexpected value: " + scanner.nextLine());
             }
         }else {
             System.out.print("\nSelect an option (0 - 7): ");
-            choice = scanner.nextLine();
 
-            switch(choice){
+            switch(scanner.nextLine()){
                 case "1":
-                    System.out.println("View Book Details");
+                    System.out.print("Enter book title: \n");
+                    String title = LibraryUtils.validateStringLength(scanner.nextLine());
+
+                    System.out.print("Enter book author: \n");
+                    String bookAuthor = LibraryUtils.validateStringLength(scanner.nextLine());
+
+                    System.out.println("\n========================");
+                    System.out.println("   BOOK DETAILS         ");
+                    System.out.println("========================");
+
+                    System.out.println(bookController.viewBookDetails(title, bookAuthor));
                     break;
                 case "2":
-                    System.out.println("View All Books");
+                    System.out.println("\n=================================");
+                    System.out.println("       LIBRARY BOOKS          ");
+                    System.out.println("=================================");
+
+                    bookController.viewAllBooks();
                     break;
                 case "3":
                     System.out.println("Search Book");
@@ -170,15 +186,20 @@ public class Controller{
                     System.out.println("View Borrowing Records");
                     break;
                 case "7":
+                    System.out.println("\n========================");
+                    System.out.println("   USER PROFILE         ");
+                    System.out.println("========================");
+
                     System.out.println(userController.viewUserProfile(id));
                     break;
                 case "0":
                     authController.logout();
                     break;
                 default:
-                    throw new IllegalStateException("Unexpected value: " + choice);
+                    throw new IllegalStateException("Unexpected value: " + scanner.nextLine());
             }
         }
+
         scanner.close();
     }
 
@@ -202,17 +223,102 @@ public class Controller{
         featuresCall(membershipType, userId);
     }
 
-    public String registerMember(){
+    public void registerMember(){
         System.out.println("========================================");
         System.out.println("        REGISTRATION DASHBOARD          ");
         System.out.println("========================================");
-        return authController.signUpAccount();
+
+        String firstName = "";
+        String lastName = "";
+        String email = "";
+        String phoneNo = "";
+        String membershipType = "";
+        String password = "";
+
+        boolean regFlag = false;
+
+        while(!regFlag){
+            try{
+
+                System.out.print("Enter firstName (minimum 3 characters): ");
+                firstName = LibraryUtils.validateStringLength(scanner.nextLine());
+
+                System.out.print("Enter lastName (minimum 3 characters): ");
+                lastName = LibraryUtils.validateStringLength(scanner.nextLine());
+
+                System.out.print("Enter a valid email: ");
+                email = LibraryUtils.validateEmail(scanner.nextLine());
+
+                System.out.print("Enter a valid phone number: ");
+                phoneNo = LibraryUtils.validatePhoneNumber(scanner.nextLine());
+
+                System.out.print("Enter membership type i.e student, general or staff: ");
+                membershipType = LibraryUtils.validateMembershipType(scanner.nextLine());
+
+                System.out.print("Choose a password, make sure it is at least 8 characters long and contains at least " +
+                        "one number, capital letter,lower letter and special character e.g /,@,#,?,$,& e.t.c: ");
+                password = LibraryUtils.validatePassword(scanner.nextLine());
+
+                regFlag = true;
+
+            } catch(InvalidNameLengthException | InvalidEmailException | InvalidPhoneNumberException |
+                    InvalidMembershipTypeException | InvalidPasswordException ex){
+                System.err.println("❌ Error: \n" + ex.getMessage());
+                System.out.println("Please try again.\n");
+            }
+        }
+
+        System.out.println("\n");
+        // enforce lower case
+        email = email.toLowerCase();
+
+        Users user = authController.signUpAccount(firstName, lastName, email, phoneNo, membershipType, password);
+
+        if (user != null){
+            System.out.println("Congratulations "+user.getFirstName()+", your registration is successful");
+
+            try{
+                Thread.sleep(3000);
+                clearConsole();
+                personalDashBoard(user);
+            }catch(InterruptedException ex){
+                System.out.println("ERROR: "+ex.getMessage());
+            }
+        }
+
+        System.out.println("User registration failed, please try again later");
     }
 
-    public Users loginMember(){
+    public void loginMember(){
         System.out.println("========================================");
         System.out.println("            LOGIN DASHBOARD             ");
         System.out.println("========================================");
-        return authController.signInAccount();
+
+        String email;
+        String password;
+
+        System.out.print("Please enter your email: ");
+        email = LibraryUtils.validateEmail(scanner.nextLine());
+
+        System.out.print("Please enter your password: ");
+        password = LibraryUtils.validatePassword(scanner.nextLine());
+
+        // enforce lower case
+        email = email.toLowerCase();
+        Users user = authController.signInAccount(email, password);
+
+        if (user == null){
+            System.out.println("Login failed");
+        }else{
+            System.out.println("Login successful");
+            clearConsole();
+            personalDashBoard(user);
+        }
+    }
+
+    public static void clearConsole() {
+        for (int i = 0; i < 25; i++) {
+            System.out.println();
+        }
     }
 }

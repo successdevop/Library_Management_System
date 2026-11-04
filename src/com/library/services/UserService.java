@@ -33,12 +33,10 @@ public class UserService{
 
     public void getAllUsers(){
         Users[] users = userRepo.getAllUsers();
-        if (users == null || users.length == 0)
-            throw new UserNotFoundException("Empty/Null array: Users not found");
 
         for (int i = 0; i < users.length; i++){
             if (users[i] == null)
-                break;
+                continue;
 
             System.out.println((i+1)+". "+"User<(id: "+users[i].getId()+", firstName: "+users[i].getFirstName()+", email: "+
                     users[i].getEmail()+", " + "userType: "+users[i].getMembershipType()+", status: "+users[i].getStatus()+")>");
