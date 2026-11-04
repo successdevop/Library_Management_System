@@ -84,10 +84,22 @@ public class Controller{
                     System.out.println(result);
                     break;
                 case "2":
-                    System.out.println("View Book Details");
+                    System.out.print("Enter book title: \n");
+                    String title = LibraryUtils.validateStringLength(scanner.nextLine());
+
+                    System.out.print("Enter book author: \n");
+                    String bookAuthor = LibraryUtils.validateStringLength(scanner.nextLine());
+
+                    System.out.println("\n========================");
+                    System.out.println("   BOOK DETAILS         ");
+                    System.out.println("========================");
+                    System.out.println(bookController.viewBookDetails(title, bookAuthor));
                     break;
                 case "3":
-                    System.out.println("View All Books");
+                    System.out.println("\n=================================");
+                    System.out.println("       LIBRARY BOOKS          ");
+                    System.out.println("=================================");
+                    bookController.viewAllBooks();
                     break;
                 case "4":
                     System.out.println("Search Book");
@@ -105,14 +117,24 @@ public class Controller{
                     System.out.println("View All Borrowing Records");
                     break;
                 case "9":
+                    System.out.println("\n========================");
+                    System.out.println("   USER PROFILE         ");
+                    System.out.println("========================");
                     System.out.println(userController.viewUserProfile(id));
                     break;
                 case "10":
                     System.out.print("Enter member Id: ");
                     choice = scanner.nextLine();
+
+                    System.out.println("\n========================");
+                    System.out.println("   USER PROFILE         ");
+                    System.out.println("========================");
                     System.out.println(userController.viewUserProfile(choice));
                     break;
                 case "11":
+                    System.out.println("\n=================================");
+                    System.out.println("        LIBRARY MEMBERS          ");
+                    System.out.println("=================================");
                     userController.viewAllUsers();
                     break;
                 case "12":

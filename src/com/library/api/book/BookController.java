@@ -13,4 +13,12 @@ public class BookController{
     public Book addBook(String bookTitle, String author, String category, short publicationYear){
         return bookService.addBook(bookTitle, author, category, publicationYear);
     }
+
+    public void viewAllBooks(){
+        bookService.viewAllBooks();
+    }
+
+    public String viewBookDetails(String title, String author){
+        return bookService.viewBook(title, author);
+    }
 }
