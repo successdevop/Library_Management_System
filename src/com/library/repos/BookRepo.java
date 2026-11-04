@@ -25,8 +25,6 @@ public class BookRepo{
     }
 
     public boolean checkBook(String title, String author){
-        if (books == null)
-            throw new IllegalStateException("Book database empty");
 
         for (Book value : books) {
             if (value != null && value.getTitle().equalsIgnoreCase(title) &&
@@ -35,5 +33,40 @@ public class BookRepo{
         }
 
         return false;
+    }
+
+    public Book[] getAllBooks(){
+        return books;
+    }
+
+    public Book searchBook(String title){
+        for (Book book : books){
+            if (book != null && book.getTitle().equalsIgnoreCase(title))
+                return book;
+        }
+
+        return null;
+    }
+
+    public Book searchBook(String title, String author){
+        for (Book book : books){
+            if (book != null && book.getTitle().equalsIgnoreCase(title) &&
+                    book.getAuthor().equalsIgnoreCase(author))
+
+                return book;
+        }
+
+        return null;
+    }
+
+    public Book searchBook(String title, String author, String category){
+        for (Book book : books){
+            if (book != null && book.getTitle().equalsIgnoreCase(title) &&
+                    book.getAuthor().equalsIgnoreCase(author) && book.getCategory().equalsIgnoreCase(category))
+
+                return book;
+        }
+
+        return null;
     }
 }
