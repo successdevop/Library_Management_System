@@ -18,10 +18,6 @@ public class UserService{
         if (user == null)
             throw new UserNotFoundException("Member not found");
 
-        System.out.println("\n========================");
-        System.out.println("   USER PROFILE         ");
-        System.out.println("========================");
-
         return (
                 "Id: "+user.getId()+"\n" +
                         "FirstName: "+user.getFirstName()+"\n" +

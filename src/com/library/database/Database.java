@@ -142,9 +142,10 @@ public class Database{
             String author = book.getAuthor();
             String category = book.getCategory();
             String isbn = book.getBookISBN();
+            String publicationYear = String.valueOf(book.getPublicationYear());
             String status = book.getBookStatus().toString();
 
-            String line = String.format("%s|%s|%s|%s|%s|%s", id, title, author, category, isbn, status);
+            String line = String.format("%s|%s|%s|%s|%s|%s|%s", id, title, author, category, isbn, publicationYear, status);
 
             bw.write(line);
             bw.newLine();

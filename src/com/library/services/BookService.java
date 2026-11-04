@@ -2,8 +2,11 @@ package com.library.services;
 
 import com.library.enums.BookStatus;
 import com.library.exceptions.BookAlreadyExistsException;
+import com.library.exceptions.BookNotFoundException;
 import com.library.models.Book;
 import com.library.repos.BookRepo;
+
+import java.util.Arrays;
 
 import static com.library.utils.LibraryUtils.generateBookId;
 import static com.library.utils.LibraryUtils.generateBookIsbnNumber;
@@ -27,5 +30,35 @@ public class BookService{
         newBook.setBookStatus(BookStatus.AVAILABLE);
 
         return bookRepo.addBook(newBook);
+    }
+
+    public void viewAllBooks(){
+        Book[] books = bookRepo.getAllBooks();
+
+        for (int i = 0; i < books.length; i++){
+            if (books[i] == null)
+                continue;
+
+            System.out.println(i+1+". Book<(book_id :"+books[i].getBookId() +", book_title: "+books[i].getTitle()+", "
+                    +"book_author: "+books[i].getAuthor()+", book_category: "+books[i].getCategory()+", book_status: "
+                    +books[i].getBookStatus()+")>");
+        }
+    }
+
+    public String viewBook(String title, String author){
+        Book book = bookRepo.searchBook(title, author);
+
+        if (book == null)
+            throw new BookNotFoundException("Book not found");
+
+        return (
+                "Book_Id: "+book.getBookId()+"\n" +
+                        "Title: "+book.getTitle()+"\n" +
+                        "Author: "+book.getAuthor()+"\n" +
+                        "Category: "+book.getCategory()+"\n" +
+                        "ISBN: "+book.getBookISBN()+"\n" +
+                        "Publication Year: "+book.getPublicationYear()+"\n" +
+                        "Status: "+book.getBookStatus()+"\n"
+                );
     }
 }
