@@ -199,8 +199,6 @@ public class Controller{
                     throw new IllegalStateException("Unexpected value: " + scanner.nextLine());
             }
         }
-
-        scanner.close();
     }
 
     public void personalDashBoard(Users user){
@@ -215,7 +213,7 @@ public class Controller{
 
         System.out.println(LibraryUtils.greet()+" "+first_name+", Welcome to your dashboard\n");
 
-        String membershipType = user.getMembershipType().name().toLowerCase();
+        String membershipType = user.getMembershipType().toString().toLowerCase();
         String userId = user.getId();
 
         displayPersonalMenu(membershipType);
@@ -256,7 +254,7 @@ public class Controller{
                 membershipType = LibraryUtils.validateMembershipType(scanner.nextLine());
 
                 System.out.print("Choose a password, make sure it is at least 8 characters long and contains at least " +
-                        "one number, capital letter,lower letter and special character e.g /,@,#,?,$,& e.t.c: ");
+                        "one number, capital letter,lower letter and special character e.g /,@,#,?,$,& e.t.c: \n");
                 password = LibraryUtils.validatePassword(scanner.nextLine());
 
                 regFlag = true;
@@ -268,25 +266,27 @@ public class Controller{
             }
         }
 
-        System.out.println("\n");
         // enforce lower case
         email = email.toLowerCase();
 
         Users user = authController.signUpAccount(firstName, lastName, email, phoneNo, membershipType, password);
 
         if (user != null){
-            System.out.println("Congratulations "+user.getFirstName()+", your registration is successful");
+            System.out.println("\nCongratulations "+user.getFirstName()+", your registration is successful\n");
 
             try{
                 Thread.sleep(3000);
                 clearConsole();
-                personalDashBoard(user);
             }catch(InterruptedException ex){
                 System.out.println("ERROR: "+ex.getMessage());
             }
+
+            personalDashBoard(user);
+        }else{
+
+            System.out.println("User registration failed, please try again later");
         }
 
-        System.out.println("User registration failed, please try again later");
     }
 
     public void loginMember(){
@@ -314,6 +314,26 @@ public class Controller{
             clearConsole();
             personalDashBoard(user);
         }
+    }
+
+    public void forgotPassword(){
+        System.out.println("========================================");
+        System.out.println("          FORGOT PASSWORD             ");
+        System.out.println("========================================");
+
+        String email;
+        String phoneNo;
+
+        System.out.print("Please enter your email: ");
+        email = LibraryUtils.validateEmail(scanner.nextLine());
+
+        System.out.print("Please enter your phone number: ");
+        phoneNo = LibraryUtils.validatePhoneNumber(scanner.nextLine());
+
+        // enforce lower case
+        email = email.toLowerCase();
+
+        boolean exists = authController.forgotPassword(email, phoneNo);
     }
 
     public static void clearConsole() {

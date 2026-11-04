@@ -8,7 +8,6 @@ import com.library.services.AuthService;
 
 public class Auth{
     private static AuthService authService = null;
-    private static Users currentUser = null;
 
     public Auth(){
         authService = new AuthService();
@@ -27,11 +26,13 @@ public class Auth{
         return authService.loginMember(email, password);
     }
 
-    // REGISTER MEMBER
+    // LOGOUT MEMBER
     public void logout(){
-        if (currentUser != null){
-            System.out.println(currentUser.getFirstName()+" logged out successfully");
-            currentUser = null;
-        }
+        authService.logout();
+    }
+
+    // FORGOT PASSWORD
+    public boolean forgotPassword(String email, String phoneNumber){
+        return authService.forgotPassword(email, phoneNumber);
     }
 }

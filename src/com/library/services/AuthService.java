@@ -2,10 +2,7 @@ package com.library.services;
 
 import com.library.enums.MemberStatus;
 import com.library.enums.MembershipType;
-import com.library.exceptions.InactiveAccountException;
-import com.library.exceptions.InvalidCredentialException;
-import com.library.exceptions.PhoneNumberAlreadyExistsException;
-import com.library.exceptions.UserAlreadyExistException;
+import com.library.exceptions.*;
 import com.library.models.Users;
 import com.library.repos.UserRepo;
 
@@ -18,6 +15,7 @@ import static com.library.utils.LibraryUtils.generateUserId;
 
 public class AuthService{
     private final UserRepo userRepo;
+    private static Users currentUser;
 
     public AuthService(){
         this.userRepo = new UserRepo();
@@ -67,6 +65,24 @@ public class AuthService{
         if (user.getStatus().toString().equalsIgnoreCase("expired"))
             throw new InactiveAccountException("Account is expired, please contact customer support/agents");
 
-        return user;
+        currentUser = user;
+        return currentUser;
+    }
+
+    public void logout(){
+        if (currentUser != null){
+            System.out.println(currentUser.getFirstName()+" logged out successfully");
+            currentUser = null;
+        }
+    }
+
+    public boolean forgotPassword(String email, String phoneNumber){
+        Users user = userRepo.getUserByEmail(email);
+        String phoneNo = userRepo.getUserByPhoneNumber(phoneNumber);
+
+        if (user == null || phoneNo == null)
+            throw new InvalidCredentialException("Incorrect email or phone number");
+
+        return true;
     }
 }

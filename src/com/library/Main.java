@@ -5,15 +5,17 @@ import com.library.app_files.Config;
 import com.library.database.Database;
 
 import java.util.Scanner;
+
 import static com.library.api.Controller.clearConsole;
 
 
 public class Main{
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
         Database.getInstance(Config.DATABASE_FILE);
         Controller controller = new Controller();
 
-        Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
         while(running){
@@ -39,7 +41,7 @@ public class Main{
                         System.out.println("Invalid number option");
                 }
             }catch(Exception ex){
-                System.out.println(ex.getMessage());
+                System.out.println("\nERROR: "+ex.getMessage()+"\n");
             }
         }
 
