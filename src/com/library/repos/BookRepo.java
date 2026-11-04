@@ -25,8 +25,12 @@ public class BookRepo{
     }
 
     public boolean checkBook(String title, String author){
+        if (books == null)
+            throw new IllegalStateException("Book database empty");
+
         for (Book value : books) {
-            if (value.getTitle().equalsIgnoreCase(title) && value.getAuthor().equalsIgnoreCase(author))
+            if (value != null && value.getTitle().equalsIgnoreCase(title) &&
+                    value.getAuthor().equalsIgnoreCase(author))
                 return true;
         }
 

@@ -1,7 +1,9 @@
 package com.library.api;
 
 import com.library.api.auth.Auth;
+import com.library.api.book.BookController;
 import com.library.api.user.UserController;
+import com.library.models.Book;
 import com.library.models.Users;
 import com.library.utils.LibraryUtils;
 
@@ -12,6 +14,7 @@ public class Controller{
     private final Scanner scanner = new Scanner(System.in);
     private final Auth authController = new Auth();
     private final UserController userController = new UserController();
+    private final BookController bookController = new BookController();
 
     public void displayMainMenu(){
         System.out.println("========================================");
@@ -57,7 +60,28 @@ public class Controller{
 
             switch(choice){
                 case "1":
-                    System.out.println("Add book");
+                    String result;
+
+                    System.out.print("Enter book title: \n");
+                    String bookTitle = LibraryUtils.validateStringLength(scanner.nextLine());
+
+                    System.out.print("Enter book author: \n");
+                    String author = LibraryUtils.validateStringLength(scanner.nextLine());
+
+                    System.out.print("Enter book category: \n");
+                    String category = LibraryUtils.validateStringLength(scanner.nextLine());
+
+                    System.out.print("Enter book publication year: \n");
+                    short publicationYear = Short.parseShort(scanner.nextLine());
+
+                    Book book = bookController.addBook(bookTitle, author, category, publicationYear);
+                    if (book != null) {
+                        result = "Book added successfully";
+                    }else{
+                        result = "Book addition failed";
+                    }
+
+                    System.out.println(result);
                     break;
                 case "2":
                     System.out.println("View Book Details");

@@ -9,14 +9,14 @@ import java.util.Scanner;
 
 
 public class Main{
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         Database.getInstance(Config.DATABASE_FILE);
         Controller controller = new Controller();
 
 
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
-        String choice = "";
+        String choice;
 
         while(running){
             controller.displayMainMenu();

@@ -136,7 +136,7 @@ public class Database{
     }
 
     public static Book appendBookToFile(String book_file_storage, Book book){
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(book_file_storage))){
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(book_file_storage, true))){
             String id = book.getBookId();
             String title = book.getTitle();
             String author = book.getAuthor();
