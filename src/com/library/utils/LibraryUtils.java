@@ -150,4 +150,31 @@ public class LibraryUtils{
 
         return greeting;
     }
+
+    public static String generateUserStringValue(Users user){
+        String id = user.getId();
+        String firstName = user.getFirstName();
+        String lastName = user.getLastName();
+        String email = user.getEmail();
+        String phoneNo = user.getPhoneNo();
+        String dateJoined = String.valueOf(user.getDateJoined());
+        String status = user.getStatus().toString();
+        String membershipType = user.getMembershipType().toString();
+        String password = user.getPassword();
+
+        return String.format("%s|%s|%s|%s|%s|%s|%s|%s|%s",
+                id, firstName, lastName, email, phoneNo, dateJoined, status, membershipType, password);
+    }
+
+    public static String generateBookStringValue(Book book){
+        String id = book.getBookId();
+        String title = book.getTitle();
+        String author = book.getAuthor();
+        String category = book.getCategory();
+        String isbn = book.getBookISBN();
+        String publicationYear = String.valueOf(book.getPublicationYear());
+        String status = book.getBookStatus().toString();
+
+        return String.format("%s|%s|%s|%s|%s|%s|%s", id, title, author, category, isbn, publicationYear, status);
+    }
 }
