@@ -8,6 +8,7 @@ import com.library.models.Book;
 import com.library.models.Users;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -153,5 +154,26 @@ public class Database{
             System.err.println("Error adding book to file: "+ex.getMessage());
         }
         return null;
+    }
+
+    public static Users updateUserFile(String storage_file, Users user){
+        String tempFile ="users_temp_file.txt";
+
+        try(
+                BufferedReader br = new BufferedReader(new FileReader(storage_file));
+                BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile))
+        ){
+            String line;
+
+            while((line = br.readLine()) != null){
+                String[] fields = line.split("\\|");
+
+                if(fields.length > 0 && fields[0].strip().equals(user.getId())){
+                    String updatedLine = ""
+                }
+            }
+        }catch(IOException ex){
+            System.out.println("updating file: "+ex.getMessage());
+        }
     }
 }
