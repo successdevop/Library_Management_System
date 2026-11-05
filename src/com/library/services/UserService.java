@@ -43,12 +43,12 @@ public class UserService{
         }
     }
 
-    public Users editUserProfile(String userId, String newValues){
-        Users user = userRepo.getUserById(userId);
+    public Users editUserProfile(Users user, String newValues){
+        Users userObj = userRepo.getUserById(user.getId());
 
-        if (user == null)
+        if (userObj == null)
             throw new UserNotFoundException("Member not found");
 
-        return userRepo.editUser(userId, newValues);
+        return userRepo.editUser(user, newValues);
     }
 }

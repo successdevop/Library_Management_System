@@ -13,6 +13,11 @@ public class Auth{
         authService = new AuthService();
     }
 
+    // GET ME
+    public Users getMe(){
+        return authService.getMe();
+    }
+
     // REGISTER MEMBER
     public Users signUpAccount(String firstName, String lastName, String email, String phoneNo, String membershipType,
                                 String password){

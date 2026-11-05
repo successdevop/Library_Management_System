@@ -68,7 +68,7 @@ public class Database{
         return null;
     }
 
-    public static boolean updateUserFile(String storage_file, String id, String newValues){
+    public static Users updateUserFile(String storage_file, Users user, String newValues){
         Path originalFile = Paths.get(storage_file);
         Path tempFile = Paths.get("users_temp_file.txt");
 
@@ -81,7 +81,7 @@ public class Database{
             while((line = br.readLine()) != null){
                 String[] fields = line.split("\\|");
 
-                if(fields.length > 0 && fields[0].strip().equals(id)){
+                if(fields.length > 0 && fields[0].strip().equals(user.getId())){
                     bw.write(newValues);
                 }else{
                     bw.write(line);
@@ -98,12 +98,12 @@ public class Database{
             Files.move(tempFile, originalFile, StandardCopyOption.ATOMIC_MOVE,
                     StandardCopyOption.REPLACE_EXISTING);
 
-            return true;
+            return user;
         } catch (IOException ex){
             System.out.println(ex.getMessage());
         }
 
-        return false;
+        return null;
     }
 
     public static synchronized Database getInstance(String[] files){

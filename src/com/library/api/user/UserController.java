@@ -22,7 +22,7 @@ public class UserController{
     }
 
     // EDIT/UPDATE USER
-    public Users updateUserProfile(String id, String userNewValues){
-        return userService.editUserProfile(id, userNewValues);
+    public Users updateUserProfile(Users user, String userNewValues){
+        return userService.editUserProfile(user, userNewValues);
     }
 }

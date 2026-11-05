@@ -25,14 +25,14 @@ public class UserRepo{
         return userObj;
     }
 
-    public Users editUser(String userId, String userNewValues){
-        boolean isUpdated = Database.updateUserFile(USERS_STORAGE_FILE, userId, userNewValues);
+    public Users editUser(Users user, String userNewValues){
+        Users userObj = Database.updateUserFile(USERS_STORAGE_FILE, user, userNewValues);
 
-        if (!isUpdated)
+        if (userObj == null)
             return null;
 
         for (int i = 0; i < users.length; i++){
-            if (users[i].getId().equals(userId)){
+            if (users[i].getId().equals(user.getId())){
                 users[i] = user;
                 break;
             }

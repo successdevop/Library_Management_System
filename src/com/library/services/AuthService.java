@@ -21,6 +21,10 @@ public class AuthService{
         this.userRepo = new UserRepo();
     }
 
+    public Users getMe(){
+        return currentUser;
+    }
+
     public Users registerMember(String firstName, String lastName, String email, String phoneNo,
                                 MembershipType membershipType, String password){
 

@@ -33,15 +33,21 @@ public class Controller{
             System.out.println("1. Add Book.");
             System.out.println("2. View Book Details");
             System.out.println("3. View All Books");
-            System.out.println("4. Search Book");
-            System.out.println("5. Borrow Book");
-            System.out.println("6. Return Book");
-            System.out.println("7. View Borrowing Records");
-            System.out.println("8. View All Borrowing Records");
-            System.out.println("9. View Personal Profile");
-            System.out.println("10. View Member Details");
-            System.out.println("11. View All Members");
-            System.out.println("12. View Library Statistics");
+            System.out.println("4. Update Books");
+            System.out.println("5. Delete Books");
+            System.out.println("6. Search Book");
+            System.out.println("7. Borrow Book");
+            System.out.println("8. Return Book");
+            System.out.println("9. View Borrowing Records");
+            System.out.println("10. View All Borrowing Records");
+            System.out.println("11. View Personal Profile");
+            System.out.println("12. View Member Profile");
+            System.out.println("13. View All Members");
+            System.out.println("14. Update Personal Profile");
+            System.out.println("15. Update Member Profile");
+            System.out.println("16. Delete Personal Profile");
+            System.out.println("17. Delete Member Profile");
+            System.out.println("18. View Library Statistics");
             System.out.println("0. Logout");
         }else{
             System.out.println("1. View Book Details");
@@ -50,7 +56,9 @@ public class Controller{
             System.out.println("4. Borrow Book");
             System.out.println("5. Return Book");
             System.out.println("6. View Borrowing Records");
-            System.out.println("7. View Profile");
+            System.out.println("7. View Personal Profile");
+            System.out.println("8. Update Personal Profile");
+            System.out.println("9. Delete Personal Profile");
             System.out.println("0. Logout");
         }
     }
@@ -58,7 +66,7 @@ public class Controller{
     public void featuresCall(String membershipType, String id){
 
         if (membershipType.equalsIgnoreCase("staff")){
-            System.out.print("\nSelect an option (0 - 12): ");
+            System.out.print("\nSelect an option (0 - 18): ");
 
             switch(scanner.nextLine()){
                 case "1":
@@ -92,11 +100,15 @@ public class Controller{
                     System.out.print("Enter book author: \n");
                     String bookAuthor = LibraryUtils.validateStringLength(scanner.nextLine());
 
-                    System.out.println("\n========================");
-                    System.out.println("   BOOK DETAILS         ");
-                    System.out.println("========================");
+                    String viewBookInfo = bookController.viewBookDetails(title, bookAuthor);
 
-                    System.out.println(bookController.viewBookDetails(title, bookAuthor));
+                    if (viewBookInfo != null){
+                        System.out.println("\n========================");
+                        System.out.println("   BOOK DETAILS         ");
+                        System.out.println("========================");
+
+                        System.out.println(viewBookInfo);
+                    }
                     break;
                 case "3":
                     System.out.println("\n=================================");
@@ -106,45 +118,70 @@ public class Controller{
                     bookController.viewAllBooks();
                     break;
                 case "4":
-                    System.out.println("Search Book");
+                    System.out.println("4. Update Books");
                     break;
                 case "5":
-                    System.out.println("Borrow Book");
+                    System.out.println("5. Delete Books");
                     break;
                 case "6":
-                    System.out.println("Return Book");
+                    System.out.println("6. Search Book");
                     break;
                 case "7":
-                    System.out.println("View Borrowing Records");
+                    System.out.println("7. Borrow Book");
                     break;
                 case "8":
-                    System.out.println("View All Borrowing Records");
+                    System.out.println("8. Return Book");
                     break;
                 case "9":
-                    System.out.println("\n========================");
-                    System.out.println("   USER PROFILE         ");
-                    System.out.println("========================");
-
-                    System.out.println(userController.viewUserProfile(id));
+                    System.out.println("9. View Borrowing Records");
                     break;
                 case "10":
-                    System.out.print("Enter member Id: ");
-
-                    System.out.println("\n========================");
-                    System.out.println("   USER PROFILE         ");
-                    System.out.println("========================");
-
-                    System.out.println(userController.viewUserProfile(scanner.nextLine()));
+                    System.out.println("10. View All Borrowing Records");
                     break;
                 case "11":
+                    String viewProfileInfo = userController.viewUserProfile(id);
+
+                    if (viewProfileInfo != null){
+                        System.out.println("\n========================");
+                        System.out.println("   USER PROFILE         ");
+                        System.out.println("========================");
+
+                        System.out.println(viewProfileInfo);
+                    }
+                    break;
+                case "12":
+                    System.out.print("Enter member Id: ");
+                    String viewMemberProfileInfo = userController.viewUserProfile(scanner.nextLine());
+
+                    if (viewMemberProfileInfo != null){
+                        System.out.println("\n========================");
+                        System.out.println("   MEMBER PROFILE         ");
+                        System.out.println("========================");
+
+                        System.out.println(viewMemberProfileInfo);
+                    }
+                    break;
+                case "13":
                     System.out.println("\n=================================");
                     System.out.println("        LIBRARY MEMBERS          ");
                     System.out.println("=================================");
 
                     userController.viewAllUsers();
                     break;
-                case "12":
-                    System.out.println("View Library Statistics");
+                case "14":
+                    System.out.println("14. Update Personal Profile");
+                    break;
+                case "15":
+                    System.out.println("15. Update Member Profile");
+                    break;
+                case "16":
+                    System.out.println("16. Delete Personal Profile");
+                    break;
+                case "17":
+                    System.out.println("17. Delete Member Profile");
+                    break;
+                case "18":
+                    System.out.println("18. View Library Statistics");
                     break;
                 case "0":
                     authController.logout();
@@ -153,7 +190,7 @@ public class Controller{
                     throw new IllegalStateException("Unexpected value: " + scanner.nextLine());
             }
         }else {
-            System.out.print("\nSelect an option (0 - 7): ");
+            System.out.print("\nSelect an option (0 - 9): ");
 
             switch(scanner.nextLine()){
                 case "1":
@@ -163,11 +200,15 @@ public class Controller{
                     System.out.print("Enter book author: \n");
                     String bookAuthor = LibraryUtils.validateStringLength(scanner.nextLine());
 
-                    System.out.println("\n========================");
-                    System.out.println("   BOOK DETAILS         ");
-                    System.out.println("========================");
+                    String viewBookInfo = bookController.viewBookDetails(title, bookAuthor);
 
-                    System.out.println(bookController.viewBookDetails(title, bookAuthor));
+                    if (viewBookInfo != null){
+                        System.out.println("\n========================");
+                        System.out.println("   BOOK DETAILS         ");
+                        System.out.println("========================");
+
+                        System.out.println(viewBookInfo);
+                    }
                     break;
                 case "2":
                     System.out.println("\n=================================");
@@ -177,7 +218,7 @@ public class Controller{
                     bookController.viewAllBooks();
                     break;
                 case "3":
-                    System.out.println("Search Book");
+                    System.out.println("3. Search Book");
                     break;
                 case "4":
                     System.out.println("Borrow Book");
@@ -189,11 +230,21 @@ public class Controller{
                     System.out.println("View Borrowing Records");
                     break;
                 case "7":
-                    System.out.println("\n========================");
-                    System.out.println("   USER PROFILE         ");
-                    System.out.println("========================");
+                    String viewProfileInfo = userController.viewUserProfile(id);
 
-                    System.out.println(userController.viewUserProfile(id));
+                    if (viewProfileInfo != null){
+                        System.out.println("\n========================");
+                        System.out.println("   USER PROFILE         ");
+                        System.out.println("========================");
+
+                        System.out.println(viewProfileInfo);
+                    }
+                    break;
+                case "8":
+                    System.out.println("8. Update Personal Profile");
+                    break;
+                case "9":
+                    System.out.println("9. Delete Personal Profile");
                     break;
                 case "0":
                     authController.logout();
@@ -341,7 +392,7 @@ public class Controller{
         Users user = authController.forgotPassword(email, phoneNo);
 
         if (user != null){
-            System.out.print("Choose a new password, make sure it is at least 8 characters long" );
+            System.out.print("Choose a new password, make sure it is at least 8 characters long: ");
             password = LibraryUtils.validatePassword(scanner.nextLine());
 
             System.out.print("Confirm password: " );
@@ -355,7 +406,7 @@ public class Controller{
 
             String newValues = LibraryUtils.generateUserStringValue(user);
 
-            Users userObj = userController.updateUserProfile(user.getId(), newValues);
+            Users userObj = userController.updateUserProfile(user, newValues);
 
             if (userObj != null){
                 System.out.println("Password changed successfully");
@@ -363,10 +414,6 @@ public class Controller{
                 System.out.println("Password change failed");
             }
         }
-    }
-
-    public void updateUserProfile(){
-
     }
 
     public static void clearConsole() {
