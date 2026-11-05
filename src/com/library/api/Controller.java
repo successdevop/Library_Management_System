@@ -352,8 +352,20 @@ public class Controller{
 
             String hashedPassword = hashPassword(password);
             user.setPassword(hashedPassword);
-        }
 
+            String newValues = LibraryUtils.generateUserStringValue(user);
+
+            Users userObj = userController.updateUserProfile(user.getId(), newValues);
+
+            if (userObj != null){
+                System.out.println("Password changed successfully");
+            }else{
+                System.out.println("Password change failed");
+            }
+        }
+    }
+
+    public void updateUserProfile(){
 
     }
 
