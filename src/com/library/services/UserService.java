@@ -42,4 +42,13 @@ public class UserService{
                     users[i].getEmail()+", " + "userType: "+users[i].getMembershipType()+", status: "+users[i].getStatus()+")>");
         }
     }
+
+    public Users editUserProfile(String userId, String newValues){
+        Users user = userRepo.getUserById(userId);
+
+        if (user == null)
+            throw new UserNotFoundException("Member not found");
+
+        return userRepo.editUser(userId, newValues);
+    }
 }

@@ -6,13 +6,18 @@ import com.library.enums.MemberStatus;
 import com.library.enums.MembershipType;
 import com.library.models.Book;
 import com.library.models.Users;
+import com.library.utils.LibraryUtils;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 public class Database{
     private static Database instance = null;
@@ -30,6 +35,75 @@ public class Database{
 
     public static Users[] getUsersDatabase(){
         return users;
+    }
+
+    public static Users appendUserToFile(String user_file_storage, Users user) {
+
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(user_file_storage, true))){
+            String line = LibraryUtils.generateUserStringValue(user);
+
+            bw.write(line);
+            bw.newLine();
+
+            return user;
+        }catch (IOException ex){
+            System.err.println("Error writing User to file: "+ex.getMessage());
+        }
+
+        return null;
+    }
+
+    public static Book appendBookToFile(String book_file_storage, Book book){
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(book_file_storage, true))){
+            String line = LibraryUtils.generateBookStringValue(book);
+
+            bw.write(line);
+            bw.newLine();
+
+            return book;
+        }catch (IOException ex){
+            System.err.println("Error adding book to file: "+ex.getMessage());
+        }
+
+        return null;
+    }
+
+    public static boolean updateUserFile(String storage_file, String id, String newValues){
+        Path originalFile = Paths.get(storage_file);
+        Path tempFile = Paths.get("users_temp_file.txt");
+
+        try(
+                BufferedReader br = Files.newBufferedReader(originalFile);
+                BufferedWriter bw = Files.newBufferedWriter(tempFile)
+        ){
+            String line;
+
+            while((line = br.readLine()) != null){
+                String[] fields = line.split("\\|");
+
+                if(fields.length > 0 && fields[0].strip().equals(id)){
+                    bw.write(newValues);
+                }else{
+                    bw.write(line);
+                }
+
+                bw.newLine();
+            }
+
+        }catch(IOException ex){
+            System.out.println("updating file: "+ex.getMessage());
+        }
+
+        try{
+            Files.move(tempFile, originalFile, StandardCopyOption.ATOMIC_MOVE,
+                    StandardCopyOption.REPLACE_EXISTING);
+
+            return true;
+        } catch (IOException ex){
+            System.out.println(ex.getMessage());
+        }
+
+        return false;
     }
 
     public static synchronized Database getInstance(String[] files){
@@ -105,75 +179,5 @@ public class Database{
         }
 
         return usr.toArray(users);
-    }
-
-    public static Users appendUserToFile(String user_file_storage, Users user) {
-
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(user_file_storage, true))){
-            String id = user.getId();
-            String firstName = user.getFirstName();
-            String lastName = user.getLastName();
-            String email = user.getEmail();
-            String phoneNo = user.getPhoneNo();
-            String dateJoined = String.valueOf(user.getDateJoined());
-            String status = user.getStatus().toString();
-            String membershipType = user.getMembershipType().toString();
-            String password = user.getPassword();
-
-            String line = String.format("%s|%s|%s|%s|%s|%s|%s|%s|%s",
-                    id, firstName, lastName, email, phoneNo, dateJoined, status, membershipType, password);
-
-            bw.write(line);
-            bw.newLine();
-
-            return user;
-        }catch (IOException ex){
-            System.err.println("Error writing User to file: "+ex.getMessage());
-        }
-
-        return null;
-    }
-
-    public static Book appendBookToFile(String book_file_storage, Book book){
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(book_file_storage, true))){
-            String id = book.getBookId();
-            String title = book.getTitle();
-            String author = book.getAuthor();
-            String category = book.getCategory();
-            String isbn = book.getBookISBN();
-            String publicationYear = String.valueOf(book.getPublicationYear());
-            String status = book.getBookStatus().toString();
-
-            String line = String.format("%s|%s|%s|%s|%s|%s|%s", id, title, author, category, isbn, publicationYear, status);
-
-            bw.write(line);
-            bw.newLine();
-
-            return book;
-        }catch (IOException ex){
-            System.err.println("Error adding book to file: "+ex.getMessage());
-        }
-        return null;
-    }
-
-    public static Users updateUserFile(String storage_file, Users user){
-        String tempFile ="users_temp_file.txt";
-
-        try(
-                BufferedReader br = new BufferedReader(new FileReader(storage_file));
-                BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile))
-        ){
-            String line;
-
-            while((line = br.readLine()) != null){
-                String[] fields = line.split("\\|");
-
-                if(fields.length > 0 && fields[0].strip().equals(user.getId())){
-                    String updatedLine = ""
-                }
-            }
-        }catch(IOException ex){
-            System.out.println("updating file: "+ex.getMessage());
-        }
     }
 }

@@ -25,6 +25,22 @@ public class UserRepo{
         return userObj;
     }
 
+    public Users editUser(String userId, String userNewValues){
+        boolean isUpdated = Database.updateUserFile(USERS_STORAGE_FILE, userId, userNewValues);
+
+        if (!isUpdated)
+            return null;
+
+        for (int i = 0; i < users.length; i++){
+            if (users[i].getId().equals(userId)){
+                users[i] = user;
+                break;
+            }
+        }
+
+        return user;
+    }
+
     public Users getUserById(String id){
 
         for (Users user : users) {
