@@ -32,7 +32,7 @@ public class Auth{
     }
 
     // FORGOT PASSWORD
-    public boolean forgotPassword(String email, String phoneNumber){
+    public Users forgotPassword(String email, String phoneNumber){
         return authService.forgotPassword(email, phoneNumber);
     }
 }

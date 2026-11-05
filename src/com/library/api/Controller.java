@@ -10,6 +10,8 @@ import com.library.utils.LibraryUtils;
 
 import java.util.Scanner;
 
+import static com.library.utils.AuthUtils.hashPassword;
+
 
 public class Controller{
     private final Scanner scanner = new Scanner(System.in);
@@ -23,6 +25,7 @@ public class Controller{
         System.out.println("========================================");
         System.out.println("1. Are you new here? Sign up.");
         System.out.println("2. Login");
+        System.out.println("3. Forgot password");
     }
 
     public void displayPersonalMenu(String membershipType){
@@ -323,6 +326,8 @@ public class Controller{
 
         String email;
         String phoneNo;
+        String password;
+        String confirmPassword;
 
         System.out.print("Please enter your email: ");
         email = LibraryUtils.validateEmail(scanner.nextLine());
@@ -333,7 +338,23 @@ public class Controller{
         // enforce lower case
         email = email.toLowerCase();
 
-        boolean exists = authController.forgotPassword(email, phoneNo);
+        Users user = authController.forgotPassword(email, phoneNo);
+
+        if (user != null){
+            System.out.print("Choose a new password, make sure it is at least 8 characters long" );
+            password = LibraryUtils.validatePassword(scanner.nextLine());
+
+            System.out.print("Confirm password: " );
+            confirmPassword = LibraryUtils.validatePassword(scanner.nextLine());
+
+            if (!password.equals(confirmPassword))
+                throw new InvalidCredentialException("Password mismatch, check your passwords");
+
+            String hashedPassword = hashPassword(password);
+            user.setPassword(hashedPassword);
+        }
+
+
     }
 
     public static void clearConsole() {
