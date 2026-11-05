@@ -76,13 +76,13 @@ public class AuthService{
         }
     }
 
-    public boolean forgotPassword(String email, String phoneNumber){
+    public Users forgotPassword(String email, String phoneNumber){
         Users user = userRepo.getUserByEmail(email);
         String phoneNo = userRepo.getUserByPhoneNumber(phoneNumber);
 
         if (user == null || phoneNo == null)
             throw new InvalidCredentialException("Incorrect email or phone number");
 
-        return true;
+        return user;
     }
 }

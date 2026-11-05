@@ -20,7 +20,7 @@ public class Main{
 
         while(running){
             controller.displayMainMenu();
-            System.out.print("\nSelect an option (0 - 2): ");
+            System.out.print("\nSelect an option (0 - 3): ");
 
             try{
                 switch (scanner.nextLine()){
@@ -30,7 +30,13 @@ public class Main{
                         break;
 
                     case "2":
+                        clearConsole();
                         controller.loginMember();
+                        break;
+
+                    case "3":
+                        clearConsole();
+                        controller.forgotPassword();
                         break;
 
                     case "0":
