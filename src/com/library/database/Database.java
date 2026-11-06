@@ -91,7 +91,7 @@ public class Database{
             }
 
         }catch(IOException ex){
-            System.out.println("updating file: "+ex.getMessage());
+            System.out.println("updating user file: "+ex.getMessage());
         }
 
         try{
@@ -100,10 +100,105 @@ public class Database{
 
             return user;
         } catch (IOException ex){
-            System.out.println(ex.getMessage());
+            System.out.println("Swapping user file: "+ex.getMessage());
         }
 
         return null;
+    }
+
+    public static Book updateBookFile(String storage_file, Book book, String newValues){
+        Path tempFile = Paths.get("book_temp_file.txt");
+        Path originalFile = Paths.get(storage_file);
+
+        try(BufferedReader reader = Files.newBufferedReader(originalFile);
+        BufferedWriter writer = Files.newBufferedWriter(tempFile)){
+            String line;
+
+            while((line = reader.readLine()) != null){
+                String[] values = line.split("\\|");
+
+                if (values.length > 0 && values[0].strip().equals(book.getBookId())){
+                    writer.write(newValues);
+                }else{
+                    writer.write(line);
+                }
+
+                writer.newLine();
+            }
+        }catch(IOException ex){
+            System.err.println("updating book file: "+ex.getMessage());
+        }
+
+        try{
+            Files.move(tempFile, originalFile, StandardCopyOption.ATOMIC_MOVE,
+                    StandardCopyOption.REPLACE_EXISTING);
+
+            return book;
+        } catch (IOException ex){
+            System.err.println("swapping book file: "+ex.getMessage());
+        }
+
+        return null;
+    }
+
+    public static void deleteFromUserFile(String storage_file, String id){
+        Path tempFile = Paths.get("user_temp_file");
+        Path originalFile = Paths.get(storage_file);
+
+        try(BufferedReader reader = Files.newBufferedReader(originalFile);
+        BufferedWriter writer = Files.newBufferedWriter(tempFile)){
+            String line;
+            while((line = reader.readLine()) != null){
+                String[] values = line.split("\\|");
+
+                if (values.length > 0 && values[0].strip().equals(id)){
+                    continue;
+                }else{
+                    writer.write(line);
+                }
+
+                writer.newLine();
+            }
+        } catch (IOException ex){
+            System.err.println("deleting: "+ex.getMessage());
+        }
+
+        try{
+            Files.move(tempFile, originalFile, StandardCopyOption.ATOMIC_MOVE,
+                    StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex){
+            System.err.println("swapping user file: "+ex.getMessage());
+        }
+    }
+
+    public static void deleteFromBookFile(String storage_file, String id){
+        Path temp = Paths.get("book_temp_file.txt");
+        Path originalFile = Paths.get(storage_file);
+
+        try(BufferedReader reader = Files.newBufferedReader(originalFile); BufferedWriter writer = Files.newBufferedWriter(temp)){
+            String line;
+
+            while((line = reader.readLine()) != null){
+                String[] values = line.split("\\|");
+
+                if(values.length > 0 && values[0].strip().equals(id)){
+                    continue;
+                }else{
+                    writer.write(line);
+                }
+
+                writer.newLine();
+            }
+        }catch (IOException ex){
+            System.err.println("deleting: "+ex.getMessage());
+        }
+
+        try{
+            Files.move(temp, originalFile, StandardCopyOption.ATOMIC_MOVE,
+                    StandardCopyOption.REPLACE_EXISTING);
+        }catch(IOException ex){
+            System.err.println("swapping book file: "+ex.getMessage());
+        }
     }
 
     public static synchronized Database getInstance(String[] files){

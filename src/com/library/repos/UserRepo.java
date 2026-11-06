@@ -41,6 +41,17 @@ public class UserRepo{
         return user;
     }
 
+    public void deleteUser(String id){
+        Database.deleteFromUserFile(USERS_STORAGE_FILE, id);
+
+        for (int i = 0; i < users.length; i++){
+            if (users[i] != null && users[i].getId().equals(id)){
+                users[i] = null;
+                break;
+            }
+        }
+    }
+
     public Users getUserById(String id){
 
         for (Users user : users) {

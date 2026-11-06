@@ -25,7 +25,23 @@ public class BookRepo{
         return bookResult;
     }
 
-    public Book searchBook(String title, String author){
+    public Book editBook(Book book, String bookNewValues){
+        Book bookObj = Database.updateBookFile(BOOKS_STORAGE_FILE, book, bookNewValues);
+
+        if (bookObj == null)
+            return null;
+
+        for (int i = 0; i < books.length; i++){
+            if(books[i] != null && books[i].getBookId().equals(book.getBookId())){
+                books[i] = bookObj;
+                break;
+            }
+        }
+
+        return bookObj;
+    }
+
+    public Book getABookByTitleAndAuthor(String title, String author){
 
         for (Book book : books){
             if (book != null && book.getTitle().equalsIgnoreCase(title) &&
@@ -35,6 +51,27 @@ public class BookRepo{
         }
 
         return null;
+    }
+
+    public Book getBookById(String id){
+        for (Book book : books) {
+            if (book != null && book.getBookId().equalsIgnoreCase(id)) {
+                return book;
+            }
+        }
+
+        return null;
+    }
+
+    public void deleteBook(String id){
+        Database.deleteFromBookFile(BOOKS_STORAGE_FILE, id);
+
+        for (Book book : books){
+            if(book != null && book.getBookId().equals(id)){
+                book = null;
+                break;
+            }
+        }
     }
 
     public Book[] getAllBooks(){

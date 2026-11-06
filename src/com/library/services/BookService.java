@@ -19,7 +19,7 @@ public class BookService{
 
     public Book addBook(String book_title, String author, String category, short publication_year){
 
-        if (bookRepo.searchBook(book_title, author) != null)
+        if (bookRepo.getABookByTitleAndAuthor(book_title, author) != null)
             throw new BookAlreadyExistsException("Book already exists");
 
         Book newBook = new Book(book_title, author, category, publication_year);
@@ -44,7 +44,7 @@ public class BookService{
     }
 
     public String viewBookDetails(String title, String author){
-        Book book = bookRepo.searchBook(title, author);
+        Book book = bookRepo.getABookByTitleAndAuthor(title, author);
 
         if (book == null)
             throw new BookNotFoundException("Book not found");
@@ -58,5 +58,25 @@ public class BookService{
                         "Publication Year: "+book.getPublicationYear()+"\n" +
                         "Status: "+book.getBookStatus()+"\n"
                 );
+    }
+
+    public Book editBook(Book book, String newValues){
+        return bookRepo.editBook(book, newValues);
+    }
+
+    public Book getABook(String title, String author){
+        Book book = bookRepo.getABookByTitleAndAuthor(title, author);
+        if (book == null)
+            throw new BookNotFoundException("Book not found");
+
+        return book;
+    }
+
+    public void deleteABook(String id){
+        Book book = bookRepo.getBookById(id);
+        if (book == null)
+            throw new BookNotFoundException("Book not found");
+
+        bookRepo.deleteBook(id);
     }
 }

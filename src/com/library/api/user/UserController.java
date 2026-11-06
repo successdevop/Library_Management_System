@@ -13,7 +13,7 @@ public class UserController{
 
     // VIEW USER PROFILE
     public String viewUserProfile(String id){
-         return userService.userProfile(id);
+         return userService.viewUserProfile(id);
     }
 
     // VIEW ALL USERS
@@ -24,5 +24,10 @@ public class UserController{
     // EDIT/UPDATE USER
     public Users updateUserProfile(Users user, String userNewValues){
         return userService.editUserProfile(user, userNewValues);
+    }
+
+    // DELETE USER
+    public void deleteUserProfile(String id){
+        userService.deleteUserProfile(id);
     }
 }

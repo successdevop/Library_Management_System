@@ -12,7 +12,7 @@ public class UserService{
         this.userRepo = new UserRepo();
     }
 
-    public String userProfile(String userId){
+    public String viewUserProfile(String userId){
         Users user = userRepo.getUserById(userId);
 
         if (user == null)
@@ -44,11 +44,10 @@ public class UserService{
     }
 
     public Users editUserProfile(Users user, String newValues){
-        Users userObj = userRepo.getUserById(user.getId());
-
-        if (userObj == null)
-            throw new UserNotFoundException("Member not found");
-
         return userRepo.editUser(user, newValues);
+    }
+
+    public void deleteUserProfile(String id){
+        userRepo.deleteUser(id);
     }
 }

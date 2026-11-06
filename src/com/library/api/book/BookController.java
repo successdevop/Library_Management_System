@@ -25,4 +25,19 @@ public class BookController{
     public String viewBookDetails(String title, String author){
         return bookService.viewBookDetails(title, author);
     }
+
+    // GET A BOOK
+    public Book getABook(String title, String author){
+        return bookService.getABook(title, author);
+    }
+
+    // EDIT A BOOK
+    public Book editBook(Book book, String newValues){
+        return bookService.editBook(book, newValues);
+    }
+
+    // DELETE A BOOK
+    public void deleteBook(String id){
+        bookService.deleteABook(id);
+    }
 }
