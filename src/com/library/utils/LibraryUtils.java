@@ -4,6 +4,7 @@ import com.library.app_files.Config;
 import com.library.database.Database;
 import com.library.exceptions.*;
 import com.library.models.Book;
+import com.library.models.BorrowRecord;
 import com.library.models.Users;
 
 import java.time.LocalTime;
@@ -53,7 +54,7 @@ public class LibraryUtils{
                 continue;
 
             String bookId = book.getBookId();
-            if (bookId == null || bookId.matches("B\\d+"))
+            if (bookId == null || !bookId.matches("B\\d+"))
                 throw new IllegalStateException("Invalid book ID found: "+bookId);
 
             int numericBookId = Integer.parseInt(bookId.substring(1));
@@ -66,7 +67,27 @@ public class LibraryUtils{
     }
 
     public static String generateTransactionId(){
-        return null;
+        BorrowRecord[] records = Database.getBorrowRecordDatabase();
+
+        int maxId = 0;
+
+        for(BorrowRecord record : records){
+            if(record == null)
+                continue;
+
+            String recordId = record.getTransactionId();
+
+            if(recordId == null || !recordId.matches("T\\d+"))
+                throw new IllegalStateException("Invalid transaction ID: "+recordId);
+
+            int intValueOfRecordId = Integer.parseInt(recordId.substring(1));
+
+            if (intValueOfRecordId > maxId)
+                maxId = intValueOfRecordId;
+        }
+
+        int id = maxId + 1;
+        return String.format("T%03d", id);
     }
 
     public static String generateBookIsbnNumber(){
@@ -176,5 +197,17 @@ public class LibraryUtils{
         String status = book.getBookStatus().toString();
 
         return String.format("%s|%s|%s|%s|%s|%s|%s", id, title, author, category, isbn, publicationYear, status);
+    }
+
+    public static String generateBorrowRecordStringValue(BorrowRecord record){
+        String transactionId = record.getTransactionId();
+        String bookId = record.getBookId();
+        String userId = record.getUserId();
+        String borrowDate = String.valueOf(record.getBorrowDate());
+        String dueDate = String.valueOf(record.getDueDate());
+        String returnDate = String.valueOf(record.getReturnDate());
+        String status = record.getBorrowStatus().toString();
+
+        return String.format("%s|%s|%s|%s|%s|%s|%s", transactionId, bookId, userId, borrowDate, dueDate, returnDate, status);
     }
 }
