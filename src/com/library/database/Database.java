@@ -89,7 +89,39 @@ public class Database{
         return null;
     }
 
+    public static BorrowRecord updateBorrowRecordFile(String storage_file, BorrowRecord record, String newValues){
+        Path temp = Paths.get("borrow_record_temp.txt");
+        Path originalFile = Paths.get(storage_file);
 
+        try(BufferedReader reader = Files.newBufferedReader(originalFile);
+        BufferedWriter writer = Files.newBufferedWriter(temp)){
+            String line;
+
+            while((line = reader.readLine()) != null){
+                String[] values = line.split("\\|");
+
+                if(values.length > 0 && values[0].strip().equals(record.getTransactionId())){
+                    writer.write(newValues);
+                }else{
+                    writer.write(line);
+                }
+
+                writer.newLine();
+            }
+        }catch (IOException ex){
+            System.out.println("Updating BorrowRecord File: "+ex.getMessage());
+        }
+
+        try{
+            Files.move(temp, originalFile, StandardCopyOption.ATOMIC_MOVE,
+                    StandardCopyOption.REPLACE_EXISTING);
+            return record;
+        }catch(IOException ex){
+            System.out.println("swaping BorrowRecord File: "+ex.getMessage());
+        }
+
+        return null;
+    }
 
     public static Users updateUserFile(String storage_file, Users user, String newValues){
         Path originalFile = Paths.get(storage_file);
@@ -224,6 +256,37 @@ public class Database{
         }
     }
 
+    public static void deleteFromBorrowRecordFile(String storage_file, String id){
+        Path temp = Paths.get("borrow_record_temp.txt");
+        Path originalFile = Paths.get(storage_file);
+
+        try(BufferedReader reader = Files.newBufferedReader(originalFile);
+            BufferedWriter writer = Files.newBufferedWriter(temp)){
+            String line;
+
+            while((line = reader.readLine()) != null){
+                String[] values = line.split("\\|");
+
+                if(values.length > 0 && values[0].strip().equals(id)){
+                    continue;
+                }else{
+                    writer.write(line);
+                }
+
+                writer.newLine();
+            }
+        }catch (IOException ex){
+            System.out.println("deleting BorrowRecord File: "+ex.getMessage());
+        }
+
+        try{
+            Files.move(temp, originalFile, StandardCopyOption.ATOMIC_MOVE,
+                    StandardCopyOption.REPLACE_EXISTING);
+        }catch(IOException ex){
+            System.out.println("swaping BorrowRecord File: "+ex.getMessage());
+        }
+    }
+
     public static synchronized Database getInstance(String[] files){
         if (instance == null){
             instance = new Database();
@@ -235,6 +298,7 @@ public class Database{
     private static void loadDatabase(String[] storage_files){
         loadUsersFromFile(storage_files[0]);
         loadBooksFromFile(storage_files[1]);
+        loadBooksFromFile(storage_files[2]);
     }
 
     private static Book[] loadBooksFromFile(String book_file_storage){
