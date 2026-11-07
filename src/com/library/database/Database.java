@@ -5,6 +5,7 @@ import com.library.enums.BookStatus;
 import com.library.enums.MemberStatus;
 import com.library.enums.MembershipType;
 import com.library.models.Book;
+import com.library.models.BorrowRecord;
 import com.library.models.Users;
 import com.library.utils.LibraryUtils;
 
@@ -23,10 +24,12 @@ public class Database{
     private static Database instance = null;
     private static Book[] books = null;
     private static Users[] users = null;
+    private static BorrowRecord[] borrowRecords = null;
 
     private Database(){
         books = new Book[Config.MAX_BOOKS];
         users = new Users[Config.MAX_USERS];
+        borrowRecords = new BorrowRecord[Config.MAX_BORROW_RECORDS];
     }
 
     public static Book[] getBooksDatabase(){
@@ -36,6 +39,8 @@ public class Database{
     public static Users[] getUsersDatabase(){
         return users;
     }
+
+    public static BorrowRecord[] getBorrowRecordDatabase(){return borrowRecords;}
 
     public static Users appendUserToFile(String user_file_storage, Users user) {
 
@@ -67,6 +72,24 @@ public class Database{
 
         return null;
     }
+
+    public static BorrowRecord appendBorrowRecordToFile(String storage_file, BorrowRecord record) {
+
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(storage_file, true))){
+
+            String line = LibraryUtils.generateBorrowRecordStringValue(record);
+            writer.write(line);
+            writer.newLine();
+
+            return record;
+        }catch(IOException ex){
+            System.out.println("appending BorrowRecord: "+ex.getMessage());
+        }
+
+        return null;
+    }
+
+
 
     public static Users updateUserFile(String storage_file, Users user, String newValues){
         Path originalFile = Paths.get(storage_file);
