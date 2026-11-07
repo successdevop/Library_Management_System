@@ -14,13 +14,21 @@ public class BorrowRecord{
     private LocalDate returnDate;
     private BorrowStatus status;
 
-    public BorrowRecord(){}
+    public BorrowRecord(){
+        this.transactionId = getTransactionId();
+        this.bookId = getBookId();
+        this.userId = getUserId();
+        this.borrowDate = getBorrowDate();
+        this.dueDate = getDueDate();
+        this.returnDate = getReturnDate();
+        this.status = getBorrowStatus();
+    }
 
     public void setTransactionId(String id){
         this.transactionId = id;
     }
 
-    public String getTransactionIs(){
+    public String getTransactionId(){
         return this.transactionId;
     }
 
