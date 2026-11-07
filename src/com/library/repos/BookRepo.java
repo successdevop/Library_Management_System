@@ -3,6 +3,8 @@ package com.library.repos;
 import com.library.database.Database;
 import com.library.models.Book;
 
+import java.util.ArrayList;
+
 import static com.library.app_files.Config.BOOKS_STORAGE_FILE;
 
 
@@ -76,5 +78,49 @@ public class BookRepo{
 
     public Book[] getAllBooks(){
         return books;
+    }
+
+    public Book[] searchBook(String title){
+        Book[] newArr = new Book[50];
+        ArrayList<Book> bookArr = new ArrayList<>();
+
+        for (Book book : books){
+            if (book != null && book.getTitle().toLowerCase().contains(title.toLowerCase())){
+                bookArr.add(book);
+            }
+        }
+
+        return bookArr.toArray(newArr);
+    }
+
+    public Book[] searchBook(String title, String author){
+        Book[] newArr = new Book[50];
+        ArrayList<Book> bookArr = new ArrayList<>();
+
+        for (Book book : books){
+            if (book != null && (book.getTitle().toLowerCase().contains(title.toLowerCase()) ||
+                    book.getAuthor().toLowerCase().contains(author.toLowerCase()))){
+
+                bookArr.add(book);
+            }
+        }
+
+        return bookArr.toArray(newArr);
+    }
+
+    public Book[] searchBook(String title, String author, String category){
+        Book[] newArr = new Book[50];
+        ArrayList<Book> bookArr = new ArrayList<>();
+
+        for (Book book : books){
+            if (book != null && (book.getTitle().toLowerCase().contains(title.toLowerCase()) ||
+                    book.getAuthor().toLowerCase().contains(author.toLowerCase()) ||
+                    book.getCategory().toLowerCase().contains(category.toLowerCase()))){
+
+                bookArr.add(book);
+            }
+        }
+
+        return bookArr.toArray(newArr);
     }
 }

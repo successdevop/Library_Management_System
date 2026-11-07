@@ -40,4 +40,19 @@ public class BookController{
     public void deleteBook(String id){
         bookService.deleteABook(id);
     }
+
+    // SEARCH BOOK BY TITLE
+    public Book[] searchBook(String title){
+        return bookService.searchBook(title);
+    }
+
+    // SEARCH BOOK BY TITLE AND AUTHOR
+    public Book[] searchBook(String title, String author){
+        return bookService.searchBook(title, author);
+    }
+
+    // SEARCH BOOK BY TITLE, AUTHOR AND CATEGORY
+    public Book[] searchBook(String title, String author, String category){
+        return bookService.searchBook(title, author, category);
+    }
 }

@@ -6,6 +6,9 @@ import com.library.exceptions.BookNotFoundException;
 import com.library.models.Book;
 import com.library.repos.BookRepo;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 import static com.library.utils.LibraryUtils.generateBookId;
 import static com.library.utils.LibraryUtils.generateBookIsbnNumber;
 
@@ -78,5 +81,35 @@ public class BookService{
             throw new BookNotFoundException("Book not found");
 
         bookRepo.deleteBook(id);
+    }
+
+    public Book[] searchBook(String title){
+        Book[] books = bookRepo.searchBook(title);
+        boolean hasObject = Arrays.stream(books).anyMatch(Objects::nonNull);
+
+        if(!hasObject)
+            throw new BookNotFoundException("No books found");
+
+        return books;
+    }
+
+    public Book[] searchBook(String title, String author){
+        Book[] books = bookRepo.searchBook(title, author);
+        boolean hasObject = Arrays.stream(books).anyMatch(Objects::nonNull);
+
+        if(!hasObject)
+            throw new BookNotFoundException("No books found");
+
+        return books;
+    }
+
+    public Book[] searchBook(String title, String author, String category){
+        Book[] books = bookRepo.searchBook(title, author, category);
+        boolean hasObject = Arrays.stream(books).anyMatch(Objects::nonNull);
+
+        if(!hasObject)
+            throw new BookNotFoundException("No books found");
+
+        return books;
     }
 }

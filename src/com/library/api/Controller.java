@@ -437,7 +437,61 @@ public class Controller{
         }
     }
 
-    public void searchBook(){}
+    public void searchBook(){
+        System.out.println("========================================");
+        System.out.println("    SEARCH BOOK   ");
+        System.out.println("========================================");
+
+        System.out.println("1. Search by Title");
+        System.out.println("1. Search by Title and Author");
+        System.out.println("1. Search by Title and Author, category");
+
+        System.out.println();
+
+        System.out.print("Enter choice: ");
+        switch(scanner.nextLine()){
+            case "1":
+                System.out.print("Enter book title: ");
+                Book[] books = bookController.searchBook(scanner.nextLine());
+                for (Book book : books){
+                    if (book != null)
+                        System.out.println(book);
+                }
+                break;
+
+            case "2":
+                System.out.print("Enter book title: ");
+                String bookTitle = scanner.nextLine();
+
+                System.out.print("Enter book author: ");
+                String bookAuthor = scanner.nextLine();
+
+                Book[] books1 = bookController.searchBook(bookTitle, bookAuthor);
+                for (Book book : books1){
+                    System.out.println(book);
+                }
+                break;
+
+            case "3":
+                System.out.print("Enter book title: ");
+                String bookTitle1 = scanner.nextLine();
+
+                System.out.print("Enter book author: ");
+                String bookAuthor1 = scanner.nextLine();
+
+                System.out.print("Enter book category: ");
+                String bookCategory = scanner.nextLine();
+
+                Book[] books2 = bookController.searchBook(bookTitle1, bookAuthor1, bookCategory);
+                for (Book book : books2){
+                    System.out.println(book);
+                }
+                break;
+
+            default:
+                System.out.println("Invalid option: "+scanner.nextLine());
+        }
+    }
 
     public void borrowBook(){}
 
