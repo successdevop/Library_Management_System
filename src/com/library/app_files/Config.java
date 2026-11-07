@@ -18,12 +18,14 @@ public class Config{
     public static final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
 
     public static final int MAX_BOOKS = 500;
+    public static final int MAX_BORROW_RECORDS = 500;
     public static final int MAX_USERS = 1000;
 
     public static final String USERS_STORAGE_FILE = "users_file.txt";
     public static final String BOOKS_STORAGE_FILE = "books_file.txt";
+    public static final String BORROW_RECORD_STORAGE_FILE = "borrowRecord_file.txt";
 
     public static final String[] DATABASE_FILE = {
-            USERS_STORAGE_FILE, BOOKS_STORAGE_FILE
+            USERS_STORAGE_FILE, BOOKS_STORAGE_FILE, BORROW_RECORD_STORAGE_FILE
     };
 }
