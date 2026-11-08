@@ -38,16 +38,17 @@ public class UserService{
             if (users[i] == null)
                 continue;
 
-            System.out.println((i+1)+". "+"User<(id: "+users[i].getId()+", firstName: "+users[i].getFirstName()+", email: "+
-                    users[i].getEmail()+", " + "userType: "+users[i].getMembershipType()+", status: "+users[i].getStatus()+")>");
+            System.out.println((i+1)+". "+users[i]);
         }
     }
 
-    public Users editUserProfile(Users user, String newValues){
-        return userRepo.editUser(user, newValues);
+    public String editUserProfile(Users user, String newValues){
+        userRepo.editUser(user, newValues);
+        return "Profile update successful";
     }
 
-    public void deleteUserProfile(String id){
+    public String deleteUserProfile(String id){
         userRepo.deleteUser(id);
+        return id +", Deleted";
     }
 }

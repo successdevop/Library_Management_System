@@ -25,7 +25,7 @@ public class AuthService{
         return currentUser;
     }
 
-    public Users registerMember(String firstName, String lastName, String email, String phoneNo,
+    public boolean registerMember(String firstName, String lastName, String email, String phoneNo,
                                 MembershipType membershipType, String password){
 
         Users user = userRepo.getUserByEmail(email);
@@ -41,9 +41,11 @@ public class AuthService{
         String hashedPassword = hashPassword(password);
 
         Users newUser = new Users(generateUserId(), firstName, lastName, email, phoneNo, LocalDate.now(),
-                MemberStatus.ACTIVE, membershipType, hashedPassword);
+                MemberStatus.ACTIVE, membershipType, hashedPassword, 0.0);
 
-        return userRepo.addUser(newUser);
+        userRepo.addUser(newUser);
+
+        return true;
     }
 
     public Users loginMember(String email, String password){
