@@ -41,7 +41,7 @@ public class Database{
 
     public static BorrowRecord[] getBorrowRecordDatabase(){return borrowRecords;}
 
-    public static Users appendUserToFile(String user_file_storage, Users user) {
+    public static void appendUserToFile(String user_file_storage, Users user) {
 
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(user_file_storage, true))){
             String line = LibraryUtils.generateUserStringValue(user);
@@ -49,30 +49,24 @@ public class Database{
             bw.write(line);
             bw.newLine();
 
-            return user;
         }catch (IOException ex){
             System.err.println("Appending user to file: "+ex.getMessage());
         }
-
-        return null;
     }
 
-    public static Book appendBookToFile(String book_file_storage, Book book){
+    public static void appendBookToFile(String book_file_storage, Book book){
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(book_file_storage, true))){
             String line = LibraryUtils.generateBookStringValue(book);
 
             bw.write(line);
             bw.newLine();
 
-            return book;
         }catch (IOException ex){
             System.err.println("Appending book to file: "+ex.getMessage());
         }
-
-        return null;
     }
 
-    public static BorrowRecord appendBorrowRecordToFile(String storage_file, BorrowRecord record) {
+    public static void appendBorrowRecordToFile(String storage_file, BorrowRecord record) {
 
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(storage_file, true))){
 
@@ -80,15 +74,12 @@ public class Database{
             writer.write(line);
             writer.newLine();
 
-            return record;
         }catch(IOException ex){
             System.out.println("Appending borrowRecord to file: "+ex.getMessage());
         }
-
-        return null;
     }
 
-    public static BorrowRecord updateBorrowRecordFile(String storage_file, BorrowRecord record, String newValues){
+    public static void updateBorrowRecordFile(String storage_file, BorrowRecord record, String newValues){
         Path temp = Paths.get("borrow_record_temp.txt");
         Path originalFile = Paths.get(storage_file);
 
@@ -114,15 +105,12 @@ public class Database{
         try{
             Files.move(temp, originalFile, StandardCopyOption.ATOMIC_MOVE,
                     StandardCopyOption.REPLACE_EXISTING);
-            return record;
         }catch(IOException ex){
             System.out.println("swaping BorrowRecord File: "+ex.getMessage());
         }
-
-        return null;
     }
 
-    public static Users updateUserFile(String storage_file, Users user, String newValues){
+    public static void updateUserFile(String storage_file, Users user, String newValues){
         Path originalFile = Paths.get(storage_file);
         Path tempFile = Paths.get("users_temp_file.txt");
 
@@ -151,16 +139,12 @@ public class Database{
         try{
             Files.move(tempFile, originalFile, StandardCopyOption.ATOMIC_MOVE,
                     StandardCopyOption.REPLACE_EXISTING);
-
-            return user;
         } catch (IOException ex){
             System.out.println("Swapping user file: "+ex.getMessage());
         }
-
-        return null;
     }
 
-    public static Book updateBookFile(String storage_file, Book book, String newValues){
+    public static void updateBookFile(String storage_file, Book book, String newValues){
         Path tempFile = Paths.get("book_temp_file.txt");
         Path originalFile = Paths.get(storage_file);
 
@@ -186,13 +170,9 @@ public class Database{
         try{
             Files.move(tempFile, originalFile, StandardCopyOption.ATOMIC_MOVE,
                     StandardCopyOption.REPLACE_EXISTING);
-
-            return book;
         } catch (IOException ex){
             System.err.println("swapping book file: "+ex.getMessage());
         }
-
-        return null;
     }
 
     public static void deleteFromUserFile(String storage_file, String id){
@@ -323,8 +303,6 @@ public class Database{
         } catch (IOException | NumberFormatException ex){
             System.err.println("Error loading books to array: "+ex.getMessage());
         }
-
-        System.out.println(Arrays.toString(books));
     }
 
     private static void loadUsersFromFile(String user_file_storage){
@@ -334,7 +312,7 @@ public class Database{
             String line;
             while((line = br.readLine()) != null && count < users.length){
                 String[] values = line.split("\\|", -1);
-                if (values.length != 9) continue;
+                if (values.length != 10) continue;
 
                 String id = values[0].trim();
                 String firstName = values[1].trim();
@@ -345,15 +323,15 @@ public class Database{
                 MemberStatus status = MemberStatus.valueOf(values[6].trim());
                 MembershipType memberType = MembershipType.valueOf(values[7].trim());
                 String password = values[8].trim();
+                double outstandingFine = Double.parseDouble(values[9].trim());
 
                 users[count++] = new Users(id, firstName, lastName, email, phoneNo, dateJoined, status,
-                        memberType, password);
+                        memberType, password, outstandingFine);
             }
             System.out.println(count+" users loaded");
         } catch (IOException | NumberFormatException ex){
             System.err.println("Error loading Users to array: "+ex.getMessage());
         }
-        System.out.println(Arrays.toString(users));
     }
 
     private static void loadBorrowRecordsFromFile(String storage_file){
@@ -378,7 +356,7 @@ public class Database{
                         r_date, status);
             }
 
-            System.out.println(count+" books loaded");
+            System.out.println(count+" BorrowRecords loaded");
         }catch(IOException ex){
             System.out.println(ex.getMessage());
         }
