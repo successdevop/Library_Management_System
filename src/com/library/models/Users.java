@@ -16,9 +16,10 @@ public class Users{
     private MemberStatus status;
     private MembershipType membershipType;
     private String password;
+    private double outstandingFine;
 
     public Users(String id, String firstName, String lastName, String email, String phoneNo, LocalDate dateJoined,
-                 MemberStatus status, MembershipType membershipType, String password){
+                 MemberStatus status, MembershipType membershipType, String password, double outstandingFine){
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -28,6 +29,7 @@ public class Users{
         this.status = status;
         this.membershipType = membershipType;
         this.password = password;
+        this.outstandingFine = outstandingFine;
     }
 
     public String getId(){
@@ -100,6 +102,14 @@ public class Users{
 
     public void setPassword(String password){
         this.password = password;
+    }
+
+    public double getOutstandingFine(){
+            return this.outstandingFine;
+    }
+
+    public void setOutstandingFine(double fine){
+        this.outstandingFine = fine;
     }
 
     @Override
