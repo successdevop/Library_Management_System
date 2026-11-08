@@ -182,9 +182,10 @@ public class LibraryUtils{
         String status = user.getStatus().toString();
         String membershipType = user.getMembershipType().toString();
         String password = user.getPassword();
+        String outstandingFine = String.valueOf(user.getOutstandingFine());
 
-        return String.format("%s|%s|%s|%s|%s|%s|%s|%s|%s",
-                id, firstName, lastName, email, phoneNo, dateJoined, status, membershipType, password);
+        return String.format("%s|%s|%s|%s|%s|%s|%s|%s|%s|%s",
+                id, firstName, lastName, email, phoneNo, dateJoined, status, membershipType, password, outstandingFine);
     }
 
     public static String generateBookStringValue(Book book){
