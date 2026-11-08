@@ -12,35 +12,29 @@ public class BookRepo{
     private final Book[] books = Database.getBooksDatabase();
 
     public Book addBook(Book book){
-        Book bookResult = Database.appendBookToFile(BOOKS_STORAGE_FILE, book);
-
-        if(bookResult == null)
-            return null;
+        Database.appendBookToFile(BOOKS_STORAGE_FILE, book);
 
         for(int i = 0; i < books.length; i++){
             if (books[i] == null){
-                books[i] = bookResult;
+                books[i] = book;
                 break;
             }
         }
 
-        return bookResult;
+        return book;
     }
 
     public Book editBook(Book book, String bookNewValues){
-        Book bookObj = Database.updateBookFile(BOOKS_STORAGE_FILE, book, bookNewValues);
-
-        if (bookObj == null)
-            return null;
+        Database.updateBookFile(BOOKS_STORAGE_FILE, book, bookNewValues);
 
         for (int i = 0; i < books.length; i++){
             if(books[i] != null && books[i].getBookId().equals(book.getBookId())){
-                books[i] = bookObj;
+                books[i] = book;
                 break;
             }
         }
 
-        return bookObj;
+        return book;
     }
 
     public Book getABookByTitleAndAuthor(String title, String author){

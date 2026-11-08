@@ -9,27 +9,19 @@ import static com.library.app_files.Config.USERS_STORAGE_FILE;
 public class UserRepo{
     private final Users[] users = Database.getUsersDatabase();
 
-    public Users addUser(Users user){
-        Users userObj =  Database.appendUserToFile(USERS_STORAGE_FILE, user);
-
-        if (userObj == null)
-            return null;
+    public void addUser(Users user){
+        Database.appendUserToFile(USERS_STORAGE_FILE, user);
 
         for (int i = 0; i < users.length; i++){
             if(users[i] == null){
-                users[i] = userObj;
+                users[i] = user;
                 break;
             }
         }
-
-        return userObj;
     }
 
-    public Users editUser(Users user, String userNewValues){
-        Users userObj = Database.updateUserFile(USERS_STORAGE_FILE, user, userNewValues);
-
-        if (userObj == null)
-            return null;
+    public void editUser(Users user, String userNewValues){
+        Database.updateUserFile(USERS_STORAGE_FILE, user, userNewValues);
 
         for (int i = 0; i < users.length; i++){
             if (users[i].getId().equals(user.getId())){
@@ -37,8 +29,6 @@ public class UserRepo{
                 break;
             }
         }
-
-        return user;
     }
 
     public void deleteUser(String id){
