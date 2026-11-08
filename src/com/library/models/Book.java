@@ -12,14 +12,14 @@ public class Book{
     private String isbn;
     private BookStatus status;
 
-    public Book(String title, String author, String category, short publication_year){
-        this.id = getBookId();
+    public Book(String id, String title, String author, String category, String isbn, short publication_year, BookStatus status){
+        this.id = id;
         this.title = title;
         this.author = author;
         this.category = category;
-        this.isbn = getBookISBN();
+        this.isbn = isbn;
         this.publication_year = publication_year;
-        this.status = getBookStatus();
+        this.status = status;
     }
 
     public String getBookId(){

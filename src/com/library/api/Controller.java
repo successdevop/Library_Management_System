@@ -493,7 +493,15 @@ public class Controller{
         }
     }
 
-    public void borrowBook(){}
+    public void borrowBook(){
+        System.out.print("Enter book title: ");
+        String title = LibraryUtils.validateStringLength(scanner.nextLine());
+
+        System.out.println("Enter book author: ");
+        String author = LibraryUtils.validateStringLength(scanner.nextLine());
+
+
+    }
 
     public void returnBook(){}
 

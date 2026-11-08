@@ -2,6 +2,7 @@ package com.library.database;
 
 import com.library.app_files.Config;
 import com.library.enums.BookStatus;
+import com.library.enums.BorrowStatus;
 import com.library.enums.MemberStatus;
 import com.library.enums.MembershipType;
 import com.library.models.Book;
@@ -15,9 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 
 public class Database{
@@ -52,7 +51,7 @@ public class Database{
 
             return user;
         }catch (IOException ex){
-            System.err.println("Error writing User to file: "+ex.getMessage());
+            System.err.println("Appending user to file: "+ex.getMessage());
         }
 
         return null;
@@ -67,7 +66,7 @@ public class Database{
 
             return book;
         }catch (IOException ex){
-            System.err.println("Error adding book to file: "+ex.getMessage());
+            System.err.println("Appending book to file: "+ex.getMessage());
         }
 
         return null;
@@ -83,7 +82,7 @@ public class Database{
 
             return record;
         }catch(IOException ex){
-            System.out.println("appending BorrowRecord: "+ex.getMessage());
+            System.out.println("Appending borrowRecord to file: "+ex.getMessage());
         }
 
         return null;
@@ -146,7 +145,7 @@ public class Database{
             }
 
         }catch(IOException ex){
-            System.out.println("updating user file: "+ex.getMessage());
+            System.out.println("Updating User File: "+ex.getMessage());
         }
 
         try{
@@ -181,7 +180,7 @@ public class Database{
                 writer.newLine();
             }
         }catch(IOException ex){
-            System.err.println("updating book file: "+ex.getMessage());
+            System.err.println("Updating Book File: "+ex.getMessage());
         }
 
         try{
@@ -215,7 +214,7 @@ public class Database{
                 writer.newLine();
             }
         } catch (IOException ex){
-            System.err.println("deleting: "+ex.getMessage());
+            System.err.println("Deleting User from File: "+ex.getMessage());
         }
 
         try{
@@ -245,7 +244,7 @@ public class Database{
                 writer.newLine();
             }
         }catch (IOException ex){
-            System.err.println("deleting: "+ex.getMessage());
+            System.err.println("Deleting Book from File: "+ex.getMessage());
         }
 
         try{
@@ -276,7 +275,7 @@ public class Database{
                 writer.newLine();
             }
         }catch (IOException ex){
-            System.out.println("deleting BorrowRecord File: "+ex.getMessage());
+            System.out.println("Deleting BorrowRecord from File: "+ex.getMessage());
         }
 
         try{
@@ -298,48 +297,45 @@ public class Database{
     private static void loadDatabase(String[] storage_files){
         loadUsersFromFile(storage_files[0]);
         loadBooksFromFile(storage_files[1]);
-        loadBooksFromFile(storage_files[2]);
+        loadBorrowRecordsFromFile(storage_files[2]);
     }
 
-    private static Book[] loadBooksFromFile(String book_file_storage){
-        Arrays.fill(books, null);
-        List<Book> bks = new ArrayList<>();
+    private static void loadBooksFromFile(String book_file_storage){
+        int count = 0;
 
         try(BufferedReader br = new BufferedReader(new FileReader(book_file_storage))){
             String line;
-            while((line = br.readLine()) != null){
-                String[] values = line.split("\\|");
-                if (values.length >= 3){
-                    String id = values[0].trim();
-                    String title = values[1].trim();
-                    String author = values[2].trim();
-                    String category = values[3].trim();
-                    String isbn = values[4].trim();
-                    short publication_year = Short.parseShort(values[5].trim());
-                    BookStatus status = BookStatus.valueOf(values[6].trim());
+            while((line = br.readLine()) != null && count < books.length){
+                String[] values = line.split("\\|", -1);
+                if (values.length != 7) continue;
 
-                    Book book = new Book(title, author, category, publication_year);
-                    book.setBookId(id);
-                    book.setBookISBN(isbn);
-                    book.setBookStatus(status);
-                    bks.add(book);
-                }
+                String id = values[0].trim();
+                String title = values[1].trim();
+                String author = values[2].trim();
+                String category = values[3].trim();
+                String isbn = values[4].trim();
+                short publication_year = Short.parseShort(values[5].trim());
+                BookStatus status = BookStatus.valueOf(values[6].trim());
+
+                books[count++] = new Book(id,title, author, category, isbn, publication_year, status);
             }
+            System.out.println(count+" books loaded");
         } catch (IOException | NumberFormatException ex){
             System.err.println("Error loading books to array: "+ex.getMessage());
         }
 
-        return bks.toArray(books);
+        System.out.println(Arrays.toString(books));
     }
 
-    private static Users[] loadUsersFromFile(String user_file_storage){
-        Arrays.fill(users, null);
-        List<Users> usr = new ArrayList<>();
+    private static void loadUsersFromFile(String user_file_storage){
+        int count = 0;
 
         try(BufferedReader br = new BufferedReader(new FileReader(user_file_storage))){
             String line;
-            while((line = br.readLine()) != null){
-                String[] values = line.split("\\|");
+            while((line = br.readLine()) != null && count < users.length){
+                String[] values = line.split("\\|", -1);
+                if (values.length != 9) continue;
+
                 String id = values[0].trim();
                 String firstName = values[1].trim();
                 String lastName = values[2].trim();
@@ -350,16 +346,41 @@ public class Database{
                 MembershipType memberType = MembershipType.valueOf(values[7].trim());
                 String password = values[8].trim();
 
-                Users user = new Users(firstName, lastName, email, phoneNo, memberType, password);
-                user.setId(id);
-                user.setDateJoined(dateJoined);
-                user.setStatus(status);
-                usr.add(user);
+                users[count++] = new Users(id, firstName, lastName, email, phoneNo, dateJoined, status,
+                        memberType, password);
             }
+            System.out.println(count+" users loaded");
         } catch (IOException | NumberFormatException ex){
             System.err.println("Error loading Users to array: "+ex.getMessage());
         }
+        System.out.println(Arrays.toString(users));
+    }
 
-        return usr.toArray(users);
+    private static void loadBorrowRecordsFromFile(String storage_file){
+        int count = 0;
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(storage_file))){
+            String line;
+
+            while((line = reader.readLine()) != null && count < borrowRecords.length){
+                String[] values = line.split("\\|", -1);
+                if (values.length != 7) continue;
+
+                String t_id = values[0].trim();
+                String b_id = values[1].trim();
+                String u_id = values[2].trim();
+                LocalDate b_date = LocalDate.parse(values[3].trim());
+                LocalDate d_date = LocalDate.parse(values[4].trim());
+                LocalDate r_date = LocalDate.parse(values[5].trim());
+                BorrowStatus status = BorrowStatus.valueOf(values[6].trim());
+
+                borrowRecords[count++] = new BorrowRecord(t_id, b_id, u_id, b_date, d_date,
+                        r_date, status);
+            }
+
+            System.out.println(count+" books loaded");
+        }catch(IOException ex){
+            System.out.println(ex.getMessage());
+        }
     }
 }

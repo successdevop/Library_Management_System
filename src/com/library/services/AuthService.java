@@ -40,10 +40,8 @@ public class AuthService{
 
         String hashedPassword = hashPassword(password);
 
-        Users newUser = new Users(firstName, lastName, email, phoneNo, membershipType, hashedPassword);
-        newUser.setId(generateUserId());
-        newUser.setDateJoined(LocalDate.now());
-        newUser.setStatus(MemberStatus.ACTIVE);
+        Users newUser = new Users(generateUserId(), firstName, lastName, email, phoneNo, LocalDate.now(),
+                MemberStatus.ACTIVE, membershipType, hashedPassword);
 
         return userRepo.addUser(newUser);
     }

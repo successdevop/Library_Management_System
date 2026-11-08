@@ -17,14 +17,15 @@ public class Users{
     private MembershipType membershipType;
     private String password;
 
-    public Users(String firstName, String lastName, String email, String phoneNo, MembershipType membershipType, String password){
-        this.id = getId();
+    public Users(String id, String firstName, String lastName, String email, String phoneNo, LocalDate dateJoined,
+                 MemberStatus status, MembershipType membershipType, String password){
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNo = phoneNo;
-        this.dateJoined = getDateJoined();
-        this.status = getStatus();
+        this.dateJoined = dateJoined;
+        this.status = status;
         this.membershipType = membershipType;
         this.password = password;
     }

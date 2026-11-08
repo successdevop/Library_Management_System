@@ -25,10 +25,8 @@ public class BookService{
         if (bookRepo.getABookByTitleAndAuthor(book_title, author) != null)
             throw new BookAlreadyExistsException("Book already exists");
 
-        Book newBook = new Book(book_title, author, category, publication_year);
-        newBook.setBookId(generateBookId());
-        newBook.setBookISBN(generateBookIsbnNumber());
-        newBook.setBookStatus(BookStatus.AVAILABLE);
+        Book newBook = new Book(generateBookId(), book_title, author, category, generateBookIsbnNumber(),
+                publication_year, BookStatus.AVAILABLE);
 
         return bookRepo.addBook(newBook);
     }
