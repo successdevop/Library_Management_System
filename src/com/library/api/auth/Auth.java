@@ -19,7 +19,7 @@ public class Auth{
     }
 
     // REGISTER MEMBER
-    public Users signUpAccount(String firstName, String lastName, String email, String phoneNo, String membershipType,
+    public boolean signUpAccount(String firstName, String lastName, String email, String phoneNo, String membershipType,
                                 String password){
 
         return authService.registerMember(firstName, lastName, email, phoneNo,

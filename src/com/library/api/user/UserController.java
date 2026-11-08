@@ -22,12 +22,12 @@ public class UserController{
     }
 
     // EDIT/UPDATE USER
-    public Users updateUserProfile(Users user, String userNewValues){
+    public String updateUserProfile(Users user, String userNewValues){
         return userService.editUserProfile(user, userNewValues);
     }
 
     // DELETE USER
-    public void deleteUserProfile(String id){
-        userService.deleteUserProfile(id);
+    public String deleteUserProfile(String id){
+        return userService.deleteUserProfile(id);
     }
 }

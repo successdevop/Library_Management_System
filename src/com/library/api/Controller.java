@@ -8,6 +8,7 @@ import com.library.models.Book;
 import com.library.models.Users;
 import com.library.utils.LibraryUtils;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 import static com.library.utils.AuthUtils.hashPassword;
@@ -714,13 +715,9 @@ public class Controller{
         }
 
         String values = LibraryUtils.generateUserStringValue(user);
-        Users userObj = userController.updateUserProfile(user, values);
+        userController.updateUserProfile(user, values);
 
-        if (userObj != null){
-            System.out.println("Profile update successful");
-        }else{
-            System.out.println("ERROR: Profile update failed");
-        }
+        System.out.println("Profile update successful");
     }
 
     public void updateMemberProfile(){}
@@ -795,24 +792,13 @@ public class Controller{
         // enforce lower case
         email = email.toLowerCase();
 
-        Users user = authController.signUpAccount(firstName, lastName, email, phoneNo, membershipType, password);
+        boolean isSuccessful = authController.signUpAccount(firstName, lastName, email, phoneNo, membershipType, password);
 
-        if (user != null){
-            System.out.println("\nCongratulations "+user.getFirstName()+", your registration is successful\n");
-
-            try{
-                Thread.sleep(3000);
-                clearConsole();
-            }catch(InterruptedException ex){
-                System.out.println("ERROR: "+ex.getMessage());
-            }
-
-            personalDashBoard(user);
+        if (isSuccessful){
+            System.out.println("\nCongratulations "+firstName+", your registration is successful\n");
         }else{
-
-            System.out.println("User registration failed, please try again later");
+            System.out.println("\nUser registration failed, please try again later\n");
         }
-
     }
 
     public void loginMember(){
@@ -878,13 +864,9 @@ public class Controller{
 
             String newValues = LibraryUtils.generateUserStringValue(user);
 
-            Users userObj = userController.updateUserProfile(user, newValues);
+            String updated = userController.updateUserProfile(user, newValues);
 
-            if (userObj != null){
-                System.out.println("Password changed successfully");
-            }else{
-                System.out.println("Password change failed");
-            }
+            System.out.println(Objects.requireNonNullElse(updated, "Password change failed"));
         }
     }
 
