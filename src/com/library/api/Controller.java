@@ -515,7 +515,9 @@ public class Controller{
         }
     }
 
-    public void returnBook(){}
+    public void returnBook(){
+
+    }
 
     public void viewBorrowingRecords(){}
 
