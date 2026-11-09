@@ -15,12 +15,11 @@ import static com.library.app_files.Config.*;
 
 
 public class LibraryUtils{
+    private static final Users[] users = Database.getUsersDatabase();
+    private static final Book[] books = Database.getBooksDatabase();
+    private static final BorrowRecord[] records = Database.getBorrowRecordDatabase();
+
     public static String generateUserId(){
-        Users[] users = Database.getUsersDatabase();
-
-        if (users == null)
-            throw new IllegalStateException("User database not initialized");
-
         int maxId = 0;
 
         for(Users user : users){
@@ -42,11 +41,6 @@ public class LibraryUtils{
     }
 
     public static String generateBookId(){
-        Book[] books = Database.getBooksDatabase();
-
-        if (books == null)
-            throw new IllegalStateException("Book database not initialised");
-
         int bookMaxId = 0;
 
         for (Book book : books){
@@ -67,8 +61,6 @@ public class LibraryUtils{
     }
 
     public static String generateTransactionId(){
-        BorrowRecord[] records = Database.getBorrowRecordDatabase();
-
         int maxId = 0;
 
         for(BorrowRecord record : records){
@@ -90,7 +82,7 @@ public class LibraryUtils{
         return String.format("T%03d", id);
     }
 
-    public static String generateBookIsbnNumber(){
+    private static String generateIsbnNumber(){
         StringBuilder sb = new StringBuilder("978");
 
         for (int i = 0; i < 12; i++){
@@ -108,6 +100,28 @@ public class LibraryUtils{
         sb.append(checkSum);
 
         return sb.toString();
+    }
+
+    public static String generateBookIsbnNumber(){
+
+        while(true){
+            String isbnNumber = generateIsbnNumber();
+            boolean duplicate = false;
+
+            for(Book book : books){
+                if (book == null) continue;
+
+                String isbn = book.getBookISBN();
+                if(isbn != null && isbn.equals(isbnNumber)) {
+                    duplicate = true;
+                    break;
+                }
+            }
+
+            if(!duplicate){
+                return isbnNumber;
+            }
+        }
     }
 
     public static String validateStringLength(String name){

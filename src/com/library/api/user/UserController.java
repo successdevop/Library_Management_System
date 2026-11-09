@@ -11,6 +11,11 @@ public class UserController{
         userService = new UserService();
     }
 
+    // GET A USER
+    public Users getAUserById(String id){
+        return userService.getAUserById(id);
+    }
+
     // VIEW USER PROFILE
     public String viewUserProfile(String id){
          return userService.viewUserProfile(id);
@@ -18,7 +23,7 @@ public class UserController{
 
     // VIEW ALL USERS
     public void viewAllUsers(){
-        userService.getAllUsers();
+        userService.viewAllUsers();
     }
 
     // EDIT/UPDATE USER

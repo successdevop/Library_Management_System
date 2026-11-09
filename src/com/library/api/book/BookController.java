@@ -26,9 +26,14 @@ public class BookController{
         return bookService.viewBookDetails(title, author);
     }
 
-    // GET A BOOK
-    public Book getABook(String title, String author){
+    // GET A BOOK BY TITLE AND AUTHOR
+    public Book getABookByTitleAndAuthor(String title, String author){
         return bookService.getABook(title, author);
+    }
+
+    // GET A BOOK BY ID
+    public Book getABookById(String id){
+        return bookService.getABookById(id);
     }
 
     // EDIT A BOOK

@@ -2,6 +2,7 @@ package com.library.services;
 
 import com.library.enums.BookStatus;
 import com.library.exceptions.BookAlreadyExistsException;
+import com.library.exceptions.BookNotAvailableException;
 import com.library.exceptions.BookNotFoundException;
 import com.library.models.Book;
 import com.library.repos.BookRepo;
@@ -34,13 +35,11 @@ public class BookService{
     public void viewAllBooks(){
         Book[] books = bookRepo.getAllBooks();
 
-        for (int i = 0; i < books.length; i++){
-            if (books[i] == null)
+        for (Book book : books) {
+            if (book == null)
                 continue;
 
-            System.out.println(i+1+". Book<(book_id :"+books[i].getBookId() +", book_title: "+books[i].getTitle()+", "
-                    +"book_author: "+books[i].getAuthor()+", book_category: "+books[i].getCategory()+", book_status: "
-                    +books[i].getBookStatus()+")>");
+            System.out.println(book);
         }
     }
 
@@ -73,10 +72,22 @@ public class BookService{
         return book;
     }
 
+    public Book getABookById(String id){
+        Book book = bookRepo.getBookById(id);
+        if (book == null)
+            throw new BookNotFoundException("Book not found");
+
+        return book;
+    }
+
     public void deleteABook(String id){
         Book book = bookRepo.getBookById(id);
         if (book == null)
             throw new BookNotFoundException("Book not found");
+
+        if (book.getBookStatus().toString().equalsIgnoreCase("BORROWED")){
+            throw new BookNotAvailableException("Cannot delete a borrowed book");
+        }
 
         bookRepo.deleteBook(id);
     }

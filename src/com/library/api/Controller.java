@@ -248,7 +248,7 @@ public class Controller{
         System.out.print("Enter book author: \n");
         String bookAuthor = LibraryUtils.validateStringLength(scanner.nextLine());
 
-        Book book = bookController.getABook(title, bookAuthor);
+        Book book = bookController.getABookByTitleAndAuthor(title, bookAuthor);
 
         System.out.println("What do you want to edit?: ");
 

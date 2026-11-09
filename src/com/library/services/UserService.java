@@ -12,6 +12,15 @@ public class UserService{
         this.userRepo = new UserRepo();
     }
 
+    public Users getAUserById(String id){
+        Users user = userRepo.getUserById(id);
+
+        if (user == null)
+            throw new UserNotFoundException("Member not found");
+
+        return user;
+    }
+
     public String viewUserProfile(String userId){
         Users user = userRepo.getUserById(userId);
 
@@ -31,7 +40,7 @@ public class UserService{
 
     }
 
-    public void getAllUsers(){
+    public void viewAllUsers(){
         Users[] users = userRepo.getAllUsers();
 
         for (int i = 0; i < users.length; i++){
