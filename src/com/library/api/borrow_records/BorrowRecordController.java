@@ -9,7 +9,7 @@ public class BorrowRecordController{
         this.borrowService = new BorrowService();
     }
 
-    public void borrowBook(String title, String author){
-        borrowService.borrowBook(title, author);
+    public boolean borrowBook(String userId, String bookId){
+        return borrowService.borrowBook(userId, bookId);
     }
 }

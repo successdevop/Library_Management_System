@@ -2,6 +2,7 @@ package com.library.api;
 
 import com.library.api.auth.Auth;
 import com.library.api.book.BookController;
+import com.library.api.borrow_records.BorrowRecordController;
 import com.library.api.user.UserController;
 import com.library.exceptions.*;
 import com.library.models.Book;
@@ -19,6 +20,7 @@ public class Controller{
     private final Auth authController = new Auth();
     private final UserController userController = new UserController();
     private final BookController bookController = new BookController();
+    private final BorrowRecordController borrowRecordController = new BorrowRecordController();
 
     public void displayMainMenu(){
         System.out.println("========================================");
@@ -495,13 +497,22 @@ public class Controller{
     }
 
     public void borrowBook(){
-        System.out.print("Enter book title: ");
-        String title = LibraryUtils.validateStringLength(scanner.nextLine());
+        Users user = authController.getMe();
 
-        System.out.println("Enter book author: ");
-        String author = LibraryUtils.validateStringLength(scanner.nextLine());
+        if(user.getStatus().name().equalsIgnoreCase("SUSPENDED")){
+            System.out.println("Outstanding fines must be paid before borrowing");
+            return;
+        }
 
+        System.out.print("Enter book id: ");
+        String id = LibraryUtils.validateStringLength(scanner.nextLine());
 
+        boolean isBorrowed = borrowRecordController.borrowBook(user.getId(), id);
+        if(isBorrowed){
+            System.out.println("Book borrowed successfully");
+        }else{
+            System.out.println("Book borrow failed");
+        }
     }
 
     public void returnBook(){}

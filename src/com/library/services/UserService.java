@@ -57,6 +57,11 @@ public class UserService{
     }
 
     public String deleteUserProfile(String id){
+        Users user = userRepo.getUserById(id);
+
+        if (user.getOutstandingFine() > 0.0)
+            throw new RuntimeException("A member with an unpaid fine cannot be deleted");
+
         userRepo.deleteUser(id);
         return id +", Deleted";
     }
