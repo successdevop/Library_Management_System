@@ -1,15 +1,15 @@
 package com.library.repos;
 
 import com.library.database.Database;
-import com.library.models.Users;
+import com.library.models.User;
 
 import static com.library.app_files.Config.USERS_STORAGE_FILE;
 
 
 public class UserRepo{
-    private final Users[] users = Database.getUsersDatabase();
+    private final User[] users = Database.getUsersDatabase();
 
-    public void addUser(Users user){
+    public void addUser(User user){
         Database.appendUserToFile(USERS_STORAGE_FILE, user);
 
         for (int i = 0; i < users.length; i++){
@@ -20,7 +20,7 @@ public class UserRepo{
         }
     }
 
-    public void editUser(Users user, String userNewValues){
+    public void editUser(User user, String userNewValues){
         Database.updateUserFile(USERS_STORAGE_FILE, user, userNewValues);
 
         for (int i = 0; i < users.length; i++){
@@ -42,9 +42,9 @@ public class UserRepo{
         }
     }
 
-    public Users getUserById(String id){
+    public User getUserById(String id){
 
-        for (Users user : users) {
+        for (User user : users) {
             if (user != null && user.getId().equals(id)) {
                 return user;
             }
@@ -53,9 +53,9 @@ public class UserRepo{
         return null;
     }
 
-    public Users getUserByEmail(String email){
+    public User getUserByEmail(String email){
 
-        for (Users user : users) {
+        for (User user : users) {
             if (user != null && user.getEmail().equals(email)) {
                 return user;
             }
@@ -66,7 +66,7 @@ public class UserRepo{
 
     public String getUserByPhoneNumber(String phoneNo){
 
-        for (Users user : users){
+        for (User user : users){
             if (user != null && user.getPhoneNo().equals(phoneNo)){
                 return user.getPhoneNo();
             }
@@ -75,7 +75,7 @@ public class UserRepo{
         return null;
     }
 
-    public Users[] getAllUsers(){
+    public User[] getAllUsers(){
         return users;
     }
 }

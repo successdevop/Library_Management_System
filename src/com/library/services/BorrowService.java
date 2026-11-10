@@ -10,7 +10,7 @@ import com.library.exceptions.RecordNotFoundException;
 import com.library.interfaces.BorrowRecordInterface;
 import com.library.models.Book;
 import com.library.models.BorrowRecord;
-import com.library.models.Users;
+import com.library.models.User;
 import com.library.repos.BookRepo;
 import com.library.repos.BorrowRepo;
 import com.library.repos.UserRepo;
@@ -18,7 +18,6 @@ import com.library.repos.UserRepo;
 import java.time.LocalDate;
 
 import static com.library.app_files.Config.*;
-import static com.library.utils.LibraryUtils.*;
 
 
 public class BorrowService{
@@ -33,7 +32,7 @@ public class BorrowService{
     }
 
     public boolean borrowBook(String userId, String bookId){
-        Users user = userRepo.getUserById(userId);
+        User user = userRepo.getUserById(userId);
 
         Book book = bookrepo.getBookById(bookId);
         if (book == null)
@@ -69,7 +68,7 @@ public class BorrowService{
         if (record.getBorrowStatus().toString().equalsIgnoreCase("returned"))
             throw new RuntimeException("This book has already been returned");
 
-        Users user = userRepo.getUserById(record.getUserId());
+        User user = userRepo.getUserById(record.getUserId());
         Book book = bookrepo.getBookById(record.getBookId());
 
         int daysLate = calculateDaysLate(record.getDueDate(), LocalDate.now());
@@ -96,7 +95,7 @@ public class BorrowService{
     }
 
     public void payFine(String userId, double amount){
-        Users user = userRepo.getUserById(userId);
+        User user = userRepo.getUserById(userId);
 
         if(amount <= 0)
             throw new RuntimeException("Amount must be positive");
@@ -121,7 +120,7 @@ public class BorrowService{
     }
 
     public void viewAllBorrowRecords(String id){
-        Users user = userRepo.getUserById(id);
+        User user = userRepo.getUserById(id);
 
         if(!user.getMembershipType().toString().equalsIgnoreCase("staff"))
             throw new RuntimeException("Not authorized, this is only for staff");
@@ -130,7 +129,7 @@ public class BorrowService{
             System.out.println(record);
     }
 
-    private void updateSuspensionStatus(Users user){
+    private void updateSuspensionStatus(User user){
         if(user.getOutstandingFine() >= SUSPENSION_FINE_THRESHOLD){
             user.setStatus(MemberStatus.SUSPENDED);
         }else if (user.getStatus() == MemberStatus.SUSPENDED){

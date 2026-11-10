@@ -1,8 +1,10 @@
 package com.library.services;
 
 import com.library.exceptions.UserNotFoundException;
-import com.library.models.Users;
+import com.library.models.User;
 import com.library.repos.UserRepo;
+
+import static com.library.utils.MethodUtils.countUserActiveBorrowings;
 
 
 public class UserService{
@@ -12,17 +14,8 @@ public class UserService{
         this.userRepo = new UserRepo();
     }
 
-    public Users getAUserById(String id){
-        Users user = userRepo.getUserById(id);
-
-        if (user == null)
-            throw new UserNotFoundException("Member not found");
-
-        return user;
-    }
-
     public String viewUserProfile(String userId){
-        Users user = userRepo.getUserById(userId);
+        User user = userRepo.getUserById(userId);
 
         if (user == null)
             throw new UserNotFoundException("Member not found");
@@ -35,13 +28,13 @@ public class UserService{
                         "PhoneNo: "+user.getPhoneNo()+"\n" +
                         "Registration Date: "+user.getDateJoined()+"\n" +
                         "Status: "+user.getStatus()+"\n" +
-                        "Membership Type: "+user.getMembershipType()
+                        "Membership Type: "+user.getMembershipType()+"\n"+
+                        "Outstanding Fine: "+user.getOutstandingFine()
                 );
-
     }
 
     public void viewAllUsers(){
-        Users[] users = userRepo.getAllUsers();
+        User[] users = userRepo.getAllUsers();
 
         for (int i = 0; i < users.length; i++){
             if (users[i] == null)
@@ -51,16 +44,19 @@ public class UserService{
         }
     }
 
-    public String editUserProfile(Users user, String newValues){
+    public String editUserProfile(User user, String newValues){
         userRepo.editUser(user, newValues);
         return "Profile update successful";
     }
 
     public String deleteUserProfile(String id){
-        Users user = userRepo.getUserById(id);
+        User user = userRepo.getUserById(id);
 
         if (user.getOutstandingFine() > 0.0)
             throw new RuntimeException("A member with an unpaid fine cannot be deleted");
+
+        if (countUserActiveBorrowings(user.getId()) > 0)
+            throw new RuntimeException("A member with an unreturned book cannot be deleted.");
 
         userRepo.deleteUser(id);
         return id +", Deleted";

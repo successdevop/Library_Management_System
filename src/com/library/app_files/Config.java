@@ -1,7 +1,5 @@
 package com.library.app_files;
 
-import com.library.enums.MembershipType;
-
 import java.util.regex.Pattern;
 
 
@@ -10,6 +8,7 @@ public class Config{
     public static final String ALGORITHM = "SHA-256";
     public static final int MIN_STRING_LENGTH = 3;
     public static final int BORROW_PERIOD = 14;
+    public static final double SUSPENSION_FINE_THRESHOLD = 10000;
 
     private static final String NIGERIA_PHONE_REGEX = "^((?:\\+?234)[789][01]\\d{8})$|^(0[789][01]\\d{8})$";
     public static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile(NIGERIA_PHONE_REGEX);
@@ -31,20 +30,4 @@ public class Config{
     public static final String[] DATABASE_FILE = {
             USERS_STORAGE_FILE, BOOKS_STORAGE_FILE, BORROW_RECORD_STORAGE_FILE
     };
-
-    public static int getBorrowingLimit(MembershipType type){
-        return switch (type) {
-            case STAFF -> 10;
-            case STUDENT -> 5;
-            default -> 3;
-        };
-    }
-
-    public static double getFineRate(MembershipType type){
-        return switch(type){
-            case STUDENT -> 300;
-            case STAFF -> 500;
-            default -> 700;
-        };
-    }
 }

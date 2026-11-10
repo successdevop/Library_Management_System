@@ -4,9 +4,11 @@ import com.library.api.auth.Auth;
 import com.library.api.book.BookController;
 import com.library.api.borrow_records.BorrowRecordController;
 import com.library.api.user.UserController;
+import com.library.enums.MembershipType;
 import com.library.exceptions.*;
 import com.library.models.Book;
 import com.library.models.User;
+import com.library.utils.MethodUtils;
 import com.library.utils.ValidationUtils;
 
 import java.util.Objects;
@@ -31,165 +33,109 @@ public class Controller{
         System.out.println("3. Forgot password");
     }
 
-    public void displayPersonalMenu(String membershipType){
-        if (membershipType.equalsIgnoreCase("staff")){
-            System.out.println("1. Add Book.");
-            System.out.println("2. View Book Details");
-            System.out.println("3. View All Books");
-            System.out.println("4. Update Books");
-            System.out.println("5. Delete Books");
-            System.out.println("6. Search Book");
-            System.out.println("7. Borrow Book");
-            System.out.println("8. Return Book");
-            System.out.println("9. View Borrowing Records");
-            System.out.println("10. View All Borrowing Records");
-            System.out.println("11. View Personal Profile");
-            System.out.println("12. View Member Profile");
-            System.out.println("13. View All Members");
-            System.out.println("14. Update Personal Profile");
-            System.out.println("15. Update Member Profile");
-            System.out.println("16. Delete Personal Profile");
-            System.out.println("17. Delete Member Profile");
-            System.out.println("18. View Library Statistics");
-            System.out.println("0. Logout");
-        }else{
-            System.out.println("1. View Book Details");
-            System.out.println("2. View All Books");
-            System.out.println("3. Search Book");
-            System.out.println("4. Borrow Book");
-            System.out.println("5. Return Book");
-            System.out.println("6. View Borrowing Records");
-            System.out.println("7. View Personal Profile");
-            System.out.println("8. Update Personal Profile");
-            System.out.println("9. Delete Personal Profile");
-            System.out.println("0. Logout");
-        }
+    public void displayPersonalMenu(){
+        System.out.println("1. Add Book.");
+        System.out.println("2. View Book Details");
+        System.out.println("3. View All Books");
+        System.out.println("4. Update Books");
+        System.out.println("5. Delete Books");
+        System.out.println("6. Search Book");
+        System.out.println("7. Borrow Book");
+        System.out.println("8. Return Book");
+        System.out.println("9. View Borrowing Records");
+        System.out.println("10. View All Borrowing Records");
+        System.out.println("11. View Personal Profile");
+        System.out.println("12. View Member Profile");
+        System.out.println("13. View All Members");
+        System.out.println("14. Update Personal Profile");
+        System.out.println("15. Update Member Profile");
+        System.out.println("16. Delete Personal Profile");
+        System.out.println("17. Delete Member Profile");
+        System.out.println("18. View Library Statistics");
+        System.out.println("19. Pay Outstanding Fine");
+        System.out.println("0. Logout");
     }
 
-    public void featuresCall(String membershipType, String id){
+    public void featuresCall(){
+        System.out.print("\nSelect an option (0 - 19): ");
 
-        if (membershipType.equalsIgnoreCase("staff")){
-            System.out.print("\nSelect an option (0 - 18): ");
-
-            switch(scanner.nextLine()){
-                case "1":
-                    addBook();
-                    break;
-                case "2":
-                    viewBookDetails();
-                    break;
-                case "3":
-                    viewAllBooks();
-                    break;
-                case "4":
-                    updatedBook();
-                    break;
-                case "5":
-                    deleteBook();
-                    break;
-                case "6":
-                    searchBook();
-                    break;
-                case "7":
-                    borrowBook();
-                    break;
-                case "8":
-                    returnBook();
-                    break;
-                case "9":
-                    viewBorrowingRecords();
-                    break;
-                case "10":
-                    viewAllBorrowingRecord();
-                    break;
-                case "11":
-                    viewPersonalProfile(id);
-                    break;
-                case "12":
-                    viewMemberProfile();
-                    break;
-                case "13":
-                    viewAllMembers();
-                    break;
-                case "14":
-                    updatePersonalProfile();
-                    break;
-                case "15":
-                    updateMemberProfile();
-                    break;
-                case "16":
-                    deletePersonalProfile(id);
-                    break;
-                case "17":
-                    deleteMemberProfile();
-                    break;
-                case "18":
-                    viewLibraryStatistics();
-                    break;
-                case "0":
-                    logout();
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + scanner.nextLine());
-            }
-        }else {
-            System.out.print("\nSelect an option (0 - 9): ");
-
-            switch(scanner.nextLine()){
-                case "1":
-                    viewBookDetails();
-                    break;
-                case "2":
-                    viewAllBooks();
-                    break;
-                case "3":
-                    searchBook();
-                    break;
-                case "4":
-                    borrowBook();
-                    break;
-                case "5":
-                    returnBook();
-                    break;
-                case "6":
-                    viewBorrowingRecords();
-                    break;
-                case "7":
-                    viewPersonalProfile(id);
-                    break;
-                case "8":
-                    updatePersonalProfile();
-                    break;
-                case "9":
-                    deletePersonalProfile(id);
-                    break;
-                case "0":
-                    logout();
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + scanner.nextLine());
-            }
+        switch(scanner.nextLine()){
+            case "1":
+                addBook();
+                break;
+            case "2":
+                viewBookDetails();
+                break;
+            case "3":
+                viewAllBooks();
+                break;
+            case "4":
+                updatedBook();
+                break;
+            case "5":
+                deleteBook();
+                break;
+            case "6":
+                searchBook();
+                break;
+            case "7":
+                borrowBook();
+                break;
+            case "8":
+                returnBook();
+                break;
+            case "9":
+                viewBorrowingRecords();
+                break;
+            case "10":
+                viewAllBorrowingRecord();
+                break;
+            case "11":
+                viewPersonalProfile();
+                break;
+            case "12":
+                viewMemberProfile();
+                break;
+            case "13":
+                viewAllMembers();
+                break;
+            case "14":
+                updatePersonalProfile();
+                break;
+            case "15":
+                updateMemberProfile();
+                break;
+            case "16":
+                deletePersonalProfile();
+                break;
+            case "17":
+                deleteMemberProfile();
+                break;
+            case "18":
+                viewLibraryStatistics();
+                break;
+            case "19":
+                payFine();
+                break;
+            case "0":
+                logout();
+                break;
+            default:
+                System.out.println("Unexpected value: " + scanner.nextLine());
         }
     }
 
     public void personalDashBoard(User user){
-        if (user == null)
-            return;
-
         String first_name = user.getFirstName();
 
         System.out.println("========================================");
         System.out.println(" "+first_name.toUpperCase()+" DASHBOARD ");
         System.out.println("========================================");
 
-        System.out.println(ValidationUtils.greet()+" "+first_name+", Welcome to your dashboard\n");
+        System.out.println(MethodUtils.greet()+" "+first_name+", Welcome to your dashboard\n");
 
-        String membershipType = user.getMembershipType().toString().toLowerCase();
-        String userId = user.getId();
-
-        displayPersonalMenu(membershipType);
-
-        featuresCall(membershipType, userId);
+        displayPersonalMenu();
+        featuresCall();
     }
 
     public void addBook(){
@@ -416,7 +362,7 @@ public class Controller{
                 System.out.println("Unexpected value: " + scanner.nextLine());
         }
 
-        String values = ValidationUtils.generateBookStringValue(book);
+        String values = MethodUtils.generateBookStringValue(book);
         Book bookObj = bookController.editBook(book, values);
 
         if (bookObj != null){
@@ -537,7 +483,8 @@ public class Controller{
         borrowRecordController.viewPersonalBorrowingRecords(userId);
     }
 
-    public void viewPersonalProfile(String id){
+    public void viewPersonalProfile(){
+        String id = authController.getMe().getId();
         String viewProfileInfo = userController.viewUserProfile(id);
 
         if (viewProfileInfo != null){
@@ -550,6 +497,9 @@ public class Controller{
     }
 
     public void viewMemberProfile(){
+        if(authController.getMe().getMembershipType() == MembershipType.STAFF)
+            throw new RuntimeException("Unauthorized, only a staff is permitted");
+
         System.out.print("Enter member Id: ");
         String viewMemberProfileInfo = userController.viewUserProfile(scanner.nextLine());
 
@@ -741,7 +691,7 @@ public class Controller{
                 System.out.println("Unexpected value: " + scanner.nextLine());
         }
 
-        String values = ValidationUtils.generateUserStringValue(user);
+        String values = MethodUtils.generateUserStringValue(user);
         userController.updateUserProfile(user, values);
 
         System.out.println("Profile update successful");
@@ -749,12 +699,14 @@ public class Controller{
 
     public void updateMemberProfile(){}
 
-    public void deletePersonalProfile(String id){
+    public void deletePersonalProfile(){
+        String id = authController.getMe().getId();
+
         System.out.println("Are you sure you want to delete your profile? Y or N: ");
         String answer = scanner.nextLine();
 
         if (answer.equalsIgnoreCase("Y")){
-            userController.deleteUserProfile(id);
+            System.out.println(userController.deleteUserProfile(id));
         }else{
             System.out.println("Profile delete cancelled!!");
         }
@@ -762,7 +714,16 @@ public class Controller{
 
     public void deleteMemberProfile(){
         System.out.print("Enter member Id: ");
-        userController.deleteUserProfile(scanner.nextLine());
+        String memberId = scanner.nextLine();
+
+        System.out.println("Are you sure you want to delete member profile? Y or N: ");
+        String answer = scanner.nextLine();
+
+        if (answer.equalsIgnoreCase("Y")){
+            System.out.println(userController.deleteUserProfile(memberId));
+        }else{
+            System.out.println("Profile delete cancelled!!");
+        }
     }
 
     public void payFine(){
@@ -898,7 +859,7 @@ public class Controller{
             String hashedPassword = hashPassword(password);
             user.setPassword(hashedPassword);
 
-            String newValues = ValidationUtils.generateUserStringValue(user);
+            String newValues = MethodUtils.generateUserStringValue(user);
 
             String updated = userController.updateUserProfile(user, newValues);
 

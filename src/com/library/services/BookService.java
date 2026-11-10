@@ -10,8 +10,8 @@ import com.library.repos.BookRepo;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static com.library.utils.LibraryUtils.generateBookId;
-import static com.library.utils.LibraryUtils.generateBookIsbnNumber;
+import static com.library.utils.ValidationUtils.generateBookId;
+import static com.library.utils.ValidationUtils.generateBookIsbnNumber;
 
 
 public class BookService{

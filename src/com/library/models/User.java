@@ -6,7 +6,7 @@ import com.library.enums.MembershipType;
 import java.time.LocalDate;
 
 
-public class Users{
+public class User {
     private String id;
     private String firstName;
     private String lastName;
@@ -18,8 +18,8 @@ public class Users{
     private String password;
     private double outstandingFine;
 
-    public Users(String id, String firstName, String lastName, String email, String phoneNo, LocalDate dateJoined,
-                 MemberStatus status, MembershipType membershipType, String password, double outstandingFine){
+    public User(String id, String firstName, String lastName, String email, String phoneNo, LocalDate dateJoined,
+                MemberStatus status, MembershipType membershipType, String password, double outstandingFine){
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

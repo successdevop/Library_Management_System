@@ -1,9 +1,10 @@
 package com.library.utils;
 
 import com.library.database.Database;
+import com.library.enums.MembershipType;
 import com.library.models.Book;
 import com.library.models.BorrowRecord;
-import com.library.models.Users;
+import com.library.models.User;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,14 +12,14 @@ import java.time.temporal.ChronoUnit;
 import java.util.Random;
 
 public class MethodUtils{
-    private static final Users[] users = Database.getUsersDatabase();
+    private static final User[] users = Database.getUsersDatabase();
     private static final Book[] books = Database.getBooksDatabase();
     private static final BorrowRecord[] records = Database.getBorrowRecordDatabase();
 
     public static String generateUserId(){
         int maxId = 0;
 
-        for(Users user : users){
+        for(User user : users){
             if (user == null)
                 continue;
 
@@ -120,7 +121,7 @@ public class MethodUtils{
         }
     }
 
-    public static String generateUserStringValue(Users user){
+    public static String generateUserStringValue(User user){
         String id = user.getId();
         String firstName = user.getFirstName();
         String lastName = user.getLastName();
@@ -167,6 +168,35 @@ public class MethodUtils{
 
     public static double calculateFine(int days, double fineRate){
         return days * fineRate;
+    }
+
+    public static int getBorrowingLimit(MembershipType type){
+        return switch (type) {
+            case STAFF -> 10;
+            case STUDENT -> 5;
+            default -> 3;
+        };
+    }
+
+    public static double getFineRate(MembershipType type){
+        return switch(type){
+            case STUDENT -> 300;
+            case STAFF -> 500;
+            default -> 700;
+        };
+    }
+
+    public static int countUserActiveBorrowings(String id){
+        int count = 0;
+
+        for(BorrowRecord record : records){
+            if(record != null && record.getUserId().equals(id) &&
+                    record.getBorrowStatus().toString().equalsIgnoreCase("BORROWED")){
+                count++;
+            }
+        }
+
+        return count;
     }
 
     public static String greet(){

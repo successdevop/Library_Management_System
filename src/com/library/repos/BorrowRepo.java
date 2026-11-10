@@ -74,20 +74,6 @@ public class BorrowRepo implements BorrowRecordInterface {
     }
 
     @Override
-    public int countUserActiveBorrowings(String id){
-        int count = 0;
-
-        for(BorrowRecord record : records){
-            if(record != null && record.getUserId().equals(id) &&
-                    record.getBorrowStatus().toString().equalsIgnoreCase("BORROWED")){
-                count++;
-            }
-        }
-
-        return count;
-    }
-
-    @Override
     public BorrowRecord[] getAllBorrowRecords() {
         return records;
     }

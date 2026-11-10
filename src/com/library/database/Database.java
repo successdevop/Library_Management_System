@@ -7,7 +7,7 @@ import com.library.enums.MemberStatus;
 import com.library.enums.MembershipType;
 import com.library.models.Book;
 import com.library.models.BorrowRecord;
-import com.library.models.Users;
+import com.library.models.User;
 import com.library.utils.MethodUtils;
 
 import java.io.*;
@@ -21,12 +21,12 @@ import java.time.LocalDate;
 public class Database{
     private static Database instance = null;
     private static Book[] books = null;
-    private static Users[] users = null;
+    private static User[] users = null;
     private static BorrowRecord[] borrowRecords = null;
 
     private Database(){
         books = new Book[Config.MAX_BOOKS];
-        users = new Users[Config.MAX_USERS];
+        users = new User[Config.MAX_USERS];
         borrowRecords = new BorrowRecord[Config.MAX_BORROW_RECORDS];
     }
 
@@ -34,13 +34,13 @@ public class Database{
         return books;
     }
 
-    public static Users[] getUsersDatabase(){
+    public static User[] getUsersDatabase(){
         return users;
     }
 
     public static BorrowRecord[] getBorrowRecordDatabase(){return borrowRecords;}
 
-    public static void appendUserToFile(String user_file_storage, Users user) {
+    public static void appendUserToFile(String user_file_storage, User user) {
 
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(user_file_storage, true))){
             String line = MethodUtils.generateUserStringValue(user);
@@ -109,7 +109,7 @@ public class Database{
         }
     }
 
-    public static void updateUserFile(String storage_file, Users user, String newValues){
+    public static void updateUserFile(String storage_file, User user, String newValues){
         Path originalFile = Paths.get(storage_file);
         Path tempFile = Paths.get("users_temp_file.txt");
 
@@ -324,7 +324,7 @@ public class Database{
                 String password = values[8].trim();
                 double outstandingFine = Double.parseDouble(values[9].trim());
 
-                users[count++] = new Users(id, firstName, lastName, email, phoneNo, dateJoined, status,
+                users[count++] = new User(id, firstName, lastName, email, phoneNo, dateJoined, status,
                         memberType, password, outstandingFine);
             }
             System.out.println(count+" users loaded");

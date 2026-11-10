@@ -10,5 +10,4 @@ public interface BorrowRecordInterface {
     public void editBorrowRecord(BorrowRecord record, String newValues);
     public void deleteBorrowRecord(String id);
     public BorrowRecord[] getAllBorrowRecords();
-    public int countUserActiveBorrowings(String id);
 }
