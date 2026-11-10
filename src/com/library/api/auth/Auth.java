@@ -1,8 +1,7 @@
 package com.library.api.auth;
 
 import com.library.enums.MembershipType;
-import com.library.exceptions.*;
-import com.library.models.Users;
+import com.library.models.User;
 import com.library.services.AuthService;
 
 
@@ -14,7 +13,7 @@ public class Auth{
     }
 
     // GET ME
-    public Users getMe(){
+    public User getMe(){
         return authService.getMe();
     }
 
@@ -27,7 +26,7 @@ public class Auth{
     }
 
     // LOGIN MEMBER
-    public Users signInAccount(String email, String password){
+    public User signInAccount(String email, String password){
         return authService.loginMember(email, password);
     }
 
@@ -37,7 +36,7 @@ public class Auth{
     }
 
     // FORGOT PASSWORD
-    public Users forgotPassword(String email, String phoneNumber){
+    public User forgotPassword(String email, String phoneNumber){
         return authService.forgotPassword(email, phoneNumber);
     }
 }

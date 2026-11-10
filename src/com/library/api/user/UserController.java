@@ -1,6 +1,6 @@
 package com.library.api.user;
 
-import com.library.models.Users;
+import com.library.models.User;
 import com.library.services.UserService;
 
 
@@ -12,7 +12,7 @@ public class UserController{
     }
 
     // GET A USER
-    public Users getAUserById(String id){
+    public User getAUserById(String id){
         return userService.getAUserById(id);
     }
 
@@ -27,7 +27,7 @@ public class UserController{
     }
 
     // EDIT/UPDATE USER
-    public String updateUserProfile(Users user, String userNewValues){
+    public String updateUserProfile(User user, String userNewValues){
         return userService.editUserProfile(user, userNewValues);
     }
 
