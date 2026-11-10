@@ -2,9 +2,11 @@ package com.library.services;
 
 import com.library.enums.BookStatus;
 import com.library.enums.BorrowStatus;
+import com.library.enums.MemberStatus;
 import com.library.exceptions.BookNotAvailableException;
 import com.library.exceptions.BookNotFoundException;
 import com.library.exceptions.BorrowLimitExceededException;
+import com.library.exceptions.RecordNotFoundException;
 import com.library.interfaces.BorrowRecordInterface;
 import com.library.models.Book;
 import com.library.models.BorrowRecord;
@@ -15,10 +17,9 @@ import com.library.repos.UserRepo;
 
 import java.time.LocalDate;
 
-import static com.library.app_files.Config.BORROW_PERIOD;
-import static com.library.app_files.Config.getBorrowingLimit;
-import static com.library.utils.LibraryUtils.generateBookStringValue;
-import static com.library.utils.LibraryUtils.generateTransactionId;
+import static com.library.app_files.Config.*;
+import static com.library.utils.LibraryUtils.*;
+
 
 public class BorrowService{
     private final BorrowRecordInterface borrowRecords;
@@ -60,5 +61,80 @@ public class BorrowService{
         return true;
     }
 
+    public boolean returnBook(String bookId){
+        BorrowRecord record = borrowRecords.getRecordByBookId(bookId);
+        if (record == null)
+            throw new RecordNotFoundException("Record not found");
 
+        if (record.getBorrowStatus().toString().equalsIgnoreCase("returned"))
+            throw new RuntimeException("This book has already been returned");
+
+        Users user = userRepo.getUserById(record.getUserId());
+        Book book = bookrepo.getBookById(record.getBookId());
+
+        int daysLate = calculateDaysLate(record.getDueDate(), LocalDate.now());
+        double fineRate = getFineRate(user.getMembershipType());
+        double fine = calculateFine(daysLate, fineRate);
+
+        if (fine > 0) {
+            user.setOutstandingFine(user.getOutstandingFine() + fine);
+            updateSuspensionStatus(user);
+        }
+
+        book.setBookStatus(BookStatus.AVAILABLE);
+        record.setBorrowStatus(BorrowStatus.RETURNED);
+
+        String userNewValues = generateUserStringValue(user);
+        String bookNewValues = generateBookStringValue(book);
+        String recordNewValues = generateBorrowRecordStringValue(record);
+
+        userRepo.editUser(user, userNewValues);
+        bookrepo.editBook(book, bookNewValues);
+        borrowRecords.editBorrowRecord(record, recordNewValues);
+
+        return true;
+    }
+
+    public void payFine(String userId, double amount){
+        Users user = userRepo.getUserById(userId);
+
+        if(amount <= 0)
+            throw new RuntimeException("Amount must be positive");
+
+        if(amount > user.getOutstandingFine())
+            throw new RuntimeException("Please pay only your debt #"+user.getOutstandingFine()+", don't add extra");
+
+        user.setOutstandingFine(user.getOutstandingFine() - amount);
+        updateSuspensionStatus(user);
+
+        String userNewValues = generateUserStringValue(user);
+        userRepo.editUser(user, userNewValues);
+    }
+
+    public void viewPersonalBorrowingRecords(String id){
+        BorrowRecord[] records = borrowRecords.getAllBorrowRecords();
+
+        for(BorrowRecord record : records){
+            if(record != null && record.getUserId().equals(id))
+                System.out.println(record);
+        }
+    }
+
+    public void viewAllBorrowRecords(String id){
+        Users user = userRepo.getUserById(id);
+
+        if(!user.getMembershipType().toString().equalsIgnoreCase("staff"))
+            throw new RuntimeException("Not authorized, this is only for staff");
+
+        for (BorrowRecord record : borrowRecords.getAllBorrowRecords())
+            System.out.println(record);
+    }
+
+    private void updateSuspensionStatus(Users user){
+        if(user.getOutstandingFine() >= SUSPENSION_FINE_THRESHOLD){
+            user.setStatus(MemberStatus.SUSPENDED);
+        }else if (user.getStatus() == MemberStatus.SUSPENDED){
+            user.setStatus(MemberStatus.ACTIVE);
+        }
+    }
 }
