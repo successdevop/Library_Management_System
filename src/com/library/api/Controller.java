@@ -516,12 +516,26 @@ public class Controller{
     }
 
     public void returnBook(){
+        System.out.print("Enter book id: ");
+        String id = LibraryUtils.validateStringLength(scanner.nextLine());
 
+        boolean isBorrowed = borrowRecordController.returnBook(id);
+        if(isBorrowed){
+            System.out.println("Book returned successfully");
+        }else{
+            System.out.println("Book return failed");
+        }
     }
 
-    public void viewBorrowingRecords(){}
+    public void viewBorrowingRecords(){
+        String userId = authController.getMe().getId();
+        borrowRecordController.viewPersonalBorrowingRecords(userId);
+    }
 
-    public void viewAllBorrowingRecord(){}
+    public void viewAllBorrowingRecord(){
+        String userId = authController.getMe().getId();
+        borrowRecordController.viewPersonalBorrowingRecords(userId);
+    }
 
     public void viewPersonalProfile(String id){
         String viewProfileInfo = userController.viewUserProfile(id);
@@ -749,6 +763,15 @@ public class Controller{
     public void deleteMemberProfile(){
         System.out.print("Enter member Id: ");
         userController.deleteUserProfile(scanner.nextLine());
+    }
+
+    public void payFine(){
+        String userId = authController.getMe().getId();
+
+        System.out.println("Enter amount: ");
+        double answer = scanner.nextDouble();
+
+        borrowRecordController.payFine(userId, answer);
     }
 
     public void viewLibraryStatistics(){}

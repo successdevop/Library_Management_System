@@ -12,4 +12,20 @@ public class BorrowRecordController{
     public boolean borrowBook(String userId, String bookId){
         return borrowService.borrowBook(userId, bookId);
     }
+
+    public boolean returnBook(String bookId){
+        return borrowService.returnBook(bookId);
+    }
+
+    public void payFine(String userId, double amount){
+        borrowService.payFine(userId, amount);
+    }
+
+    public void viewPersonalBorrowingRecords(String id){
+        borrowService.viewPersonalBorrowingRecords(id);
+    }
+
+    public void viewAllBorrowRecords(String id){
+        borrowService.viewAllBorrowRecords(id);
+    }
 }
