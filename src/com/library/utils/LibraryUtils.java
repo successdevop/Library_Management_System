@@ -7,7 +7,9 @@ import com.library.models.Book;
 import com.library.models.BorrowRecord;
 import com.library.models.Users;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Random;
 import java.util.Set;
 
@@ -224,5 +226,14 @@ public class LibraryUtils{
         String status = record.getBorrowStatus().toString();
 
         return String.format("%s|%s|%s|%s|%s|%s|%s", transactionId, bookId, userId, borrowDate, dueDate, returnDate, status);
+    }
+
+    public static int calculateDaysLate(LocalDate dueDate, LocalDate returnDate){
+        long totalDays = ChronoUnit.DAYS.between(dueDate, returnDate);
+        return (int)totalDays;
+    }
+
+    public static double calculateFine(int days, double fineRate){
+        return days * fineRate;
     }
 }
