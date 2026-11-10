@@ -3,6 +3,7 @@ package com.library.services;
 import com.library.enums.BookStatus;
 import com.library.enums.BorrowStatus;
 import com.library.enums.MemberStatus;
+import com.library.enums.MembershipType;
 import com.library.exceptions.BookNotAvailableException;
 import com.library.exceptions.BookNotFoundException;
 import com.library.exceptions.BorrowLimitExceededException;
@@ -18,6 +19,7 @@ import com.library.repos.UserRepo;
 import java.time.LocalDate;
 
 import static com.library.app_files.Config.*;
+import static com.library.utils.MethodUtils.*;
 
 
 public class BorrowService{
@@ -41,10 +43,10 @@ public class BorrowService{
         if (!book.getBookStatus().toString().equalsIgnoreCase("AVAILABLE"))
             throw new BookNotAvailableException("Book not available");
 
-        int numberOfBorrowings = borrowRecords.countUserActiveBorrowings(userId);
+        int numberOfActiveBorrowings = countUserActiveBorrowings(userId);
         int userMaxBorrowing = getBorrowingLimit(user.getMembershipType());
 
-        if(numberOfBorrowings >= userMaxBorrowing)
+        if(numberOfActiveBorrowings >= userMaxBorrowing)
             throw new BorrowLimitExceededException("Borrowing limit for "+user.getMembershipType()+" members is "
                     + userMaxBorrowing);
 
@@ -65,7 +67,7 @@ public class BorrowService{
         if (record == null)
             throw new RecordNotFoundException("Record not found");
 
-        if (record.getBorrowStatus().toString().equalsIgnoreCase("returned"))
+        if (record.getBorrowStatus() == BorrowStatus.RETURNED)
             throw new RuntimeException("This book has already been returned");
 
         User user = userRepo.getUserById(record.getUserId());
@@ -122,11 +124,27 @@ public class BorrowService{
     public void viewAllBorrowRecords(String id){
         User user = userRepo.getUserById(id);
 
-        if(!user.getMembershipType().toString().equalsIgnoreCase("staff"))
-            throw new RuntimeException("Not authorized, this is only for staff");
+        if(!(user.getMembershipType() == MembershipType.STAFF))
+            throw new RuntimeException("Not authorized, this is only for staff members");
 
         for (BorrowRecord record : borrowRecords.getAllBorrowRecords())
             System.out.println(record);
+    }
+
+    public void deleteBorrowRecord(String userId, String recordId){
+        User user = userRepo.getUserById(userId);
+        if (user.getMembershipType() == MembershipType.STAFF)
+            throw new RuntimeException("Not authorized, for staff members only");
+
+        BorrowRecord record = borrowRecords.getRecordByTransactionId(recordId);
+
+        if (record == null)
+            throw new RuntimeException("Record not found");
+
+        if (record.getBorrowStatus() == BorrowStatus.BORROWED)
+            throw new RuntimeException("Cannot delete a transaction that is active/borrowed");
+
+        borrowRecords.deleteBorrowRecord(recordId);
     }
 
     private void updateSuspensionStatus(User user){

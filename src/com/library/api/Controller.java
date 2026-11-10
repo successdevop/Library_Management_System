@@ -53,6 +53,7 @@ public class Controller{
         System.out.println("17. Delete Member Profile");
         System.out.println("18. View Library Statistics");
         System.out.println("19. Pay Outstanding Fine");
+        System.out.println("20. Delete Borrow Record");
         System.out.println("0. Logout");
     }
 
@@ -117,6 +118,9 @@ public class Controller{
             case "19":
                 payFine();
                 break;
+            case "20":
+                deleteBorrowRecords();
+                break;
             case "0":
                 logout();
                 break;
@@ -139,8 +143,6 @@ public class Controller{
     }
 
     public void addBook(){
-        String result;
-
         System.out.print("Enter book title: \n");
         String bookTitle = ValidationUtils.validateStringLength(scanner.nextLine());
 
@@ -155,12 +157,10 @@ public class Controller{
 
         Book book = bookController.addBook(bookTitle, author, category, publicationYear);
         if (book != null) {
-            result = "Book added successfully";
+            System.out.println("Book added successfully");
         }else{
-            result = "Adding new book failed, please try again later!!!";
+            System.out.println("Adding new book failed, please try again later!!!");
         }
-
-        System.out.println(result);
     }
 
     public void viewBookDetails(){
@@ -373,6 +373,10 @@ public class Controller{
     }
 
     public void deleteBook(){
+        MembershipType membershipType = authController.getMe().getMembershipType();
+        if(!(membershipType == MembershipType.STAFF))
+            throw new RuntimeException("unauthorized, only staff members can delete book");
+
         System.out.println("Enter book id: ");
         String bookId = scanner.nextLine();
 
@@ -480,7 +484,15 @@ public class Controller{
 
     public void viewAllBorrowingRecord(){
         String userId = authController.getMe().getId();
-        borrowRecordController.viewPersonalBorrowingRecords(userId);
+        borrowRecordController.viewAllBorrowRecords(userId);
+    }
+
+    public void deleteBorrowRecords(){
+        String userId = authController.getMe().getId();
+
+        System.out.println("Enter record id: ");
+        String recordId = scanner.nextLine();
+        borrowRecordController.deleteBorrowRecords(userId, recordId);
     }
 
     public void viewPersonalProfile(){

@@ -348,7 +348,7 @@ public class Database{
                 String u_id = values[2].trim();
                 LocalDate b_date = LocalDate.parse(values[3].trim());
                 LocalDate d_date = LocalDate.parse(values[4].trim());
-                LocalDate r_date = LocalDate.parse(values[5].trim());
+                LocalDate r_date = values[5].isEmpty() ? null : LocalDate.parse(values[5].trim());
                 BorrowStatus status = BorrowStatus.valueOf(values[6].trim());
 
                 borrowRecords[count++] = new BorrowRecord(t_id, b_id, u_id, b_date, d_date,

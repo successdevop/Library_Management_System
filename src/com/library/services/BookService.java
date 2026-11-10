@@ -10,8 +10,8 @@ import com.library.repos.BookRepo;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static com.library.utils.ValidationUtils.generateBookId;
-import static com.library.utils.ValidationUtils.generateBookIsbnNumber;
+import static com.library.utils.MethodUtils.generateBookId;
+import static com.library.utils.MethodUtils.generateBookIsbnNumber;
 
 
 public class BookService{
@@ -80,8 +80,8 @@ public class BookService{
         return book;
     }
 
-    public void deleteABook(String id){
-        Book book = bookRepo.getBookById(id);
+    public void deleteABook(String bookId){
+        Book book = bookRepo.getBookById(bookId);
         if (book == null)
             throw new BookNotFoundException("Book not found");
 
@@ -89,7 +89,7 @@ public class BookService{
             throw new BookNotAvailableException("Cannot delete a borrowed book");
         }
 
-        bookRepo.deleteBook(id);
+        bookRepo.deleteBook(bookId);
     }
 
     public Book[] searchBook(String title){

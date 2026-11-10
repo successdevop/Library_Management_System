@@ -28,4 +28,8 @@ public class BorrowRecordController{
     public void viewAllBorrowRecords(String id){
         borrowService.viewAllBorrowRecords(id);
     }
+
+    public void deleteBorrowRecords(String userId, String recordId){
+        borrowService.deleteBorrowRecord(userId, recordId);
+    }
 }

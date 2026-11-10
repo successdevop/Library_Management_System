@@ -155,7 +155,7 @@ public class MethodUtils{
         String userId = record.getUserId();
         String borrowDate = String.valueOf(record.getBorrowDate());
         String dueDate = String.valueOf(record.getDueDate());
-        String returnDate = String.valueOf(record.getReturnDate());
+        String returnDate = record.getReturnDate() == null ? "" : String.valueOf(record.getReturnDate());
         String status = record.getBorrowStatus().toString();
 
         return String.format("%s|%s|%s|%s|%s|%s|%s", transactionId, bookId, userId, borrowDate, dueDate, returnDate, status);
