@@ -115,6 +115,6 @@ public class Users{
     @Override
     public String toString(){
         return "User<(id: "+this.id+", firstName: "+this.firstName+", email: "+this.email+", " +
-                "userType: "+this.membershipType+", status: "+getStatus()+")>";
+                "userType: "+this.membershipType+", outstandingFine: "+this.outstandingFine+", status: "+getStatus()+")>";
     }
 }
