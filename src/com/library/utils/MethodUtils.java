@@ -1,8 +1,6 @@
 package com.library.utils;
 
-import com.library.app_files.Config;
 import com.library.database.Database;
-import com.library.exceptions.*;
 import com.library.models.Book;
 import com.library.models.BorrowRecord;
 import com.library.models.Users;
@@ -11,12 +9,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Random;
-import java.util.Set;
 
-import static com.library.app_files.Config.*;
-
-
-public class LibraryUtils{
+public class MethodUtils{
     private static final Users[] users = Database.getUsersDatabase();
     private static final Book[] books = Database.getBooksDatabase();
     private static final BorrowRecord[] records = Database.getBorrowRecordDatabase();
@@ -126,68 +120,6 @@ public class LibraryUtils{
         }
     }
 
-    public static String validateStringLength(String name){
-        if (name == null || name.strip().length() < Config.MIN_STRING_LENGTH){
-            throw new InvalidNameLengthException("name must be at least 3 characters long");
-        }
-        return name;
-    }
-
-    public static String validatePhoneNumber(String phoneNumber){
-        // Remove common spaces, dashes, or parentheses before processing
-        String cleaned = phoneNumber.replaceAll("[\\s\\-()]", "");
-
-        boolean isMatches = PHONE_NUMBER_PATTERN.matcher(cleaned).matches();
-
-        if(!isMatches){
-            throw new InvalidPhoneNumberException("Invalid phone number");
-        }
-
-        return phoneNumber;
-    }
-
-    public static String validateEmail(String email){
-        boolean isMatches = EMAIL_PATTERN.matcher(email).matches();
-        if(!isMatches){
-            throw new InvalidEmailException("Invalid email");
-        }
-
-        return email;
-    }
-
-    public static String validatePassword(String password){
-
-        boolean isMatches = PASSWORD_PATTERN.matcher(password).matches();
-        if(!isMatches)
-            throw new InvalidPasswordException("Invalid password");
-
-        return password;
-    }
-
-    public static String validateMembershipType(String membershipType){
-        if (!Set.of("student", "general", "staff").contains(membershipType)){
-            throw new InvalidMembershipTypeException("Invalid membership type");
-        }
-        return membershipType;
-    }
-
-    public static String greet(){
-        LocalTime now = LocalTime.now();
-        int hour = now.getHour();
-
-        String greeting;
-
-        if (hour <= 12){
-            greeting = "Good morning";
-        } else if (hour <= 17){
-            greeting = "Good afternoon";
-        } else{
-            greeting = "Good evening";
-        }
-
-        return greeting;
-    }
-
     public static String generateUserStringValue(Users user){
         String id = user.getId();
         String firstName = user.getFirstName();
@@ -235,5 +167,22 @@ public class LibraryUtils{
 
     public static double calculateFine(int days, double fineRate){
         return days * fineRate;
+    }
+
+    public static String greet(){
+        LocalTime now = LocalTime.now();
+        int hour = now.getHour();
+
+        String greeting;
+
+        if (hour <= 12){
+            greeting = "Good morning";
+        } else if (hour <= 17){
+            greeting = "Good afternoon";
+        } else{
+            greeting = "Good evening";
+        }
+
+        return greeting;
     }
 }
