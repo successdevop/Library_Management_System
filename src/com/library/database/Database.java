@@ -8,7 +8,7 @@ import com.library.enums.MembershipType;
 import com.library.models.Book;
 import com.library.models.BorrowRecord;
 import com.library.models.Users;
-import com.library.utils.LibraryUtils;
+import com.library.utils.MethodUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -16,7 +16,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
-import java.util.Arrays;
 
 
 public class Database{
@@ -44,7 +43,7 @@ public class Database{
     public static void appendUserToFile(String user_file_storage, Users user) {
 
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(user_file_storage, true))){
-            String line = LibraryUtils.generateUserStringValue(user);
+            String line = MethodUtils.generateUserStringValue(user);
 
             bw.write(line);
             bw.newLine();
@@ -56,7 +55,7 @@ public class Database{
 
     public static void appendBookToFile(String book_file_storage, Book book){
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(book_file_storage, true))){
-            String line = LibraryUtils.generateBookStringValue(book);
+            String line = MethodUtils.generateBookStringValue(book);
 
             bw.write(line);
             bw.newLine();
@@ -70,7 +69,7 @@ public class Database{
 
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(storage_file, true))){
 
-            String line = LibraryUtils.generateBorrowRecordStringValue(record);
+            String line = MethodUtils.generateBorrowRecordStringValue(record);
             writer.write(line);
             writer.newLine();
 
