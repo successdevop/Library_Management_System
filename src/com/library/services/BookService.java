@@ -7,9 +7,6 @@ import com.library.exceptions.BookNotFoundException;
 import com.library.models.Book;
 import com.library.repos.BookRepo;
 
-import java.util.Arrays;
-import java.util.Objects;
-
 import static com.library.utils.MethodUtils.*;
 
 
@@ -65,14 +62,6 @@ public class BookService{
 
     public Book getABook(String title, String author){
         Book book = bookRepo.getABookByTitleAndAuthor(title, author);
-        if (book == null)
-            throw new BookNotFoundException("Book not found");
-
-        return book;
-    }
-
-    public Book getABookById(String id){
-        Book book = bookRepo.getBookById(id);
         if (book == null)
             throw new BookNotFoundException("Book not found");
 

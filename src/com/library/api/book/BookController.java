@@ -31,11 +31,6 @@ public class BookController{
         return bookService.getABook(title, author);
     }
 
-    // GET A BOOK BY ID
-    public Book getABookById(String id){
-        return bookService.getABookById(id);
-    }
-
     // EDIT A BOOK
     public Book editBook(Book book, String newValues){
         return bookService.editBook(book, newValues);

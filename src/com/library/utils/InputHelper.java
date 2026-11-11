@@ -31,6 +31,17 @@ public class InputHelper{
         }
     }
 
+    public static int readInt(String prompt){
+        while(true){
+            String value = readNonEmptyString(prompt);
+            try{
+                return Integer.parseInt(value);
+            }catch(NumberFormatException ex){
+                System.err.println("Please enter a valid whole number");
+            }
+        }
+    }
+
     public static int validateNumber(){
         while(true){
             try{

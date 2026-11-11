@@ -47,17 +47,15 @@ public class Controller{
         System.out.println("12. View Member Profile");
         System.out.println("13. View All Members");
         System.out.println("14. Update Personal Profile");
-        System.out.println("15. Update Member Profile");
-        System.out.println("16. Delete Personal Profile");
-        System.out.println("17. Delete Member Profile");
-        System.out.println("18. View Library Statistics");
-        System.out.println("19. Pay Outstanding Fine");
-        System.out.println("20. Delete Borrowing Record");
-        System.out.println("0. Logout");
+        System.out.println("15. Delete Personal Profile");
+        System.out.println("16. Delete Member Profile");
+        System.out.println("17. View Library Statistics");
+        System.out.println("18. Pay Outstanding Fine");
+        System.out.println("19. Delete Borrowing Record");
     }
 
     public void featuresCall(){
-        int choice = readInt("\nSelect an option (0 - 19): ", 0, 20);
+        int choice = readInt("\nSelect an option (1 - 19): ", 1, 19);
 
         switch(choice){
             case 1:
@@ -103,26 +101,21 @@ public class Controller{
                 updatePersonalProfile();
                 break;
             case 15:
-                updateMemberProfile();
-                break;
-            case 16:
                 deletePersonalProfile();
                 break;
-            case 17:
+            case 16:
                 deleteMemberProfile();
                 break;
-            case 18:
+            case 17:
                 viewLibraryStatistics();
                 break;
-            case 19:
+            case 18:
                 payFine();
                 break;
-            case 20:
+            case 19:
                 deleteBorrowRecords();
                 break;
-            case 0:
-                logout();
-                break;
+
             default:
                 System.out.println("Unexpected value: " + choice);
         }
@@ -135,10 +128,20 @@ public class Controller{
         System.out.println("    "+first_name+" DASHBOARD            ");
         System.out.println("========================================");
 
-        System.out.println(MethodUtils.greet()+" "+first_name+", Welcome to your dashboard\n");
+        boolean running = true;
+
+        while(running){
+            System.out.println(MethodUtils.greet()+" "+first_name+", Welcome to your dashboard");
 
             displayPersonalMenu();
             featuresCall();
+
+            int choice = readInt("\n1. Perform another transaction\n0. Logout");
+            if(choice == 0){
+                logout();
+                running = false;
+            }
+        }
     }
 
     public void addBook(){
@@ -641,8 +644,6 @@ public class Controller{
 
         System.out.println("Profile update successful");
     }
-
-    public void updateMemberProfile(){}
 
     public void deletePersonalProfile(){
         String id = authController.getMe().getId();
