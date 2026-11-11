@@ -10,8 +10,7 @@ import com.library.repos.BookRepo;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static com.library.utils.MethodUtils.generateBookId;
-import static com.library.utils.MethodUtils.generateBookIsbnNumber;
+import static com.library.utils.MethodUtils.*;
 
 
 public class BookService{
@@ -85,18 +84,20 @@ public class BookService{
         if (book == null)
             throw new BookNotFoundException("Book not found");
 
-        if (book.getBookStatus().toString().equalsIgnoreCase("BORROWED")){
+        if (book.getBookStatus() == BookStatus.BORROWED){
             throw new BookNotAvailableException("Cannot delete a borrowed book");
         }
+
+        if(checkBookAndRecordStatus(bookId))
+            throw new RuntimeException("Cannot delete a borrowed book");
 
         bookRepo.deleteBook(bookId);
     }
 
     public Book[] searchBook(String title){
         Book[] books = bookRepo.searchBook(title);
-        boolean hasObject = Arrays.stream(books).anyMatch(Objects::nonNull);
 
-        if(!hasObject)
+        if(books.length == 0)
             throw new BookNotFoundException("No books found");
 
         return books;
@@ -104,9 +105,7 @@ public class BookService{
 
     public Book[] searchBook(String title, String author){
         Book[] books = bookRepo.searchBook(title, author);
-        boolean hasObject = Arrays.stream(books).anyMatch(Objects::nonNull);
-
-        if(!hasObject)
+        if(books.length == 0)
             throw new BookNotFoundException("No books found");
 
         return books;
@@ -114,9 +113,7 @@ public class BookService{
 
     public Book[] searchBook(String title, String author, String category){
         Book[] books = bookRepo.searchBook(title, author, category);
-        boolean hasObject = Arrays.stream(books).anyMatch(Objects::nonNull);
-
-        if(!hasObject)
+        if(books.length == 0)
             throw new BookNotFoundException("No books found");
 
         return books;

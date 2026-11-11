@@ -1,6 +1,7 @@
 package com.library.utils;
 
 import com.library.database.Database;
+import com.library.enums.BorrowStatus;
 import com.library.enums.MembershipType;
 import com.library.models.Book;
 import com.library.models.BorrowRecord;
@@ -197,6 +198,16 @@ public class MethodUtils{
         }
 
         return count;
+    }
+
+    public static boolean checkBookAndRecordStatus(String id){
+        for (BorrowRecord record : records) {
+            if (record != null && record.getBookId().equalsIgnoreCase(id) &&
+                    (record.getBorrowStatus() == BorrowStatus.BORROWED))
+                return true;
+        }
+
+        return false;
     }
 
     public static String greet(){

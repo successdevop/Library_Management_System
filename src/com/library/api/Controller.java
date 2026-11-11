@@ -371,7 +371,7 @@ public class Controller{
 
         switch(choice){
             case 1:
-                Book[] books = bookController.searchBook(readNonEmptyString("Enter book title: "));
+                Book[] books = bookController.searchBook(ValidationUtils.validateStringLength("Enter book title: "));
                 for (Book book : books){
                     if (book != null)
                         System.out.println(book);
@@ -379,26 +379,28 @@ public class Controller{
                 break;
 
             case 2:
-                String bookTitle = readNonEmptyString("Enter book title: ");
+                String bookTitle = ValidationUtils.validateStringLength("Enter book title: ");
 
-                String bookAuthor = readNonEmptyString("Enter book author: ");
+                String bookAuthor = ValidationUtils.validateStringLength("Enter book author: ");
 
                 Book[] books1 = bookController.searchBook(bookTitle, bookAuthor);
                 for (Book book : books1){
-                    System.out.println(book);
+                    if (book != null)
+                        System.out.println(book);
                 }
                 break;
 
             case 3:
-                String bookTitle1 = readNonEmptyString("Enter book title: ");
+                String bookTitle1 = ValidationUtils.validateStringLength("Enter book title: ");
 
-                String bookAuthor1 = readNonEmptyString("Enter book author: ");
+                String bookAuthor1 = ValidationUtils.validateStringLength("Enter book author: ");
 
-                String bookCategory = readNonEmptyString("Enter book category: ");
+                String bookCategory = ValidationUtils.validateStringLength("Enter book category: ");
 
                 Book[] books2 = bookController.searchBook(bookTitle1, bookAuthor1, bookCategory);
                 for (Book book : books2){
-                    System.out.println(book);
+                    if (book != null)
+                        System.out.println(book);
                 }
                 break;
 
@@ -672,7 +674,13 @@ public class Controller{
         borrowRecordController.payFine(userId, answer);
     }
 
-    public void viewLibraryStatistics(){}
+    public void viewLibraryStatistics(){
+        System.out.println("========================================");
+        System.out.println("        LIBRARY STATISTICS          ");
+        System.out.println("========================================");
+
+        System.out.println(borrowRecordController.viewLibraryStatistics());
+    }
 
     public void logout(){
         authController.logout();

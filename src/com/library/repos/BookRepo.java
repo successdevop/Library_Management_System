@@ -62,9 +62,9 @@ public class BookRepo{
     public void deleteBook(String id){
         Database.deleteFromBookFile(BOOKS_STORAGE_FILE, id);
 
-        for (Book book : books){
-            if(book != null && book.getBookId().equals(id)){
-                book = null;
+        for (int i = 0; i < books.length; i++){
+            if(books[i] != null && books[i].getBookId().equals(id)){
+                books[i] = null;
                 break;
             }
         }
@@ -75,46 +75,37 @@ public class BookRepo{
     }
 
     public Book[] searchBook(String title){
-        Book[] newArr = new Book[50];
-        ArrayList<Book> bookArr = new ArrayList<>();
-
-        for (Book book : books){
-            if (book != null && book.getTitle().toLowerCase().contains(title.toLowerCase())){
-                bookArr.add(book);
-            }
-        }
-
-        return bookArr.toArray(newArr);
+        return searchEngine(title, null, null);
     }
 
     public Book[] searchBook(String title, String author){
-        Book[] newArr = new Book[50];
-        ArrayList<Book> bookArr = new ArrayList<>();
-
-        for (Book book : books){
-            if (book != null && (book.getTitle().toLowerCase().contains(title.toLowerCase()) ||
-                    book.getAuthor().toLowerCase().contains(author.toLowerCase()))){
-
-                bookArr.add(book);
-            }
-        }
-
-        return bookArr.toArray(newArr);
+        return searchEngine(title, author, null);
     }
 
     public Book[] searchBook(String title, String author, String category){
-        Book[] newArr = new Book[50];
-        ArrayList<Book> bookArr = new ArrayList<>();
+        return searchEngine(title, author, category);
+    }
 
-        for (Book book : books){
-            if (book != null && (book.getTitle().toLowerCase().contains(title.toLowerCase()) ||
-                    book.getAuthor().toLowerCase().contains(author.toLowerCase()) ||
-                    book.getCategory().toLowerCase().contains(category.toLowerCase()))){
+    private Book[] searchEngine(String title, String author, String category){
+        ArrayList<Book> bookArray = new ArrayList<>();
 
-                bookArr.add(book);
+        for (Book book : books) {
+            if (book == null) continue;
+
+            if (title != null && book.getTitle().toLowerCase().contains(title.toLowerCase())) {
+                bookArray.add(book);
+            } else if (title != null && author != null &&
+                    (book.getTitle().toLowerCase().contains(title.toLowerCase()) ||
+                            book.getAuthor().toLowerCase().contains(author.toLowerCase()))) {
+                bookArray.add(book);
+            } else if (title != null && author != null && category != null &&
+                    (book.getTitle().toLowerCase().contains(title.toLowerCase()) ||
+                            book.getAuthor().toLowerCase().contains(author.toLowerCase()) ||
+                            book.getCategory().toLowerCase().contains(category.toLowerCase()))) {
+                bookArray.add(book);
             }
         }
 
-        return bookArr.toArray(newArr);
+        return bookArray.toArray(new Book[0]);
     }
 }

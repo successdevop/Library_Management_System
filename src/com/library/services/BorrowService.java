@@ -144,7 +144,103 @@ public class BorrowService{
         if (record.getBorrowStatus() == BorrowStatus.BORROWED)
             throw new RuntimeException("Cannot delete a transaction that is active/borrowed");
 
+        Book[] books = bookrepo.getAllBooks();
+        for (Book book : books) {
+            if (book != null && book.getBookId().equalsIgnoreCase(record.getBookId()) &&
+                    book.getBookStatus() == BookStatus.BORROWED)
+                throw new RuntimeException("Cannot delete a transaction that is active/borrowed");
+        }
+
         borrowRecords.deleteBorrowRecord(recordId);
+    }
+
+    public String libraryStatistics(){
+        int totalBooks = bookStatistics()[0];
+        int totalAvailableBooks = bookStatistics()[1];
+        int totalBorrowedBooks = bookStatistics()[2];
+        int totalUsers = userStatistics()[0];
+        int totalActiveUsers = userStatistics()[1];
+        int totalInactiveUsers = userStatistics()[2];
+        int totalOverdueBooks = (int)borrowRecordStatistics()[0];
+        double totalFines = borrowRecordStatistics()[1];
+
+        return "Total Books: "+totalBooks+"\n"+
+                "Available Books: "+totalAvailableBooks+"\n"+
+                "Borrowed Books: "+totalBorrowedBooks+"\n"+
+                "Total Members: "+totalUsers+"\n"+
+                "Active Members: "+totalActiveUsers+"\n"+
+                "Inactive Members: "+totalInactiveUsers+"\n"+
+                "Overdue Books: "+totalOverdueBooks+"\n"+
+                "Total Fines: #"+totalFines;
+    }
+
+    private double[] borrowRecordStatistics(){
+        BorrowRecord[] records = borrowRecords.getAllBorrowRecords();
+        Book[] books = bookrepo.getAllBooks();
+        User[] users = userRepo.getAllUsers();
+
+        int overdueBooks = 0;
+        double totalFines = 0;
+
+        for (BorrowRecord record : records) {
+            if (record == null) continue;
+
+            for (Book book : books) {
+                if (book == null) continue;
+
+                if (record.getBookId().equalsIgnoreCase(book.getBookId())) {
+                    int days = calculateDaysLate(record.getDueDate(), record.getReturnDate());
+                    if (days > 0) overdueBooks++;
+                    else break;
+
+                    for (User user : users) {
+                        if (user == null) continue;
+
+                        if (record.getUserId().equalsIgnoreCase(user.getId())) {
+                            double fine = calculateFine(days, getFineRate(user.getMembershipType()));
+
+                            totalFines += fine;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return new double[]{overdueBooks, totalFines};
+    }
+
+    private int[] userStatistics(){
+        User[] users = userRepo.getAllUsers();
+        int counter = 0;
+        int activeUser = 0;
+        int inActiveUser = 0;
+
+        for(User user : users){
+            if(user != null){
+                counter++;
+                if (user.getStatus() == MemberStatus.ACTIVE) activeUser++;
+                if(user.getStatus() != MemberStatus.ACTIVE) inActiveUser++;
+            }
+        }
+
+        return new int[]{counter, activeUser, inActiveUser};
+    }
+
+    private int[] bookStatistics(){
+        Book[] books = bookrepo.getAllBooks();
+        int counter = 0;
+        int availableBookCount = 0;
+        int borrowedBookCount = 0;
+
+        for(Book book : books){
+            if(book != null){
+                counter++;
+                if (book.getBookStatus() == BookStatus.AVAILABLE) availableBookCount++;
+                if(book.getBookStatus() == BookStatus.BORROWED) borrowedBookCount++;
+            }
+        }
+        return new int[]{counter, availableBookCount, borrowedBookCount};
     }
 
     private void updateSuspensionStatus(User user){
