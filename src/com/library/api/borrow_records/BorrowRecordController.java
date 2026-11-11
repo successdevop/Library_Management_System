@@ -29,8 +29,8 @@ public class BorrowRecordController{
         borrowService.viewAllBorrowRecords(id);
     }
 
-    public void deleteBorrowRecords(String userId, String recordId){
-        borrowService.deleteBorrowRecord(userId, recordId);
+    public void deleteBorrowRecords(String recordId){
+        borrowService.deleteBorrowRecord(recordId);
     }
 
     public String viewLibraryStatistics(){

@@ -128,14 +128,11 @@ public class BorrowService{
             throw new RuntimeException("Not authorized, this is only for staff members");
 
         for (BorrowRecord record : borrowRecords.getAllBorrowRecords())
-            System.out.println(record);
+            if(record != null)
+                System.out.println(record);
     }
 
-    public void deleteBorrowRecord(String userId, String recordId){
-        User user = userRepo.getUserById(userId);
-        if (user.getMembershipType() == MembershipType.STAFF)
-            throw new RuntimeException("Not authorized, for staff members only");
-
+    public void deleteBorrowRecord(String recordId){
         BorrowRecord record = borrowRecords.getRecordByTransactionId(recordId);
 
         if (record == null)
@@ -164,14 +161,14 @@ public class BorrowService{
         int totalOverdueBooks = (int)borrowRecordStatistics()[0];
         double totalFines = borrowRecordStatistics()[1];
 
-        return "Total Books: "+totalBooks+"\n"+
-                "Available Books: "+totalAvailableBooks+"\n"+
-                "Borrowed Books: "+totalBorrowedBooks+"\n"+
-                "Total Members: "+totalUsers+"\n"+
-                "Active Members: "+totalActiveUsers+"\n"+
-                "Inactive Members: "+totalInactiveUsers+"\n"+
-                "Overdue Books: "+totalOverdueBooks+"\n"+
-                "Total Fines: #"+totalFines;
+        return "Total Books:\t\t\t"+totalBooks+"\n"+
+                "Available Books:\t\t"+totalAvailableBooks+"\n"+
+                "Borrowed Books:\t\t\t"+totalBorrowedBooks+"\n"+
+                "Total Members:\t\t\t"+totalUsers+"\n"+
+                "Active Members:\t\t\t"+totalActiveUsers+"\n"+
+                "Inactive Members:\t\t"+totalInactiveUsers+"\n"+
+                "Overdue Books:\t\t\t"+totalOverdueBooks+"\n"+
+                "Total Fines:\t\t\t#"+totalFines;
     }
 
     private double[] borrowRecordStatistics(){

@@ -449,10 +449,13 @@ public class Controller{
     }
 
     public void deleteBorrowRecords(){
-        String userId = authController.getMe().getId();
+        User user = authController.getMe();
+
+        if (user.getMembershipType() != MembershipType.STAFF)
+            throw new RuntimeException("Not authorized, for staff members only");
 
         String recordId = readNonEmptyString("Enter record id: ");
-        borrowRecordController.deleteBorrowRecords(userId, recordId);
+        borrowRecordController.deleteBorrowRecords(recordId);
     }
 
     public void viewPersonalProfile(){
@@ -469,7 +472,7 @@ public class Controller{
     }
 
     public void viewMemberProfile(){
-        if(authController.getMe().getMembershipType() == MembershipType.STAFF)
+        if(authController.getMe().getMembershipType() != MembershipType.STAFF)
             throw new RuntimeException("Unauthorized, only a staff is permitted");
 
         String viewMemberProfileInfo = userController.viewUserProfile(readNonEmptyString("Enter member Id: "));
@@ -666,12 +669,15 @@ public class Controller{
     }
 
     public void payFine(){
-        String userId = authController.getMe().getId();
+        User user = authController.getMe();
+
+        if(user.getOutstandingFine() <= 0.0)
+            throw new RuntimeException("You don't have any outstanding debt");
 
         System.out.println("Enter amount: ");
         double answer = validateNumber();
 
-        borrowRecordController.payFine(userId, answer);
+        borrowRecordController.payFine(user.getId(), answer);
     }
 
     public void viewLibraryStatistics(){
@@ -795,6 +801,12 @@ public class Controller{
     }
 
     public static void clearConsole() {
+        try{
+            Thread.sleep(3000);
+        }catch(InterruptedException ex){
+            System.out.println(ex.getMessage());
+        }
+
         for (int i = 0; i < 25; i++) {
             System.out.println();
         }

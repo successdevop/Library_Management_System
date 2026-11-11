@@ -163,8 +163,10 @@ public class MethodUtils{
     }
 
     public static int calculateDaysLate(LocalDate dueDate, LocalDate returnDate){
-        long totalDays = ChronoUnit.DAYS.between(dueDate, returnDate);
-        return (int)totalDays;
+        if (returnDate == null)
+            return 0;
+
+        return (int) ChronoUnit.DAYS.between(dueDate, returnDate);
     }
 
     public static double calculateFine(int days, double fineRate){
