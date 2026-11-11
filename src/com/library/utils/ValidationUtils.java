@@ -5,14 +5,21 @@ import com.library.exceptions.*;
 import java.util.Set;
 
 import static com.library.app_files.Config.*;
+import static com.library.utils.InputHelper.readNonEmptyString;
 
 
 public class ValidationUtils {
-    public static String validateStringLength(String name){
-        if (name == null || name.strip().length() < Config.MIN_STRING_LENGTH){
-            throw new InvalidNameLengthException("name must be at least 3 characters long");
+    public static String validateStringLength(String prompt){
+        while(true){
+
+            String name = readNonEmptyString(prompt);
+
+            if (!(name.strip().length() < Config.MIN_STRING_LENGTH)){
+                return name;
+            }
+
+            System.out.println("input must be at least 3 characters long");
         }
-        return name;
     }
 
     public static String validatePhoneNumber(String phoneNumber){
@@ -34,7 +41,7 @@ public class ValidationUtils {
             throw new InvalidEmailException("Invalid email");
         }
 
-        return email;
+        return email.toLowerCase();
     }
 
     public static String validatePassword(String password){
@@ -52,4 +59,5 @@ public class ValidationUtils {
         }
         return membershipType;
     }
+
 }

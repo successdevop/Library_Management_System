@@ -30,4 +30,14 @@ public class InputHelper{
             }
         }
     }
+
+    public static int validateNumber(){
+        while(true){
+            try{
+                return Integer.parseInt(scanner.nextLine().trim());
+            }catch(NumberFormatException ex){
+                System.err.println("Please enter a valid whole number");
+            }
+        }
+    }
 }
