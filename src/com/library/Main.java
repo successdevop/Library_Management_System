@@ -4,16 +4,12 @@ import com.library.api.Controller;
 import com.library.app_files.Config;
 import com.library.database.Database;
 
-import java.time.LocalDate;
-import java.util.Scanner;
-
 import static com.library.api.Controller.clearConsole;
+import static com.library.utils.InputHelper.readInt;
 
 
 public class Main{
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
         Database.getInstance(Config.DATABASE_FILE);
         Controller controller = new Controller();
 
@@ -21,26 +17,26 @@ public class Main{
 
         while(running){
             controller.displayMainMenu();
-            System.out.print("\nSelect an option (0 - 3): ");
+            int choice = readInt("\nSelect an option (0 - 3)", 0, 3);
 
             try{
-                switch (scanner.nextLine()){
-                    case "1":
+                switch (choice){
+                    case 1:
                         clearConsole();
                         controller.registerMember();
                         break;
 
-                    case "2":
+                    case 2:
                         clearConsole();
                         controller.loginMember();
                         break;
 
-                    case "3":
+                    case 3:
                         clearConsole();
                         controller.forgotPassword();
                         break;
 
-                    case "0":
+                    case 0:
                         running = false;
                         break;
 
@@ -51,7 +47,5 @@ public class Main{
                 System.out.println("\nERROR: "+ex.getMessage()+"\n");
             }
         }
-
-        scanner.close();
     }
 }

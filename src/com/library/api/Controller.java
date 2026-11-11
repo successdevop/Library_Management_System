@@ -12,13 +12,12 @@ import com.library.utils.MethodUtils;
 import com.library.utils.ValidationUtils;
 
 import java.util.Objects;
-import java.util.Scanner;
 
 import static com.library.utils.AuthUtils.hashPassword;
+import static com.library.utils.InputHelper.*;
 
 
 public class Controller{
-    private final Scanner scanner = new Scanner(System.in);
     private final Auth authController = new Auth();
     private final UserController userController = new UserController();
     private final BookController bookController = new BookController();
@@ -37,8 +36,8 @@ public class Controller{
         System.out.println("1. Add Book.");
         System.out.println("2. View Book Details");
         System.out.println("3. View All Books");
-        System.out.println("4. Update Books");
-        System.out.println("5. Delete Books");
+        System.out.println("4. Update Book");
+        System.out.println("5. Delete Book");
         System.out.println("6. Search Book");
         System.out.println("7. Borrow Book");
         System.out.println("8. Return Book");
@@ -53,107 +52,104 @@ public class Controller{
         System.out.println("17. Delete Member Profile");
         System.out.println("18. View Library Statistics");
         System.out.println("19. Pay Outstanding Fine");
-        System.out.println("20. Delete Borrow Record");
+        System.out.println("20. Delete Borrowing Record");
         System.out.println("0. Logout");
     }
 
     public void featuresCall(){
-        System.out.print("\nSelect an option (0 - 19): ");
+        int choice = readInt("\nSelect an option (0 - 19): ", 0, 20);
 
-        switch(scanner.nextLine()){
-            case "1":
+        switch(choice){
+            case 1:
                 addBook();
                 break;
-            case "2":
+            case 2:
                 viewBookDetails();
                 break;
-            case "3":
+            case 3:
                 viewAllBooks();
                 break;
-            case "4":
+            case 4:
                 updatedBook();
                 break;
-            case "5":
+            case 5:
                 deleteBook();
                 break;
-            case "6":
+            case 6:
                 searchBook();
                 break;
-            case "7":
+            case 7:
                 borrowBook();
                 break;
-            case "8":
+            case 8:
                 returnBook();
                 break;
-            case "9":
+            case 9:
                 viewBorrowingRecords();
                 break;
-            case "10":
+            case 10:
                 viewAllBorrowingRecord();
                 break;
-            case "11":
+            case 11:
                 viewPersonalProfile();
                 break;
-            case "12":
+            case 12:
                 viewMemberProfile();
                 break;
-            case "13":
+            case 13:
                 viewAllMembers();
                 break;
-            case "14":
+            case 14:
                 updatePersonalProfile();
                 break;
-            case "15":
+            case 15:
                 updateMemberProfile();
                 break;
-            case "16":
+            case 16:
                 deletePersonalProfile();
                 break;
-            case "17":
+            case 17:
                 deleteMemberProfile();
                 break;
-            case "18":
+            case 18:
                 viewLibraryStatistics();
                 break;
-            case "19":
+            case 19:
                 payFine();
                 break;
-            case "20":
+            case 20:
                 deleteBorrowRecords();
                 break;
-            case "0":
+            case 0:
                 logout();
                 break;
             default:
-                System.out.println("Unexpected value: " + scanner.nextLine());
+                System.out.println("Unexpected value: " + choice);
         }
     }
 
     public void personalDashBoard(User user){
-        String first_name = user.getFirstName();
+        String first_name = user.getFirstName().toUpperCase();
 
         System.out.println("========================================");
-        System.out.println(" "+first_name.toUpperCase()+" DASHBOARD ");
+        System.out.println("    "+first_name+" DASHBOARD            ");
         System.out.println("========================================");
 
         System.out.println(MethodUtils.greet()+" "+first_name+", Welcome to your dashboard\n");
 
-        displayPersonalMenu();
-        featuresCall();
+            displayPersonalMenu();
+            featuresCall();
     }
 
     public void addBook(){
-        System.out.print("Enter book title: \n");
-        String bookTitle = ValidationUtils.validateStringLength(scanner.nextLine());
+        String bookTitle = ValidationUtils.validateStringLength("Enter book title: ");
 
-        System.out.print("Enter book author: \n");
-        String author = ValidationUtils.validateStringLength(scanner.nextLine());
+        String author = ValidationUtils.validateStringLength("Enter book author: ");
 
-        System.out.print("Enter book category: \n");
-        String category = ValidationUtils.validateStringLength(scanner.nextLine());
+        String category = ValidationUtils.validateStringLength("Enter book category: ");
 
         System.out.print("Enter book publication year: \n");
-        short publicationYear = Short.parseShort(scanner.nextLine());
+        short publicationYear = (short)validateNumber();
 
         Book book = bookController.addBook(bookTitle, author, category, publicationYear);
         if (book != null) {
@@ -164,11 +160,9 @@ public class Controller{
     }
 
     public void viewBookDetails(){
-        System.out.print("Enter book title: \n");
-        String title = ValidationUtils.validateStringLength(scanner.nextLine());
+        String title = ValidationUtils.validateStringLength("Enter book title: ");
 
-        System.out.print("Enter book author: \n");
-        String bookAuthor = ValidationUtils.validateStringLength(scanner.nextLine());
+        String bookAuthor = ValidationUtils.validateStringLength("Enter book author: ");
 
         String viewBookInfo = bookController.viewBookDetails(title, bookAuthor);
 
@@ -190,11 +184,9 @@ public class Controller{
     }
 
     public void updatedBook(){
-        System.out.print("Enter book title: \n");
-        String title = ValidationUtils.validateStringLength(scanner.nextLine());
+        String title = ValidationUtils.validateStringLength("Enter book title: ");
 
-        System.out.print("Enter book author: \n");
-        String bookAuthor = ValidationUtils.validateStringLength(scanner.nextLine());
+        String bookAuthor = ValidationUtils.validateStringLength("Enter book author: ");
 
         Book book = bookController.getABookByTitleAndAuthor(title, bookAuthor);
 
@@ -215,143 +207,121 @@ public class Controller{
         System.out.println("13. Author, Category and Publication Year");
         System.out.println("14. Title, Author, Category and Publication Year");
 
-        System.out.print("\nSelect an option (1 - 14): ");
+        int choice = readInt("Select an option (1 - 14)",1,14);
 
-        switch(scanner.nextLine()){
-            case "1":
-                System.out.print("Enter book title: \n");
-                String bookTitle1 = ValidationUtils.validateStringLength(scanner.nextLine());
+        switch(choice){
+            case 1:
+                String bookTitle1 = ValidationUtils.validateStringLength("Enter book title: ");
                 book.setTitle(bookTitle1);
                 break;
-            case "2":
-                System.out.print("Enter book author: \n");
-                String author1 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 2:
+                String author1 = ValidationUtils.validateStringLength("Enter book author: ");
                 book.setAuthor(author1);
                 break;
-            case "3":
-                System.out.print("Enter book category: \n");
-                String category1 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 3:
+                String category1 = ValidationUtils.validateStringLength("Enter book category: ");
                 book.setCategory(category1);
                 break;
-            case "4":
+            case 4:
                 System.out.print("Enter book publication year: \n");
-                short publicationYear1 = Short.parseShort(scanner.nextLine());
+                short publicationYear1 = (short)validateNumber();
                 book.setPublicationYear(publicationYear1);
                 break;
-            case "5":
-                System.out.print("Enter book title: \n");
-                String bookTitle2 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 5:
+                String bookTitle2 = ValidationUtils.validateStringLength("Enter book title: ");
 
-                System.out.print("Enter book author: \n");
-                String author2 = ValidationUtils.validateStringLength(scanner.nextLine());
+                String author2 = ValidationUtils.validateStringLength("Enter book author: ");
 
                 book.setTitle(bookTitle2);
                 book.setAuthor(author2);
                 break;
-            case "6":
-                System.out.print("Enter book title: \n");
-                String bookTitle3 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 6:
+                String bookTitle3 = ValidationUtils.validateStringLength("Enter book title: ");
 
-                System.out.print("Enter book category: \n");
-                String category3 = ValidationUtils.validateStringLength(scanner.nextLine());
+                String category3 = ValidationUtils.validateStringLength("Enter book category: ");
 
                 book.setTitle(bookTitle3);
                 book.setCategory(category3);
                 break;
-            case "7":
-                System.out.print("Enter book title: \n");
-                String bookTitle4 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 7:
+                String bookTitle4 = ValidationUtils.validateStringLength("Enter book title: ");
 
-                System.out.print("Enter book publication year: \n");
-                short publicationYear2 = Short.parseShort(scanner.nextLine());
+                System.out.print("Enter book publication year: ");
+                short publicationYear2 = (short) validateNumber();
 
                 book.setTitle(bookTitle4);
                 book.setPublicationYear(publicationYear2);
                 break;
-            case "8":
-                System.out.print("Enter book author: \n");
-                String author3 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 8:
+                String author3 = ValidationUtils.validateStringLength("Enter book author: ");
 
-                System.out.print("Enter book category: \n");
-                String category2 = ValidationUtils.validateStringLength(scanner.nextLine());
+                String category2 = ValidationUtils.validateStringLength("Enter book category: ");
 
                 book.setAuthor(author3);
                 book.setCategory(category2);
                 break;
-            case "9":
-                System.out.print("Enter book author: \n");
-                String author4 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 9:
+                String author4 = ValidationUtils.validateStringLength("Enter book author: ");
 
                 System.out.print("Enter book publication year: \n");
-                short publicationYear3 = Short.parseShort(scanner.nextLine());
+                short publicationYear3 = (short)validateNumber();
 
                 book.setAuthor(author4);
                 book.setPublicationYear(publicationYear3);
                 break;
-            case "10":
-                System.out.print("Enter book category: \n");
-                String category4 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 10:
+                String category4 = ValidationUtils.validateStringLength("Enter book category: ");
 
                 System.out.print("Enter book publication year: \n");
-                short publicationYear4 = Short.parseShort(scanner.nextLine());
+                short publicationYear4 = (short) validateNumber();
 
                 book.setCategory(category4);
                 book.setPublicationYear(publicationYear4);
                 break;
-            case "11":
-                System.out.print("Enter book title: \n");
-                String bookTitle5 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 11:
+                String bookTitle5 = ValidationUtils.validateStringLength("Enter book title: ");
 
-                System.out.print("Enter book author: \n");
-                String author5 = ValidationUtils.validateStringLength(scanner.nextLine());
+                String author5 = ValidationUtils.validateStringLength("Enter book author: ");
 
-                System.out.print("Enter book category: \n");
-                String category5 = ValidationUtils.validateStringLength(scanner.nextLine());
+                String category5 = ValidationUtils.validateStringLength("Enter book category: ");
 
                 book.setTitle(bookTitle5);
                 book.setAuthor(author5);
                 book.setCategory(category5);
                 break;
-            case "12":
-                System.out.print("Enter book title: \n");
-                String bookTitle6 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 12:
+                String bookTitle6 = ValidationUtils.validateStringLength("Enter book title: ");
 
-                System.out.print("Enter book author: \n");
-                String author6 = ValidationUtils.validateStringLength(scanner.nextLine());
+                String author6 = ValidationUtils.validateStringLength("Enter book author: ");
 
                 System.out.print("Enter book publication year: \n");
-                short publicationYear5 = Short.parseShort(scanner.nextLine());
+                short publicationYear5 = (short) validateNumber();
 
                 book.setTitle(bookTitle6);
                 book.setAuthor(author6);
                 book.setPublicationYear(publicationYear5);
                 break;
-            case "13":
-                System.out.print("Enter book author: \n");
-                String author7 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 13:
+                String author7 = ValidationUtils.validateStringLength("Enter book author: ");
 
-                System.out.print("Enter book category: \n");
-                String category6 = ValidationUtils.validateStringLength(scanner.nextLine());
+                String category6 = ValidationUtils.validateStringLength("Enter book category: ");
 
                 System.out.print("Enter book publication year: \n");
-                short publicationYear6 = Short.parseShort(scanner.nextLine());
+                short publicationYear6 = (short) validateNumber();
 
                 book.setAuthor(author7);
                 book.setCategory(category6);
                 book.setPublicationYear(publicationYear6);
                 break;
-            case "14":
-                System.out.print("Enter book title: \n");
-                String bookTitle = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 14:
+                String bookTitle = ValidationUtils.validateStringLength("Enter book title: ");
 
-                System.out.print("Enter book author: \n");
-                String author = ValidationUtils.validateStringLength(scanner.nextLine());
+                String author = ValidationUtils.validateStringLength("Enter book author: ");
 
-                System.out.print("Enter book category: \n");
-                String category = ValidationUtils.validateStringLength(scanner.nextLine());
+                String category = ValidationUtils.validateStringLength("Enter book category: ");
 
                 System.out.print("Enter book publication year: \n");
-                short publicationYear = Short.parseShort(scanner.nextLine());
+                short publicationYear = (short)validateNumber();
 
                 book.setTitle(bookTitle);
                 book.setAuthor(author);
@@ -359,7 +329,7 @@ public class Controller{
                 book.setPublicationYear(publicationYear);
                 break;
             default:
-                System.out.println("Unexpected value: " + scanner.nextLine());
+                System.out.println("Unexpected value: " + choice);
         }
 
         String values = MethodUtils.generateBookStringValue(book);
@@ -377,11 +347,9 @@ public class Controller{
         if(!(membershipType == MembershipType.STAFF))
             throw new RuntimeException("unauthorized, only staff members can delete book");
 
-        System.out.println("Enter book id: ");
-        String bookId = scanner.nextLine();
+        String bookId = readNonEmptyString("Enter book id: ");
 
-        System.out.println("Are you sure you want to delete book? Y or N: ");
-        String answer = scanner.nextLine();
+        String answer = readNonEmptyString("Are you sure you want to delete book? Y or N: ");
 
         if (answer.equalsIgnoreCase("Y")){
             bookController.deleteBook(bookId);
@@ -396,28 +364,24 @@ public class Controller{
         System.out.println("========================================");
 
         System.out.println("1. Search by Title");
-        System.out.println("1. Search by Title and Author");
-        System.out.println("1. Search by Title and Author, category");
+        System.out.println("2. Search by Title and Author");
+        System.out.println("3. Search by Title and Author, category");
 
-        System.out.println();
+        int choice = readInt("Enter choice: ", 1, 3);
 
-        System.out.print("Enter choice: ");
-        switch(scanner.nextLine()){
-            case "1":
-                System.out.print("Enter book title: ");
-                Book[] books = bookController.searchBook(scanner.nextLine());
+        switch(choice){
+            case 1:
+                Book[] books = bookController.searchBook(readNonEmptyString("Enter book title: "));
                 for (Book book : books){
                     if (book != null)
                         System.out.println(book);
                 }
                 break;
 
-            case "2":
-                System.out.print("Enter book title: ");
-                String bookTitle = scanner.nextLine();
+            case 2:
+                String bookTitle = readNonEmptyString("Enter book title: ");
 
-                System.out.print("Enter book author: ");
-                String bookAuthor = scanner.nextLine();
+                String bookAuthor = readNonEmptyString("Enter book author: ");
 
                 Book[] books1 = bookController.searchBook(bookTitle, bookAuthor);
                 for (Book book : books1){
@@ -425,15 +389,12 @@ public class Controller{
                 }
                 break;
 
-            case "3":
-                System.out.print("Enter book title: ");
-                String bookTitle1 = scanner.nextLine();
+            case 3:
+                String bookTitle1 = readNonEmptyString("Enter book title: ");
 
-                System.out.print("Enter book author: ");
-                String bookAuthor1 = scanner.nextLine();
+                String bookAuthor1 = readNonEmptyString("Enter book author: ");
 
-                System.out.print("Enter book category: ");
-                String bookCategory = scanner.nextLine();
+                String bookCategory = readNonEmptyString("Enter book category: ");
 
                 Book[] books2 = bookController.searchBook(bookTitle1, bookAuthor1, bookCategory);
                 for (Book book : books2){
@@ -442,7 +403,7 @@ public class Controller{
                 break;
 
             default:
-                System.out.println("Invalid option: "+scanner.nextLine());
+                System.out.println("Invalid option: "+choice);
         }
     }
 
@@ -454,8 +415,7 @@ public class Controller{
             return;
         }
 
-        System.out.print("Enter book id: ");
-        String id = ValidationUtils.validateStringLength(scanner.nextLine());
+        String id = ValidationUtils.validateStringLength("Enter book id: ");
 
         boolean isBorrowed = borrowRecordController.borrowBook(user.getId(), id);
         if(isBorrowed){
@@ -466,8 +426,7 @@ public class Controller{
     }
 
     public void returnBook(){
-        System.out.print("Enter book id: ");
-        String id = ValidationUtils.validateStringLength(scanner.nextLine());
+        String id = ValidationUtils.validateStringLength("Enter book id: ");
 
         boolean isBorrowed = borrowRecordController.returnBook(id);
         if(isBorrowed){
@@ -490,8 +449,7 @@ public class Controller{
     public void deleteBorrowRecords(){
         String userId = authController.getMe().getId();
 
-        System.out.println("Enter record id: ");
-        String recordId = scanner.nextLine();
+        String recordId = readNonEmptyString("Enter record id: ");
         borrowRecordController.deleteBorrowRecords(userId, recordId);
     }
 
@@ -512,8 +470,7 @@ public class Controller{
         if(authController.getMe().getMembershipType() == MembershipType.STAFF)
             throw new RuntimeException("Unauthorized, only a staff is permitted");
 
-        System.out.print("Enter member Id: ");
-        String viewMemberProfileInfo = userController.viewUserProfile(scanner.nextLine());
+        String viewMemberProfileInfo = userController.viewUserProfile(readNonEmptyString("Enter member Id: "));
 
         if (viewMemberProfileInfo != null){
             System.out.println("\n========================");
@@ -556,143 +513,114 @@ public class Controller{
         System.out.println("13. LastName, Email and Phone Number");
         System.out.println("14. FirstName, LastName, Email and Phone Number");
 
-        System.out.print("\nSelect an option (1 - 14): ");
+        int choice = readInt("\nSelect an option (1 - 14): ", 1, 14);
 
-        switch(scanner.nextLine()){
-            case "1":
-                System.out.print("Enter firstName (minimum 3 characters): ");
-                String firstName = ValidationUtils.validateStringLength(scanner.nextLine());
+        switch(choice){
+            case 1:
+                String firstName = ValidationUtils.validateStringLength("Enter firstName (minimum 3 characters): ");
                 user.setFirstName(firstName);
                 break;
-            case "2":
-                System.out.print("Enter lastName (minimum 3 characters): ");
-                String lastName = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 2:
+                String lastName = ValidationUtils.validateStringLength("Enter lastName (minimum 3 characters): ");
                 user.setLastName(lastName);
                 break;
-            case "3":
-                System.out.print("Enter a valid email: ");
-                String email = ValidationUtils.validateEmail(scanner.nextLine().toLowerCase());
+            case 3:
+                String email = ValidationUtils.validateEmail(readNonEmptyString("Enter a valid email: "));
                 user.setEmail(email);
                 break;
-            case "4":
-                System.out.print("Enter a valid phone number: ");
-                String phoneNo = ValidationUtils.validatePhoneNumber(scanner.nextLine());
+            case 4:
+                String phoneNo = ValidationUtils.validatePhoneNumber(readNonEmptyString("Enter a valid phone number: "));
                 user.setPhoneNo(phoneNo);
                 break;
-            case "5":
-                System.out.print("Enter firstName (minimum 3 characters): ");
-                String firstName1 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 5:
+                String firstName1 = ValidationUtils.validateStringLength("Enter firstName (minimum 3 characters): ");
 
-                System.out.print("Enter lastName (minimum 3 characters): ");
-                String lastName1 = ValidationUtils.validateStringLength(scanner.nextLine());
+                String lastName1 = ValidationUtils.validateStringLength("Enter lastName (minimum 3 characters): ");
 
                 user.setFirstName(firstName1);
                 user.setLastName(lastName1);
                 break;
-            case "6":
-                System.out.print("Enter firstName (minimum 3 characters): ");
-                String firstName2 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 6:
+                String firstName2 = ValidationUtils.validateStringLength("Enter firstName (minimum 3 characters): ");
 
-                System.out.print("Enter a valid email: ");
-                String email2 = ValidationUtils.validateEmail(scanner.nextLine().toLowerCase());
+                String email2 = ValidationUtils.validateEmail(readNonEmptyString("Enter a valid email: "));
 
                 user.setFirstName(firstName2);
                 user.setEmail(email2);
                 break;
-            case "7":
-                System.out.print("Enter firstName (minimum 3 characters): ");
-                String firstName3 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 7:
+                String firstName3 = ValidationUtils.validateStringLength("Enter firstName (minimum 3 characters): ");
 
-                System.out.print("Enter a valid phone number: ");
-                String phoneNo3 = ValidationUtils.validatePhoneNumber(scanner.nextLine());
+                String phoneNo3 = ValidationUtils.validatePhoneNumber(readNonEmptyString("Enter a valid phone number: "));
 
                 user.setFirstName(firstName3);
                 user.setPhoneNo(phoneNo3);
                 break;
-            case "8":
-                System.out.print("Enter lastName (minimum 3 characters): ");
-                String lastName3 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 8:
+                String lastName3 = ValidationUtils.validateStringLength("Enter lastName (minimum 3 characters): ");
 
-                System.out.print("Enter a valid email: ");
-                String email3 = ValidationUtils.validateEmail(scanner.nextLine().toLowerCase());
+                String email3 = ValidationUtils.validateEmail(readNonEmptyString("Enter a valid email: "));
 
                 user.setLastName(lastName3);
                 user.setEmail(email3);
                 break;
-            case "9":
-                System.out.print("Enter lastName (minimum 3 characters): ");
-                String lastName4 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 9:
+                String lastName4 = ValidationUtils.validateStringLength("Enter lastName (minimum 3 characters): ");
 
-                System.out.print("Enter a valid phone number: ");
-                String phoneNo4 = ValidationUtils.validatePhoneNumber(scanner.nextLine());
+                String phoneNo4 = ValidationUtils.validatePhoneNumber(readNonEmptyString("Enter a valid phone number: "));
 
                 user.setLastName(lastName4);
                 user.setPhoneNo(phoneNo4);
                 break;
-            case "10":
-                System.out.print("Enter a valid email: ");
-                String email5 = ValidationUtils.validateEmail(scanner.nextLine().toLowerCase());
+            case 10:
+                String email5 = ValidationUtils.validateEmail(readNonEmptyString("Enter a valid email: "));
 
-                System.out.print("Enter a valid phone number: ");
-                String phoneNo5 = ValidationUtils.validatePhoneNumber(scanner.nextLine());
+                String phoneNo5 = ValidationUtils.validatePhoneNumber(readNonEmptyString("Enter a valid phone number: "));
 
                 user.setEmail(email5);
                 user.setPhoneNo(phoneNo5);
                 break;
-            case "11":
-                System.out.print("Enter firstName (minimum 3 characters): ");
-                String firstName4 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 11:
+                String firstName4 = ValidationUtils.validateStringLength("Enter firstName (minimum 3 characters): ");
 
-                System.out.print("Enter lastName (minimum 3 characters): ");
-                String lastName5 = ValidationUtils.validateStringLength(scanner.nextLine());
+                String lastName5 = ValidationUtils.validateStringLength("Enter lastName (minimum 3 characters): ");
 
-                System.out.print("Enter a valid email: ");
-                String email6 = ValidationUtils.validateEmail(scanner.nextLine().toLowerCase());
+                String email6 = ValidationUtils.validateEmail(readNonEmptyString("Enter a valid email: "));
 
                 user.setFirstName(firstName4);
                 user.setLastName(lastName5);
                 user.setEmail(email6);
                 break;
-            case "12":
-                System.out.print("Enter firstName (minimum 3 characters): ");
-                String firstName5 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 12:
+                String firstName5 = ValidationUtils.validateStringLength("Enter firstName (minimum 3 characters): ");
 
-                System.out.print("Enter lastName (minimum 3 characters): ");
-                String lastName6 = ValidationUtils.validateStringLength(scanner.nextLine());
+                String lastName6 = ValidationUtils.validateStringLength("Enter lastName (minimum 3 characters): ");
 
-                System.out.print("Enter a valid phone number: ");
-                String phoneNo6 = ValidationUtils.validatePhoneNumber(scanner.nextLine());
+                String phoneNo6 = ValidationUtils.validatePhoneNumber(readNonEmptyString("Enter a valid phone number: "));
 
                 user.setFirstName(firstName5);
                 user.setLastName(lastName6);
                 user.setPhoneNo(phoneNo6);
                 break;
-            case "13":
-                System.out.print("Enter lastName (minimum 3 characters): ");
-                String lastName7 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 13:
+                String lastName7 = ValidationUtils.validateStringLength("Enter lastName (minimum 3 characters): ");
 
-                System.out.print("Enter a valid email: ");
-                String email4 = ValidationUtils.validateEmail(scanner.nextLine().toLowerCase());
+                String email4 = ValidationUtils.validateEmail(readNonEmptyString("Enter a valid email: "));
 
-                System.out.print("Enter a valid phone number: ");
-                String phoneNo2 = ValidationUtils.validatePhoneNumber(scanner.nextLine());
+                String phoneNo2 = ValidationUtils.validatePhoneNumber(readNonEmptyString("Enter a valid phone number: "));
 
                 user.setLastName(lastName7);
                 user.setEmail(email4);
                 user.setPhoneNo(phoneNo2);
                 break;
-            case "14":
-                System.out.print("Enter firstName (minimum 3 characters): ");
-                String firstName6 = ValidationUtils.validateStringLength(scanner.nextLine());
+            case 14:
+                String firstName6 = ValidationUtils.validateStringLength("Enter firstName (minimum 3 characters): ");
 
-                System.out.print("Enter lastName (minimum 3 characters): ");
-                String lastName2 = ValidationUtils.validateStringLength(scanner.nextLine());
+                String lastName2 = ValidationUtils.validateStringLength("Enter lastName (minimum 3 characters): ");
 
-                System.out.print("Enter a valid email: ");
-                String email1 = ValidationUtils.validateEmail(scanner.nextLine().toLowerCase());
+                String email1 = ValidationUtils.validateEmail(readNonEmptyString("Enter a valid email: "));
 
-                System.out.print("Enter a valid phone number: ");
-                String phoneNo1 = ValidationUtils.validatePhoneNumber(scanner.nextLine());
+                String phoneNo1 = ValidationUtils.validatePhoneNumber(readNonEmptyString("Enter a valid phone number: "));
 
                 user.setFirstName(firstName6);
                 user.setLastName(lastName2);
@@ -700,7 +628,7 @@ public class Controller{
                 user.setPhoneNo(phoneNo1);
                 break;
             default:
-                System.out.println("Unexpected value: " + scanner.nextLine());
+                System.out.println("Unexpected value: " + choice);
         }
 
         String values = MethodUtils.generateUserStringValue(user);
@@ -714,8 +642,7 @@ public class Controller{
     public void deletePersonalProfile(){
         String id = authController.getMe().getId();
 
-        System.out.println("Are you sure you want to delete your profile? Y or N: ");
-        String answer = scanner.nextLine();
+        String answer = readNonEmptyString("Are you sure you want to delete your profile? Y or N: ");
 
         if (answer.equalsIgnoreCase("Y")){
             System.out.println(userController.deleteUserProfile(id));
@@ -725,11 +652,9 @@ public class Controller{
     }
 
     public void deleteMemberProfile(){
-        System.out.print("Enter member Id: ");
-        String memberId = scanner.nextLine();
+        String memberId = readNonEmptyString("Enter member Id: ");
 
-        System.out.println("Are you sure you want to delete member profile? Y or N: ");
-        String answer = scanner.nextLine();
+        String answer = readNonEmptyString("Are you sure you want to delete member profile? Y or N: ");
 
         if (answer.equalsIgnoreCase("Y")){
             System.out.println(userController.deleteUserProfile(memberId));
@@ -742,7 +667,7 @@ public class Controller{
         String userId = authController.getMe().getId();
 
         System.out.println("Enter amount: ");
-        double answer = scanner.nextDouble();
+        double answer = validateNumber();
 
         borrowRecordController.payFine(userId, answer);
     }
@@ -770,24 +695,20 @@ public class Controller{
         while(!regFlag){
             try{
 
-                System.out.print("Enter firstName (minimum 3 characters): ");
-                firstName = ValidationUtils.validateStringLength(scanner.nextLine());
+                firstName = ValidationUtils.validateStringLength("Enter firstName (minimum 3 characters): ");
 
-                System.out.print("Enter lastName (minimum 3 characters): ");
-                lastName = ValidationUtils.validateStringLength(scanner.nextLine());
+                lastName = ValidationUtils.validateStringLength("Enter lastName (minimum 3 characters): ");
 
-                System.out.print("Enter a valid email: ");
-                email = ValidationUtils.validateEmail(scanner.nextLine());
+                email = ValidationUtils.validateEmail(readNonEmptyString("Enter a valid email: "));
 
-                System.out.print("Enter a valid phone number: ");
-                phoneNo = ValidationUtils.validatePhoneNumber(scanner.nextLine());
+                phoneNo = ValidationUtils.validatePhoneNumber(readNonEmptyString("Enter a valid phone number: "));
 
-                System.out.print("Enter membership type i.e student, general or staff: ");
-                membershipType = ValidationUtils.validateMembershipType(scanner.nextLine());
+                membershipType = ValidationUtils.validateMembershipType(readNonEmptyString("Enter membership type i.e student, general or staff: "));
 
-                System.out.print("Choose a password, make sure it is at least 8 characters long and contains at least " +
-                        "one number, capital letter,lower letter and special character e.g /,@,#,?,$,& e.t.c: \n");
-                password = ValidationUtils.validatePassword(scanner.nextLine());
+                password = ValidationUtils.validatePassword(readNonEmptyString(
+                        "Choose a password, make sure it is at least 8 characters long and contains at least " +
+                                "one number, capital letter,lower letter and special character e.g /,@,#,?,$,& e.t.c: "
+                ));
 
                 regFlag = true;
 
@@ -797,9 +718,6 @@ public class Controller{
                 System.out.println("Please try again.\n");
             }
         }
-
-        // enforce lower case
-        email = email.toLowerCase();
 
         boolean isSuccessful = authController.signUpAccount(firstName, lastName, email, phoneNo, membershipType, password);
 
@@ -818,14 +736,10 @@ public class Controller{
         String email;
         String password;
 
-        System.out.print("Please enter your email: ");
-        email = ValidationUtils.validateEmail(scanner.nextLine());
+        email = ValidationUtils.validateEmail(readNonEmptyString("Please enter your email: "));
 
-        System.out.print("Please enter your password: ");
-        password = ValidationUtils.validatePassword(scanner.nextLine());
+        password = ValidationUtils.validatePassword(readNonEmptyString("Please enter your password: "));
 
-        // enforce lower case
-        email = email.toLowerCase();
         User user = authController.signInAccount(email, password);
 
         if (user == null){
@@ -847,23 +761,16 @@ public class Controller{
         String password;
         String confirmPassword;
 
-        System.out.print("Please enter your email: ");
-        email = ValidationUtils.validateEmail(scanner.nextLine());
+        email = ValidationUtils.validateEmail(readNonEmptyString("Please enter your email: "));
 
-        System.out.print("Please enter your phone number: ");
-        phoneNo = ValidationUtils.validatePhoneNumber(scanner.nextLine());
-
-        // enforce lower case
-        email = email.toLowerCase();
+        phoneNo = ValidationUtils.validatePhoneNumber(readNonEmptyString("Please enter your phone number: "));
 
         User user = authController.forgotPassword(email, phoneNo);
 
         if (user != null){
-            System.out.print("Choose a new password, make sure it is at least 8 characters long: ");
-            password = ValidationUtils.validatePassword(scanner.nextLine());
+            password = ValidationUtils.validatePassword(readNonEmptyString("Choose a new password, make sure it is at least 8 characters long: "));
 
-            System.out.print("Confirm password: " );
-            confirmPassword = ValidationUtils.validatePassword(scanner.nextLine());
+            confirmPassword = ValidationUtils.validatePassword(readNonEmptyString("Confirm password: " ));
 
             if (!password.equals(confirmPassword))
                 throw new InvalidCredentialException("Password mismatch, check your passwords");
