@@ -1,0 +1,4 @@
+B001|clean code|success I. Raphael|programming|9781626547178983|2008|BORROWED
+B002|living word|S.I.R|spiritual|9785003333473248|2026|BORROWED
+B004|learning coding|faith|programming|9786305655124663|2009|AVAILABLE
+B005|love|holy spirit|spiritual|9784871416198095|1900|AVAILABLE
