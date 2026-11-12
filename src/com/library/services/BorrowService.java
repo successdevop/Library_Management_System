@@ -4,10 +4,7 @@ import com.library.enums.BookStatus;
 import com.library.enums.BorrowStatus;
 import com.library.enums.MemberStatus;
 import com.library.enums.MembershipType;
-import com.library.exceptions.BookNotAvailableException;
-import com.library.exceptions.BookNotFoundException;
-import com.library.exceptions.BorrowLimitExceededException;
-import com.library.exceptions.RecordNotFoundException;
+import com.library.exceptions.*;
 import com.library.interfaces.BorrowRecordInterface;
 import com.library.models.Book;
 import com.library.models.BorrowRecord;
@@ -35,6 +32,8 @@ public class BorrowService{
 
     public boolean borrowBook(String userId, String bookId){
         User user = userRepo.getUserById(userId);
+        if(user == null)
+            throw new UserNotFoundException("member not found");
 
         Book book = bookrepo.getBookById(bookId);
         if (book == null)
@@ -62,7 +61,7 @@ public class BorrowService{
         return true;
     }
 
-    public boolean returnBook(String bookId){
+    public boolean returnBook(String userId, String bookId){
         BorrowRecord record = borrowRecords.getRecordByBookId(bookId);
         if (record == null)
             throw new RecordNotFoundException("Record not found");
@@ -70,8 +69,8 @@ public class BorrowService{
         if (record.getBorrowStatus() == BorrowStatus.RETURNED)
             throw new RuntimeException("This book has already been returned");
 
-        User user = userRepo.getUserById(record.getUserId());
-        Book book = bookrepo.getBookById(record.getBookId());
+        User user = userRepo.getUserById(userId);
+        Book book = bookrepo.getBookById(bookId);
 
         int daysLate = calculateDaysLate(record.getDueDate(), LocalDate.now());
         double fineRate = getFineRate(user.getMembershipType());
@@ -84,6 +83,7 @@ public class BorrowService{
 
         book.setBookStatus(BookStatus.AVAILABLE);
         record.setBorrowStatus(BorrowStatus.RETURNED);
+        record.setReturnDate(LocalDate.now());
 
         String userNewValues = generateUserStringValue(user);
         String bookNewValues = generateBookStringValue(book);

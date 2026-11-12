@@ -431,9 +431,10 @@ public class Controller{
     }
 
     public void returnBook(){
+        User user = authController.getMe();
         String id = ValidationUtils.validateStringLength("Enter book id: ");
 
-        boolean isBorrowed = borrowRecordController.returnBook(id);
+        boolean isBorrowed = borrowRecordController.returnBook(user.getId(), id);
         if(isBorrowed){
             System.out.println("Book returned successfully");
         }else{

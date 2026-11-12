@@ -24,7 +24,7 @@ public class UserRepo{
         Database.updateUserFile(USERS_STORAGE_FILE, user, userNewValues);
 
         for (int i = 0; i < users.length; i++){
-            if (users[i].getId().equals(user.getId())){
+            if (users[i] != null && users[i].getId().equals(user.getId())){
                 users[i] = user;
                 break;
             }

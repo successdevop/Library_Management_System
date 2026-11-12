@@ -58,7 +58,7 @@ public class AuthService{
             throw new InvalidCredentialException("Invalid email or password");
         }
 
-        if (isActive(user)){
+        if (isInactive(user)){
             throw new InactiveAccountException("Account is "+user.getStatus()+", please contact customer support/agents");
         }
 
@@ -77,14 +77,13 @@ public class AuthService{
         User user = userRepo.getUserByEmail(email);
         String phoneNo = userRepo.getUserByPhoneNumber(phoneNumber);
 
-        if (user == null || phoneNo == null)
+        if (user == null || !user.getPhoneNo().equalsIgnoreCase(phoneNo))
             throw new InvalidCredentialException("Incorrect email or phone number");
 
         return user;
     }
 
-    private boolean isActive(User user){
-        return user.getStatus() == MemberStatus.INACTIVE || user.getStatus() == MemberStatus.SUSPENDED ||
-                user.getStatus() == MemberStatus.EXPIRED;
+    private boolean isInactive(User user){
+        return user.getStatus() == MemberStatus.INACTIVE || user.getStatus() == MemberStatus.EXPIRED;
     }
 }

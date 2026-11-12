@@ -15,8 +15,8 @@ public class BorrowRecordController{
     }
 
     // RETURN BOOK
-    public boolean returnBook(String bookId){
-        return borrowService.returnBook(bookId);
+    public boolean returnBook(String userId, String bookId){
+        return borrowService.returnBook(userId, bookId);
     }
 
     // PAY FINE

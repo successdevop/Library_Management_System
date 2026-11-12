@@ -52,6 +52,9 @@ public class UserService{
     public String deleteUserProfile(String id){
         User user = userRepo.getUserById(id);
 
+        if(user == null)
+            throw new UserNotFoundException("Member not found");
+
         if (user.getOutstandingFine() > 0.0)
             throw new RuntimeException("A member with an unpaid fine cannot be deleted");
 

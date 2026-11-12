@@ -92,18 +92,21 @@ public class BookRepo{
         for (Book book : books) {
             if (book == null) continue;
 
-            if (title != null && book.getTitle().toLowerCase().contains(title.toLowerCase())) {
-                bookArray.add(book);
-            } else if (title != null && author != null &&
-                    (book.getTitle().toLowerCase().contains(title.toLowerCase()) ||
-                            book.getAuthor().toLowerCase().contains(author.toLowerCase()))) {
-                bookArray.add(book);
-            } else if (title != null && author != null && category != null &&
-                    (book.getTitle().toLowerCase().contains(title.toLowerCase()) ||
-                            book.getAuthor().toLowerCase().contains(author.toLowerCase()) ||
-                            book.getCategory().toLowerCase().contains(category.toLowerCase()))) {
-                bookArray.add(book);
+            boolean matches = true;
+
+            if (title != null && !title.isBlank()) {
+                matches = book.getTitle().toLowerCase().contains(title.toLowerCase());
             }
+
+            if (author != null && !author.isBlank()) {
+                matches = matches && book.getAuthor().toLowerCase().contains(author.toLowerCase());
+            }
+
+            if (category != null && !category.isBlank())
+                matches = matches && book.getCategory().toLowerCase().contains(category.toLowerCase());
+
+            if(matches)
+                bookArray.add(book);
         }
 
         return bookArray.toArray(new Book[0]);
